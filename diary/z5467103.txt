@@ -1,0 +1,10 @@
+Diary z5467103
+
+Week 1:
+We Formed a group of 5, we call ourself okay buddy. together we read through all the project outlines as a group and discussed how would we tackle those problem based on our skillsets and availability. Decided that we are going to do a web development project and three people will be working on the frontend and two people will be working on the backend. Decided that sheena will be the scrum master.
+
+Week 2:
+Decided on our project preference for the project raffle;roject 18, project 16, project 17, project 23 and project 23, the result we got project 23. Decided that Eric, Vincent, and Nicolas will be working on the backend. Sheina and myself will be working on the frontend. Started on the project proposal backbone structure and will fill in all the details when the project selection is finalised. Also made the profesional user flow diagram and possible action per page.
+
+Week 3: 
+Discussed and refined the user flow with fellow members
