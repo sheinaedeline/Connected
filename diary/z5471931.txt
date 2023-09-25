@@ -1,0 +1,7 @@
+Week 1
+
+In week 1, We formed a group of 5, Selected a Scrum Master which is Sheina.
+We also have joined the Jira that is formed by Sheina. Other than that, we also decided
+on the topic that we want to choose which is Topic 23. We also have started some brainstorming
+on the features and tech stack that we want to use.
+
