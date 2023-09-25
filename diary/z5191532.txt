@@ -1,0 +1,16 @@
+Week 1:
+•	Formed a group of 5. 
+•	Read through all the project outlines as a group and analysed the key aspects in each project such as the challenges and constraints, potential solutions, and timeline.
+•	Discussed and shared our skillsets and our individual goals in this course.
+•	Decided that we are going to do a web development project and three people will be working on the frontend and two people will be working on the backend.
+
+Week 2:
+Monday:
+•	Decided on our project preference: 
+project 18, project 16, project 17, project 23 and project 23.
+•	Decided that Eric, Vincent, and Nicolas will be working on the backend. Sheina and Satrio will be working on the frontend.
+•	Started on the project proposal backbone structure and will fill in all the details when the project selection is finalised.
+Friday:
+•	Distributed sections of the project proposal to team members.
+•	Agreed on finishing the draft by next Monday tutorial.
+
