@@ -1,0 +1,26 @@
+Week 1
+- decided on a scrum master -> sheina
+- decided on a project -> p23
+- Meet the team and introduces ourselves including the skills
+- Team:
+	- Vincent
+	- Sheina
+	- Nicholas
+	- Satrio
+	- Eric
+
+Week 2
+- chose 4 other projects as project preferences in addition to our previous decision of project -> (p18,p16,p17,p25,p23)
+- scan through project proposal
+- discuss on the framework and programming language used to code.
+- separate frontend and backend roles: 
+	- Sheina - Frontend
+	- Satrio - Frontend
+	- Nicholas - Backend
+	- Vincent - Backend
+	- Eric - Backend    
+
+Week 3
+
+
+Week 4
