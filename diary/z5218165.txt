@@ -11,7 +11,7 @@ Week 1
 
 Week 2
 - chose 4 other projects as project preferences in addition to our previous decision of project -> (p18,p16,p17,p25,p23)
-- scan through project proposal
+- scan through project proposal and divide workload
 - discuss on the framework and programming language used to code.
 - separate frontend and backend roles: 
 	- Sheina - Frontend
@@ -21,6 +21,8 @@ Week 2
 	- Eric - Backend    
 
 Week 3
-
+- finishing up my part of the project proposal -> compamy user storyboard
+- proofread and do final checking with the team
+- did a rundown of the project's user stories together with the team
 
 Week 4
