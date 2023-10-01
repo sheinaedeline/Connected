@@ -12,3 +12,10 @@ We ended up Picking Project 23, 18, 16, 17, and 25. In the end we managed to get
 We also have divided up the Backend Team and Frontend Team. This week, we also looked at past examples of the proposal. 
 On Thursday Morning (23-09-2023) we conducted a meeting to seperate the divide up work for the proposal, Then we conducted a meeting with a client.
 Additionaly, I also worked on the System Diagram for the proposal
+
+Week 3
+In week 3, Each of us focuses on finishing the sections of the proposal that was distributed in Week 2. Personally, I finished my section
+which is the System Diagram, I also joined the meeting where we did a final review and revamp the storyboards while also scheduling up the sprints
+for our project. Additionally, I also helped other sections of the proposal such as importing and reformating the storyboards from figma to the documents. 
+In week 3, I also have started doing research on the Authentication model that we want to use between the frontend and backend along with the type of notification
+system that I want to implement for the backend.
