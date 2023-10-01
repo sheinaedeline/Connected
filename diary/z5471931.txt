@@ -5,3 +5,10 @@ We also have joined the Jira that is formed by Sheina. Other than that, we also 
 on the topic that we want to choose which is Topic 23. We also have started some brainstorming
 on the features and tech stack that we want to use.
 
+Week 2
+
+In Week 2, We scanned through the project options again as the class require us to submit the top 5 project preferences we have,
+We ended up Picking Project 23, 18, 16, 17, and 25. In the end we managed to get our number 1 project preference which is project 23.
+We also have divided up the Backend Team and Frontend Team. This week, we also looked at past examples of the proposal. 
+On Thursday Morning (23-09-2023) we conducted a meeting to seperate the divide up work for the proposal, Then we conducted a meeting with a client.
+Additionaly, I also worked on the System Diagram for the proposal
