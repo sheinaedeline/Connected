@@ -1,0 +1,100 @@
+#######################################
+TUT01 11/09/2023 1-3pm
+Tutor email: haowei.luo@unsw.edu.au
+
+Team members: 
+	- Vincent Julio Jap (z5218165), Backend
+	- Eric Li (z5191532), Backend
+	- Nicholas Jovanka (z5471931), Backend
+	- Satrio Raffani Raharjo (z5467103), Frontend
+	- Sheina Edeline Tengara (z5190299), Scrum Master, Frontend
+- Project: P23
+
+
+Front-end:
+	- React, Dynamic view from web to mobile
+Backend:
+	- Express Typescript
+Data:
+	- MongoDB on premise
+
+
+Documentation:
+	- Github
+	- Figma
+	- System Architecture and design
+	- ClassDiagram for backend
+	- Testing
+	- User manuals and guide 
+	- Technical guide
+
+
+ 
+#######################################
+TUT02 18/09/2023 1-3pm
+List 5 topic preferences: 23, 18, 16, 17, 25
+Final project: 23
+Client contact: b.suleiman@unsw.edu.au
+
+As a Scrum Master, I believe we should meet outside of lab and these are the days that everyone is available. We will meet at least once a week out of the lab time. 
+Meeting varies from 30 mins to 1 hour or more depending on the tasks we have to deliver.
+Team's free schedule:
+	- Tuesday during day
+	- Thursday during day
+	- Friday 2pm onwards
+	- Weekend anytime
+
+Daily Scrum meeting 15 mins, keep track of what every member is doing
+3 questions:
+	- What did you do yesterday?
+	- What did you do today?
+	- What obstacles are in your way?
+
+
+To do:
+	- Create a google drive to share to the team for reports and documentation
+	- Start on project proposal outline
+	- Create the GitHub Classroom and team repo 9900M13AOKBUDDY
+	- Take up the role as team lead and reply email on project 23 meeting with client.
+	- Research the core topics and required knowledge and skills related to the project --> Come up with some ideas based
+	- Compile core knowledge and skills of the team (summary of majors, skills, experience)
+	- Clarify requirements, scope and expected outcomes, and record them
+	- Product backlog (set of user stories based on requirements)
+		- A list of all desired work on the project, what the users want, what is needed for the feature/action that can be done by the user
+		- Start making sprints on Jira, From epic --> user stories --> sprints
+		- Create sprint goals like which requirements we want to complete within the sprint
+		- Example: catalogue + managing users, basic search
+	- Create Figma for storyboard
+	- Create Draw.io for system architecture
+	- Finish proposal by Monday
+
+
+
+#######################################
+TUT03 25/09/2023 1-3pm
+During the lab, we ran through all the user stories together as a team so that everyone is on the same page and that we are not missing the basic requirements. 
+My task involves in creating the backlog in Jira and also arranging the sprint structure needed for the proposal.
+We have also listed down the pages needed for the storyboard and the flow of the system for different user types.
+
+
+Meeting 3/10/2023 8.30-9.30pm
+Nicholas started on setting up the backend using MongoDB and Postman. He also asked the team to read a bit on mongoosejs. I will start a high fidelity in Figma. 
+
+Novelty features:
+	- Validation process for Professionals applying through a short quiz that tests the skills like for example React js
+
+Pages:
+	1. Landing 
+	2. Registration
+	3. Home
+	4. Profile
+
+
+#######################################
+TUT04 4/10/2023 10-12pm
+We will assign user stories to each member so that we can start coding.
+
+WK5 Demo:
+	- Present the application
+	- Show the completed user stories on Jira
+	- No need to make a presentation
