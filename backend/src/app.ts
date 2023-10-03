@@ -2,7 +2,7 @@ import express from 'express';
 import compression from 'compression';
 import { json, urlencoded } from 'body-parser';
 import mongooseConnector from '@mongodb/connector';
-import root_router from '@routes/root_router';
+import root_router from '@routes/rootRouter';
 import cors from 'cors';
 import 'dotenv/config'
 const app = express();
