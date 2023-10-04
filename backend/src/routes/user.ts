@@ -1,6 +1,7 @@
 import express from "express"
 const router = express.Router();
-import {register} from "@controller/userController"
+import {register,tokenTest} from "@controller/userController"
 
 router.post("/register",register);
+router.post("/test",tokenTest);
 export default router;

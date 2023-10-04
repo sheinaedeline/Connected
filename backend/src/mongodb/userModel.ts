@@ -3,7 +3,21 @@ import * as bcrypt from 'bcrypt';
 const { Schema } = mongoose;
 
 const userSchema = new Schema({
-    fullName: {
+    userType: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    firstName: {
+        type: String,
+        trim: true,
+        required: true
+    },
+    lastName: {
+        type: String,
+        trim: true
+    },
+    name: {
         type: String,
         trim: true,
         required: true
@@ -15,13 +29,33 @@ const userSchema = new Schema({
         trim: true,
         required: true
     },
+    phoneNumber: {
+        type: String,
+        trim: true
+    },
+    address: {
+        type: String,
+        trim: true
+    },
+    dob: {
+        type: Date
+    },
+    abn: {
+        type: String,
+        trim: true
+    },
+    socialURL: {
+        type: String,
+        trim: true
+    },
     hash_password: {
         type: String
     },
-    created: {
-        type: Date,
-        default: Date.now
-    }
+    industryType: {
+        type: String,
+        trim: true
+    },
+    tags: [String]
 });
 
 userSchema.methods.comparePassword = function(password:string) {
