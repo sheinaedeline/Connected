@@ -7,7 +7,6 @@ import * as bcrypt from 'bcrypt';
 export async function register(req: Request, res: Response): Promise<Response> {
     try {
         const { email, password, name} = req.body;
-        console.log(email);
         const required_fields = [
 			'email',
 			'password',

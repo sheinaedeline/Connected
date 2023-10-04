@@ -45,10 +45,10 @@ The Steps to creating an API can be divided into multiple steps.
     //Insert the routes here
     
     export default router;
-    
+    '
     If you just created the route directory file, lets say in this case you just created user.ts then register it to the root router by adding a line
     in the rootRouter.ts file such as:
-    '
+    
     import express from "express" //DONT TOUCH THIS
     import user from "@routes/user"; //REMEMBER TO IMPORT YOUR DEFINED ROUTE FILE (This imports the user.ts)
     const router = express.Router();
