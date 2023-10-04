@@ -21,8 +21,12 @@ Week 2
 	- Eric - Backend    
 
 Week 3
-- finishing up my part of the project proposal -> compamy user storyboard
+- finishing up my part of the project proposal -> company user storyboard
 - proofread and do final checking with the team
 - did a rundown of the project's user stories together with the team
+- project proposal done and submitted
 
 Week 4
+- meeting with the backend team -> me, eric and nicholas
+- scan through jira and distribute workload among the backend team
+- finished coding sprint 1 and prepare for first demo on week 5 monday
