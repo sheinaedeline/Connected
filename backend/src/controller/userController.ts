@@ -1,9 +1,9 @@
 import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
-import Token from '@mongodb/tokenModel';
+import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
 import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime } from '@utils/utils';
-import {generateNewToken, authoriseToken, deleteToken} from '@utils/authUtils';
+import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
 import * as jwt from 'jsonwebtoken';
 
@@ -101,6 +101,59 @@ export async function register(req: Request, res: Response): Promise<Response> {
     }
 }
 
+export async function login(req: Request, res: Response): Promise<Response> {
+    try {
+        const {email, password} = req.body;
+        let required_fields = [
+            'email',
+			'password'
+		];
+
+		for (const fields of required_fields) {
+			let valid = check_req_field(req.body[fields])
+            if(!valid){
+                throw new Error(`${fields} cannot be empty`)
+            }
+		}
+
+        let existingUser = await User.findOne({email});
+
+        if( existingUser == null){
+            return response_not_found(res,"User not found");
+        } else {
+            let passwordValid:boolean = existingUser.comparePassword(password);
+            if (passwordValid == false){
+                return response_unauthorized(res,"Wrong Password");
+            } else {
+                let jwtToken = await generateNewToken(existingUser.email, existingUser.userType, existingUser._id.toString());
+                return response_success(res,{jwtToken: `JWT ${jwtToken}`},"Successful Login")
+            }
+        }
+    } catch (error:any) {
+        if(error instanceof Error){
+            return response_bad_request(res,error.message)
+        } 
+        return response_internal_server_error(res, error.message)
+    }
+}
+
+
+export async function logout(req: Request, res: Response): Promise<Response> {
+    try {
+        const token_header = req.headers.authorization?.split(" ");
+        const token = getTokenFromHeader(token_header?token_header:[]);
+        await deleteToken(token);
+        return response_success(res,{},"Succesfully Log Out");
+    } catch (error:any) {
+        if(error instanceof Error){
+            return response_bad_request(res,error.message)
+        } 
+        return response_internal_server_error(res, error.message)
+    }
+}
+
+
+
 
 
 
@@ -112,13 +165,13 @@ export async function tokenTest(req: Request, res: Response): Promise<Response> 
         //     jwtTokenCreationDate:currentTime
         // });
         // await newToken.save();
-        const tokenAuthorisedObject = await authoriseToken(req);
-        if(tokenAuthorisedObject.status === "invalid"){
-            response_not_found(res,"Invalid Token")
-        } else{
-            await deleteToken(tokenAuthorisedObject.token);
-        }
-        return response_success(res,{},"Successful Delete Token")
+        // const tokenAuthorisedObject = await authoriseToken(req);
+        // if(tokenAuthorisedObject.status === "invalid"){
+        //     response_not_found(res,"Invalid Token")
+        // } else{
+        //     await deleteToken(tokenAuthorisedObject.tokenString);
+        // }
+        return response_success(res,{},"Authorised")
 
     } catch (error:any) {
         if(error instanceof Error){

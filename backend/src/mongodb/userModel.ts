@@ -1,8 +1,31 @@
-import * as mongoose from 'mongoose';
 import * as bcrypt from 'bcrypt';
-const { Schema } = mongoose;
+import { Schema, Model, model, Types} from 'mongoose';
 
-const userSchema = new Schema({
+
+interface IUser {
+    userType: string,
+    firstName: string,
+    lastName?: string,
+    name: string,
+    email: string,
+    phoneNumber: string,
+    address: string,
+    dob: Date,
+    abn: string,
+    socialURL: string,
+    hash_password: string,
+    industryType: string,
+    tags: Array<string>
+}
+
+interface IUserMethods {
+    comparePassword(password:string): boolean;
+}
+
+type UserModel = Model<IUser, {}, IUserMethods>;
+
+
+const userSchema = new Schema <IUser, UserModel, IUserMethods>({
     userType: {
         type: String,
         trim: true,
@@ -58,10 +81,10 @@ const userSchema = new Schema({
     tags: [String]
 });
 
-userSchema.methods.comparePassword = function(password:string) {
+userSchema.method('comparePassword', function(password:string) {
     return bcrypt.compareSync(password, this.hash_password);
-};
+});
 
-const User = mongoose.model('User', userSchema);
+const User = model<IUser, UserModel>('User', userSchema);
 
 export default User;

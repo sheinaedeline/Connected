@@ -2,13 +2,19 @@ import Token from '@mongodb/tokenModel';
 import * as jwt from 'jsonwebtoken';
 import {getCurrentTime } from '@utils/utils';
 import token from '@mongodb/tokenModel';
-import type {Request} from 'express';
-import type {AuthoriseTokenResponse } from '@interfaces/authInterface';
+import type {AuthorizeTokenResponse } from '@interfaces/authInterface';
+import type { Request, Response, NextFunction} from 'express';
+import {response_unauthorized, response_bad_request} from '@utils/responseUtils';
 import { verify } from 'crypto';
+
+export const getTokenFromHeader = (token_header:string[]):string => {
+    const token = token_header?.length == 3? token_header[2]:token_header?token_header[1]:"";
+    return token;
+}
+
 export const deleteToken = async (token:string):Promise<void> => {
     await Token.findOneAndDelete({jwtString:token});
 }
-
 
 export const deactivateCurrentUserToken = async (userId:string):Promise<void> => {
     const tokenEntry = await Token.findOne({jwtUserID:userId});
@@ -18,8 +24,6 @@ export const deactivateCurrentUserToken = async (userId:string):Promise<void> =>
         await deleteToken(tokenEntry.jwtString);
     }
 }
-
-
 
 export const generateNewToken = async (email:string , userType: string, userId:string):Promise<string> => {
     await deactivateCurrentUserToken(userId);
@@ -34,15 +38,14 @@ export const generateNewToken = async (email:string , userType: string, userId:s
     return jwtToken;
 }
 
-export const authoriseToken = async (req:Request): Promise<AuthoriseTokenResponse> => {
+export const authorizeToken = async (req:Request): Promise<AuthorizeTokenResponse> => { 
     const token_header = req.headers.authorization?.split(" ");
-    const token = token_header?.length == 3? token_header[2]:token_header?token_header[1]:"";
-    let response_status:Boolean = true;
+    const token = getTokenFromHeader(token_header?token_header:[]);
     const secret:string = process.env.SECRET?process.env.SECRET:"none";
-    let authorizeTokenResponse: AuthoriseTokenResponse = {
+    let authorizeTokenResponse: AuthorizeTokenResponse = {
         status:"",
         decodedToken:"",
-        token
+        tokenString: token
     }
     jwt.verify(token, secret, function(err, decode) {
         if (err) {
@@ -54,10 +57,33 @@ export const authoriseToken = async (req:Request): Promise<AuthoriseTokenRespons
         }
     })
     if(authorizeTokenResponse.status = "valid"){
-        const tokenInDB = Token.findOne({jwtString: token})
+        const tokenInDB = await Token.findOne({jwtString: token});
         if(tokenInDB == null){
             authorizeTokenResponse.status ="invalid";
         }
     }
     return authorizeTokenResponse;
+}
+
+/*
+Middleware that checks for the role of the user using the token provided in the header, value should either be professional, company, admin,
+or any(any means that it doesnt care what the user role is and is just used to check if a valid token is used).
+
+To use this function just add import and add the function to the route before your main function
+for example if you are creating a login function where the route looks like:
+'route.post("/login",login)
+Then you want to modify it so that the api can only be called by a professional user then change it to:
+'route.post("login"/,checkForRole,login)
+*/
+export function checkForRole(role:string="any") {
+    return async function roleMiddleware(req: Request, res: Response, next:NextFunction) {
+        let authorizedTokenObject:AuthorizeTokenResponse = await authorizeToken(req);
+        if (authorizedTokenObject.status == "invalid"){
+            return response_bad_request(res,"Invalid Token");
+        } else if (authorizedTokenObject.decodedToken.role != role && role!== "any"){
+            return response_unauthorized(res,"Invalid Access Level");
+        } else {
+            next();
+        }
+    } 
 }

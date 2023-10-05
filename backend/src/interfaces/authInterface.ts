@@ -1,5 +1,5 @@
-export interface AuthoriseTokenResponse{
+export interface AuthorizeTokenResponse{
     status: string,
     decodedToken: any,
-    token:string
+    tokenString:string
 }

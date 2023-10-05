@@ -1,5 +1,4 @@
-import * as mongoose from 'mongoose';
-const { Schema } = mongoose;
+import { Schema, InferSchemaType , model} from 'mongoose';
 const tokenSchema = new Schema({
     jwtUserID: {
         type:String,
@@ -17,6 +16,8 @@ const tokenSchema = new Schema({
     }
 });
 
-const token = mongoose.model('Token', tokenSchema);
+type Token = InferSchemaType<typeof tokenSchema>;
+
+const token = model('Token', tokenSchema);
 
 export default token;
