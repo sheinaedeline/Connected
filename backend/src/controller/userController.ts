@@ -1,11 +1,11 @@
 import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
-import User from '@mongodb/userModel';
+import User, { IUser } from '@mongodb/userModel';
 import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
 import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime } from '@utils/utils';
 import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
-import * as jwt from 'jsonwebtoken';
+export type {IUser} from '@mongodb/userModel'
 
 export async function register(req: Request, res: Response): Promise<Response> {
     try {
@@ -153,25 +153,46 @@ export async function logout(req: Request, res: Response): Promise<Response> {
 }
 
 
+export async function getProfessionalUsers(req: Request, res: Response): Promise<Response> {
+    try {
+        let users = await User.find().byUserType("professional").lean();
+        let professionalUsers = users.map((document) => 
+        {
+            let documentObj = document;
+            let {_id,__v, hash_password, ...rest} = documentObj
+            return {
+                id:_id.toString(),
+                ...rest
+            }
+        })
+        return response_success(res,{professionalUsers},"Request Success")
+
+    } catch (error:any) {
+        if(error instanceof Error){
+            return response_bad_request(res,error.message)
+        } 
+        return response_internal_server_error(res, error.message)
+    }
+}
+
+
 
 
 
 
 export async function tokenTest(req: Request, res: Response): Promise<Response> {
     try {
-        // let currentTime = getCurrentTime().toJSDate();
-        // let newToken = new Token({
-        //     jwtString:"test",
-        //     jwtTokenCreationDate:currentTime
-        // });
-        // await newToken.save();
-        // const tokenAuthorisedObject = await authoriseToken(req);
-        // if(tokenAuthorisedObject.status === "invalid"){
-        //     response_not_found(res,"Invalid Token")
-        // } else{
-        //     await deleteToken(tokenAuthorisedObject.tokenString);
-        // }
-        return response_success(res,{},"Authorised")
+        let users = await User.find().byUserType("professional").lean();
+        let professionalUsers = users.map((document) => 
+        {
+            let documentObj = document;
+            let {_id,__v, hash_password, ...rest} = documentObj
+            return {
+                id:_id.toString(),
+                ...rest
+            }
+        })
+        return response_success(res,{professionalUsers},"Request Success")
 
     } catch (error:any) {
         if(error instanceof Error){

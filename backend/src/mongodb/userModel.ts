@@ -1,8 +1,9 @@
 import * as bcrypt from 'bcrypt';
-import { Schema, Model, model, Types} from 'mongoose';
+import { Schema, Model, model, Types, Query, HydratedDocument} from 'mongoose';
+import type { QueryWithHelpers } from 'mongoose';
 
 
-interface IUser {
+export interface IUser {
     userType: string,
     firstName: string,
     lastName?: string,
@@ -15,17 +16,26 @@ interface IUser {
     socialURL: string,
     hash_password: string,
     industryType: string,
-    tags: Array<string>
+    tags: Array<string>,
+    __v?: number
 }
 
 interface IUserMethods {
     comparePassword(password:string): boolean;
 }
 
-type UserModel = Model<IUser, {}, IUserMethods>;
+interface UserQueryHelpers {
+    byUserType(name: string): QueryWithHelpers<
+      HydratedDocument<IUser>[],
+      HydratedDocument<IUser>,
+      UserQueryHelpers
+    >
+}
+  
+type UserModel = Model<IUser, UserQueryHelpers, IUserMethods>;
 
 
-const userSchema = new Schema <IUser, UserModel, IUserMethods>({
+const userSchema = new Schema <IUser, UserModel, IUserMethods, UserQueryHelpers>({
     userType: {
         type: String,
         trim: true,
@@ -79,11 +89,20 @@ const userSchema = new Schema <IUser, UserModel, IUserMethods>({
         trim: true
     },
     tags: [String]
-});
+}
+);
 
 userSchema.method('comparePassword', function(password:string) {
     return bcrypt.compareSync(password, this.hash_password);
 });
+
+userSchema.query.byUserType = function byName(
+    this: QueryWithHelpers<any, HydratedDocument<IUser>, UserQueryHelpers>,
+    userType: string
+  ) {
+    return this.find({userType});
+};
+
 
 const User = model<IUser, UserModel>('User', userSchema);
 
