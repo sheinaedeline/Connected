@@ -74,6 +74,8 @@ for example if you are creating a login function where the route looks like:
 'route.post("/login",login)
 Then you want to modify it so that the api can only be called by a professional user then change it to:
 'route.post("login"/,checkForRole,login)
+
+Also adds the _id property to the request object
 */
 export function checkForRole(role:string="any") {
     return async function roleMiddleware(req: Request, res: Response, next:NextFunction) {
@@ -83,6 +85,7 @@ export function checkForRole(role:string="any") {
         } else if (authorizedTokenObject.decodedToken.role != role && role!== "any"){
             return response_unauthorized(res,"Invalid Access Level");
         } else {
+            req.body["_id"] = authorizedTokenObject.decodedToken._id;
             next();
         }
     } 
