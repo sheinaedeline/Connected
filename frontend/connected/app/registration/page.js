@@ -7,11 +7,13 @@ import Link from 'next/link'
 export default function Registration() {
     return (
         <div className="bg-white dark:bg-black">
-            <Image
-                src={logo}
-                width={150}
-                alt="connected logo"
-            />
+            <Link href="/">
+                <Image
+                    src={logo}
+                    width={150}
+                    alt="connected logo"
+                />
+            </Link>
             <div className="flex flex-col justify-center mx-64 my-10 px-20 pb-2 mb-36 rounded-md border-2 border-blue-900">
                 <h2 className="my-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                     Join as a Professional or a Company

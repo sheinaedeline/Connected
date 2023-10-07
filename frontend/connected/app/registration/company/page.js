@@ -6,11 +6,13 @@ export default function RegistrationCompany() {
     return (
         <div className="bg-white dark:bg-black">
             <div className="flex justify-between">
-                <Image
-                    src={logo}
-                    width={150}
-                    alt="connected logo"
-                />
+                <Link href="/">
+                    <Image
+                        src={logo}
+                        width={150}
+                        alt="connected logo"
+                    />
+                </Link>
                 <p className="mt-4 mr-8 text-center text-sm text-gray-500">
                     Looking for work?{' '}
                     <a href="/registration/company" className="font-semibold leading-6 text-blue-600 hover:text-blue-00">
@@ -198,7 +200,7 @@ export default function RegistrationCompany() {
                     
 
                     <div>
-                        <Link href="/professional">
+                        <Link href="/company">
                             <button
                                 type="submit"
                                 className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
