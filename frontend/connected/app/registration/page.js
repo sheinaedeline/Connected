@@ -4,7 +4,7 @@ import company from "assets/Company Icon.png"
 import Image from 'next/image'
 import Link from 'next/link'
 
-export default function Login() {
+export default function Registration() {
     return (
         <div className="bg-white dark:bg-black">
             <Image
@@ -17,34 +17,28 @@ export default function Login() {
                     Join as a Professional or a Company
                 </h2>
                   <div className="flex justify-center items-center gap-10 mb-10">
-                    <button className="p-4 rounded-md border-2 border-blue-900 focus:bg-blue-100">
-                      <Image
-                        src={professional}
-                        width={150}
-                        alt="professional icon" 
-                      />
-                      I'm a professional, looking for work
-                    </button>
-                    <button className="p-4 rounded-md border-2 border-blue-900 focus:bg-blue-100">
-                      <Image
-                        src={company}
-                        width={150}
-                        alt="professional icon" 
-                      />
-                      I’m a company, hiring for a project
-                    </button>
-                  </div>
-                  <div className="flex justify-center">
-                    <Link href="/home">
-                      <button
-                          type="submit"
-                          className="flex justify-center rounded-md bg-blue-900 px-10 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                      >
-                          Create Account
+                    <Link href="/registration/professional">
+                      <button className="p-4 rounded-md border-2 border-blue-900 focus:bg-blue-100">
+                        <Image
+                          src={professional}
+                          width={150}
+                          alt="professional icon" 
+                        />
+                        I'm a professional, looking for work
                       </button>
-                    </Link> 
+                      </Link>
+                    <Link href="/registration/company">
+                      <button className="p-4 rounded-md border-2 border-blue-900 focus:bg-blue-100">
+                        <Image
+                          src={company}
+                          width={150}
+                          alt="professional icon" 
+                        />
+                        I’m a company, hiring for a project
+                      </button>
+                    </Link>
                   </div>
-                <p className="mt-8 text-center text-sm text-gray-500 pb-8">
+                <p className="mt-6 text-center text-sm text-gray-500 pb-8">
                     Already have an account?{' '}
                     <a href="/login" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
                     Log In
