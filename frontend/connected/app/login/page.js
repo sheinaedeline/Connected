@@ -2,13 +2,6 @@ import logo from "assets/Logo Expanded.png"
 import Image from 'next/image'
 import Link from 'next/link'
 
-const boxStyles = {
-    width: '70%',
-    height: '100%',
-    borderRadius: '15px',
-    border: '3px #137DC5 solid',
-}
-
 export default function Login() {
     return (
         <div className="bg-white dark:bg-black">
@@ -17,8 +10,8 @@ export default function Login() {
                 width={150}
                 alt="connected logo"
             />
-            <div className="flex flex-col justify-center mx-64 my-10 px-20 py-2 rounded-md border-2 border-blue-900">
-                <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+            <div className="flex flex-col justify-center mx-64 my-10 px-20 pb-2 mb-36 rounded-md border-2 border-blue-900">
+                <h2 className="my-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                     Log in to Connected
                 </h2>
                 <form className="space-y-6" action="#" method="POST">
