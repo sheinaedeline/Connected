@@ -9,18 +9,18 @@ const buttonStyles = {
     borderRadius: '5px',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
-  };
+};
 
 export default function Home() {
   return (
     <div className="bg-white dark:bg-black">
       <section className="relative">
         <div className="px-4 pt-10 mx-auto max-w-7xl md:pt-16"> 
-          <div className="w-full pb-5 mx-auto text-center md:w-11/12">'
+          <div className="w-full pb-5 mx-auto text-center md:w-11/12">
             
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'right' }}>
-            <button style={{ ...buttonStyles, marginRight: '10px' }}>Register</button>
-            <button style={buttonStyles}>Login</button>
+            <Link href="/registration"><button style={{ ...buttonStyles, marginRight: '10px' }}>Register</button></Link>
+            <Link href="/login"><button style={buttonStyles}>Login</button></Link>
           </div>
 
 
