@@ -22,7 +22,7 @@ export default function ProfessionalProfile() {
     return (
         <div className="bg-white dark:bg-black">
             <div className="flex justify-between">
-                <Link href="/">
+                <Link href="/professional">
                     <Image
                         src={logo}
                         width={150}
@@ -55,7 +55,7 @@ export default function ProfessionalProfile() {
                         </button>
                     </form>
                     {/* My Projects */}
-                    <Link href="/professional">
+                    <Link href="/projects">
                         <button
                             type="submit"
                             className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
