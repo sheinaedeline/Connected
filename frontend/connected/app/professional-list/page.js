@@ -107,7 +107,7 @@ export default function ProfessionalList() {
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
-                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.first_name} {item.last_name}</p>
+                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
                             <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
                             <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
                             <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
