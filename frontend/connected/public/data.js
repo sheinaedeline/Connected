@@ -260,8 +260,8 @@ export const trendingCompanies = [{
 
 export const trendingProfessionals = [{
     id: 1,
-    first_name: "Patsy",
-    last_name: "Ullrich",
+    firstName: "Patsy",
+    lastName: "Ullrich",
     rating: 4.0,
     skills: 10,
     industry: "Healthcare",
@@ -270,8 +270,8 @@ export const trendingProfessionals = [{
     description: "Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus."
   }, {
     id: 2,
-    first_name: "Natale",
-    last_name: "Gorhardt",
+    firstName: "Natale",
+    lastName: "Gorhardt",
     rating: 3.3,
     skills: 48,
     industry: "Finance",
@@ -280,8 +280,8 @@ export const trendingProfessionals = [{
     description: "Nullam varius. Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero. Nam dui."
   }, {
     id: 3,
-    first_name: "Steven",
-    last_name: "Culpan",
+    firstName: "Steven",
+    lastName: "Culpan",
     rating: 4.9,
     skills: 30,
     industry: "Finance",
@@ -290,8 +290,8 @@ export const trendingProfessionals = [{
     description: "Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia."
   }, {
     id: 4,
-    first_name: "Vivi",
-    last_name: "Isted",
+    firstName: "Vivi",
+    lastName: "Isted",
     rating: 4.2,
     skills: 8,
     industry: "Education",
@@ -300,8 +300,8 @@ export const trendingProfessionals = [{
     description: "Duis aliquam convallis nunc. Proin at turpis a pede posuere nonummy. Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus. Suspendisse potenti. In eleifend quam a odio."
   }, {
     id: 5,
-    first_name: "Alic",
-    last_name: "Belcher",
+    firstName: "Alic",
+    lastName: "Belcher",
     rating: 3.2,
     skills: 13,
     industry: "Construction",
@@ -310,8 +310,8 @@ export const trendingProfessionals = [{
     description: "Nunc purus. Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla. Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo. Pellentesque ultrices mattis odio. Donec vitae nisi. Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper augue, a suscipit nulla elit ac nulla."
   }, {
     id: 6,
-    first_name: "Ollie",
-    last_name: "O'Reagan",
+    firstName: "Ollie",
+    lastName: "O'Reagan",
     rating: 2.5,
     skills: 18,
     industry: "Finance",
@@ -320,8 +320,8 @@ export const trendingProfessionals = [{
     description: "Integer a nibh. In quis justo. Maecenas rhoncus aliquam lacus. Morbi quis tortor id nulla ultrices aliquet. Maecenas leo odio, condimentum id, luctus nec, molestie sed, justo. Pellentesque viverra pede ac diam. Cras pellentesque volutpat dui. Maecenas tristique, est et tempus semper, est quam pharetra magna, ac consequat metus sapien ut nunc. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Mauris viverra diam vitae quam. Suspendisse potenti. Nullam porttitor lacus at turpis. Donec posuere metus vitae ipsum. Aliquam non mauris."
   }, {
     id: 7,
-    first_name: "Cinderella",
-    last_name: "Giannazzi",
+    firstName: "Cinderella",
+    lastName: "Giannazzi",
     rating: 2.7,
     skills: 39,
     industry: "Media",
@@ -330,8 +330,8 @@ export const trendingProfessionals = [{
     description: "Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla. Integer pede justo, lacinia eget, tincidunt eget, tempus vel, pede."
   }, {
     id: 8,
-    first_name: "Bertina",
-    last_name: "Gladdifh",
+    firstName: "Bertina",
+    lastName: "Gladdifh",
     rating: 2.4,
     skills: 22,
     industry: "Transportation",
@@ -340,8 +340,8 @@ export const trendingProfessionals = [{
     description: "Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque."
   }, {
     id: 9,
-    first_name: "Nessie",
-    last_name: "Kindall",
+    firstName: "Nessie",
+    lastName: "Kindall",
     rating: 4.9,
     skills: 5,
     industry: "Hospitality",
@@ -350,8 +350,8 @@ export const trendingProfessionals = [{
     description: "Aliquam non mauris. Morbi non lectus. Aliquam sit amet diam in magna bibendum imperdiet. Nullam orci pede, venenatis non, sodales sed, tincidunt eu, felis. Fusce posuere felis sed lacus. Morbi sem mauris, laoreet ut, rhoncus aliquet, pulvinar sed, nisl. Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus."
   }, {
     id: 10,
-    first_name: "Gerick",
-    last_name: "Ruffell",
+    firstName: "Gerick",
+    lastName: "Ruffell",
     rating: 1.4,
     skills: 31,
     industry: "Media",
@@ -360,8 +360,8 @@ export const trendingProfessionals = [{
     description: "Nunc rhoncus dui vel sem. Sed sagittis. Nam congue, risus semper porta volutpat, quam pede lobortis ligula, sit amet eleifend pede libero quis orci. Nullam molestie nibh in lectus. Pellentesque at nulla. Suspendisse potenti. Cras in purus eu magna vulputate luctus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Vivamus vestibulum sagittis sapien. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Etiam vel augue. Vestibulum rutrum rutrum neque. Aenean auctor gravida sem. Praesent id massa id nisl venenatis lacinia."
   }, {
     id: 11,
-    first_name: "Ninnetta",
-    last_name: "D'Adda",
+    firstName: "Ninnetta",
+    lastName: "D'Adda",
     rating: 1.1,
     skills: 46,
     industry: "Media",
@@ -370,8 +370,8 @@ export const trendingProfessionals = [{
     description: "Ut tellus. Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla."
   }, {
     id: 12,
-    first_name: "Caesar",
-    last_name: "Coutts",
+    firstName: "Caesar",
+    lastName: "Coutts",
     rating: 3.6,
     skills: 17,
     industry: "Technology",
@@ -379,4 +379,49 @@ export const trendingProfessionals = [{
     imageAlt: "nisi",
     description: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat."
   }
-];  
+];
+
+export const sampleProfessional = [{
+    id: 1,
+    firstName: "Patsy",
+    lastName: "Ullrich",
+    rating: 4.0,
+    skills: 10,
+    industry: "Healthcare, IT & Development, Technology",
+    imageSrc: "http://dummyimage.com/286x202.png/ff4444/ffffff",
+    imageAlt: "neque duis",
+    description: "Integer non velit. Donec diam neque, vestibulum eget, vulputate ut, ultrices vel, augue. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Donec pharetra, magna vestibulum aliquet ultrices, erat tortor sollicitudin mi, sit amet lobortis sapien sapien non mi. Integer ac neque. Duis bibendum. Morbi non quam nec dui luctus rutrum. Nulla tellus. In sagittis dui vel nisl. Duis ac nibh. Fusce lacus purus, aliquet at, feugiat non, pretium quis, lectus.",
+    address: '139 Moon Road, Waterloo, NSW 2023',
+    email: 'patsy.Ullrich@gmail.com',
+    phoneNumber: '+6112345678',
+    linkedIn: 'https://www.linkedin.com/in/nicholas-ed-03c8a61b7/',
+    projectHistory: [
+        {
+            id: 1,
+            name: "Star Trading App Project",
+            start_date: "10 Aug 2023",
+            end_date: "1 Oct 2023",
+            price: 150,
+            company: "Monster Inc.",
+            industry: "IT & Development",
+            rating: 5,
+            pricePerHr: 30,
+            hours: 5,
+            remark: "Patsy delivered her part on time and did an outstanding job!",
+        },
+        {
+            id: 2,
+            name: "Pannier",
+            start_date: "10-Oct-2023",
+            end_date: "31-Oct-2023",
+            price: 200,
+            company: "Brainverse",
+            industry: "Technology",
+            rating: 5,
+            pricePerHr: 40,
+            hours: 5,
+            remark: "Patsy delivered her part on time and did an outstanding job!",
+        },
+    ],
+  },
+];
