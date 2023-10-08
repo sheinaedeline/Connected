@@ -274,9 +274,6 @@ export async function tokenTest(req: Request, res: Response): Promise<Response|v
     }
 }
 
-
-
-
 export async function imageSendTest(req: Request, res: Response): Promise<Response|void> {
     try {
         const { id: _id } = req.params;
@@ -297,5 +294,23 @@ export async function imageSendTest(req: Request, res: Response): Promise<Respon
             return response_bad_request(res,error.message)
         } 
         return response_internal_server_error(res, error.message)
+    }
+}
+
+export async function viewProfile(req: Request, res: Response): Promise<Response> {
+    try {
+        // Fetch the user's profile using the extracted _id.
+        const user = await User.findById(req.body["_id"]).select("-hash_password -__v"); // Exclude the hash_password field.
+        // If the user is not found, return a bad request response.
+        if (!user) {
+            return response_bad_request(res, "User not found.");
+        }
+        // If the user is found, return the user's profile.
+        return response_success(res, { user }, "User profile retrieved successfully.");
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        } 
+        return response_internal_server_error(res, error.message);
     }
 }
