@@ -6,8 +6,10 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { AiOutlinePlus, AiOutlineMail } from 'react-icons/ai';
 import { trendingProjects, trendingProfessionals } from '/public/data.js';
 import trading from "assets/Trading Background.png";
+import Footer from '/components/Footer.js';
 
 
 export default function CompanyHome() {
@@ -36,7 +38,7 @@ export default function CompanyHome() {
     return (
         <div className="bg-white dark:bg-black">
             <div className="flex justify-between">
-                <Link href="/professional">
+                <Link href="/company">
                     <Image
                         src={logo}
                         width={150}
@@ -69,12 +71,13 @@ export default function CompanyHome() {
                         </button>
                     </form>
                     {/* Create new project */}
-                    <Link href="/professional">
+                    <Link href="/company/post">
                         <button
                             type="submit"
-                            className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            className="flex gap-1 justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
-                            Create new project
+                            <AiOutlinePlus/> 
+                            <div>Create new project</div>
                         </button>
                     </Link> 
                     {/* My Projects */}
@@ -96,7 +99,7 @@ export default function CompanyHome() {
                         </button>
                     </Link> 
                     {/* Profile Icon */}
-                    <Link href="/professional/profile">
+                    <Link href="/company/profile">
                         <Image
                             src={profile}
                             width={38}
@@ -131,7 +134,7 @@ export default function CompanyHome() {
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.name}</p>
-                            <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
+                            <p className="col-span-2 text-xs italic text-gray-600">{item.startDate} - {item.endDate}</p>
                             <p className="col-span-2 text-sm font-medium text-blue-900">{item.company} Company</p>
                             <p className="mt-1 text-sm font-medium text-gray-600">${item.price}</p>
                             <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
@@ -203,10 +206,11 @@ export default function CompanyHome() {
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
-                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.company}</p>
-                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.projects} projects</p>
+                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.name}</p>
+                            <p className="col-span-2 text-xs italic text-gray-600">{item.startDate} - {item.endDate}</p>
+                            <p className="col-span-2 text-sm font-medium text-blue-900">{item.company} Company</p>
+                            <p className="mt-1 text-sm font-medium text-gray-600">${item.price}</p>
+                            <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                           </div>
                         </a>
@@ -216,6 +220,8 @@ export default function CompanyHome() {
                   </div>
                 </div>
             </div>
+            
+            <Footer/>
         </div>
     )
 }

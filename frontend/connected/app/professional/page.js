@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { trendingProjects, trendingCompanies } from '/public/data.js';
 import trading from "assets/Trading Background.png";
+import Footer from '/components/Footer.js';
 
 
 export default function ProfessionalHome() {
@@ -122,7 +123,7 @@ export default function ProfessionalHome() {
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.name}</p>
-                            <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
+                            <p className="col-span-2 text-xs italic text-gray-600">{item.startDate} - {item.endDate}</p>
                             <p className="col-span-2 text-sm font-medium text-blue-900">{item.company} Company</p>
                             <p className="mt-1 text-sm font-medium text-gray-600">${item.price}</p>
                             <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
@@ -194,10 +195,11 @@ export default function ProfessionalHome() {
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
-                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.company}</p>
-                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.projects} projects</p>
+                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.name}</p>
+                            <p className="col-span-2 text-xs italic text-gray-600">{item.startDate} - {item.endDate}</p>
+                            <p className="col-span-2 text-sm font-medium text-blue-900">{item.company} Company</p>
+                            <p className="mt-1 text-sm font-medium text-gray-600">${item.price}</p>
+                            <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                           </div>
                         </a>
@@ -207,6 +209,7 @@ export default function ProfessionalHome() {
                   </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     )
 }

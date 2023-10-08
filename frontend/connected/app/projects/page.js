@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { trendingProjects } from '/public/data.js';
 import trading from "assets/Trading Background.png";
+import Footer from '/components/Footer.js';
 
 
 export default function ProfessionalHome() {
@@ -109,7 +110,7 @@ export default function ProfessionalHome() {
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.name}</p>
-                            <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
+                            <p className="col-span-2 text-xs italic text-gray-600">{item.startDate} - {item.endDate}</p>
                             <p className="col-span-2 text-sm font-medium text-blue-900">{item.company} Company</p>
                             <p className="mt-1 text-sm font-medium text-gray-600">${item.price}</p>
                             <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
@@ -120,6 +121,7 @@ export default function ProfessionalHome() {
                   </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     )
 }

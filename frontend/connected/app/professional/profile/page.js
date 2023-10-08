@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { sampleProfessional } from '/public/data.js';
+import Footer from '/components/Footer.js';
 
 export default function ProfessionalProfile() {
 
@@ -279,6 +280,7 @@ export default function ProfessionalProfile() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     )
 }
