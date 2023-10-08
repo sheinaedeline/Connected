@@ -6,6 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { trendingCompanies } from '/public/data.js';
+import Footer from '/components/Footer.js';
 
 
 export default function CompanyList() {
@@ -118,6 +119,7 @@ export default function CompanyList() {
                   </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     )
 }

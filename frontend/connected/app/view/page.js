@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { sampleProfessional } from '/public/data.js';
 import { AiOutlineHeart, AiFillLinkedin } from 'react-icons/ai';
 import trading from "assets/Trading Background.png";
+import Footer from '/components/Footer.js';
 
 
 export default function ViewProfessional() {
@@ -27,7 +28,7 @@ export default function ViewProfessional() {
     return (
         <div className="bg-white dark:bg-black">
             <div className="flex justify-between">
-                <Link href="/professional">
+                <Link href="/company">
                     <Image
                         src={logo}
                         width={150}
@@ -149,6 +150,7 @@ export default function ViewProfessional() {
                     ))}
                 </div>
             </div>
+            <Footer/>
         </div>
     )
 }

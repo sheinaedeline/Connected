@@ -5,7 +5,9 @@ import search from "assets/carbon_search.png";
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { AiOutlinePlus } from 'react-icons/ai';
 import { sampleCompany } from 'public/data.js';
+import Footer from '/components/Footer.js';
 
 export default function CompanyProfile() {
     
@@ -23,7 +25,7 @@ export default function CompanyProfile() {
     return (
         <div className="bg-white dark:bg-black">
             <div className="flex justify-between">
-                <Link href="/">
+                <Link href="/company">
                     <Image
                         src={logo}
                         width={150}
@@ -56,14 +58,15 @@ export default function CompanyProfile() {
                         </button>
                     </form>
                     {/* Create new project */}
-                    <Link href="/professional">
+                    <Link href="/company/post">
                         <button
                             type="submit"
-                            className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            className="flex gap-1 justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
-                            Create new project
+                            <AiOutlinePlus/> 
+                            <div>Create new project</div>
                         </button>
-                    </Link> 
+                    </Link>
                     {/* My Projects */}
                     <Link href="/projects">
                         <button
@@ -83,7 +86,7 @@ export default function CompanyProfile() {
                         </button>
                     </Link> 
                     {/* Profile Icon */}
-                    <Link href="/professional/profile">
+                    <Link href="/company/profile">
                         <Image
                             src={profile}
                             width={38}
@@ -302,6 +305,7 @@ export default function CompanyProfile() {
                     </div>
                 </div>
             </div>
+            <Footer/>
         </div>
     )
 }
