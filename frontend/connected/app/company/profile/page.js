@@ -5,6 +5,7 @@ import search from "assets/carbon_search.png";
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
+import { sampleCompany } from 'public/data.js';
 
 export default function CompanyProfile() {
     
@@ -125,7 +126,7 @@ export default function CompanyProfile() {
                                 id="firstName"
                                 name="firstName"
                                 type="text"
-                                required
+                                value={sampleCompany[0].firstName}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -139,7 +140,7 @@ export default function CompanyProfile() {
                                 id="lastName"
                                 name="lastName"
                                 type="text"
-                                required
+                                value={sampleCompany[0].lastName}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -154,7 +155,7 @@ export default function CompanyProfile() {
                                 name="email"
                                 type="email"
                                 autoComplete="email"
-                                required
+                                value={sampleCompany[0].email}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -168,7 +169,7 @@ export default function CompanyProfile() {
                                 id="phoneNumber"
                                 name="phoneNumber"
                                 type="text"
-                                required
+                                value={sampleCompany[0].phoneNumber}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -182,7 +183,7 @@ export default function CompanyProfile() {
                                 id="username"
                                 name="username"
                                 type="text"
-                                required
+                                value={sampleCompany[0].username}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -196,7 +197,7 @@ export default function CompanyProfile() {
                                 id="password"
                                 name="password"
                                 type="password"
-                                required
+                                value={sampleCompany[0].password}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -225,7 +226,7 @@ export default function CompanyProfile() {
                                 id="companyName"
                                 name="companyName"
                                 type="text"
-                                required
+                                value={sampleCompany[0].companyName}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -239,7 +240,7 @@ export default function CompanyProfile() {
                                 id="ABN"
                                 name="ABN"
                                 type="text"
-                                required
+                                value={sampleCompany[0].ABN}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -253,7 +254,7 @@ export default function CompanyProfile() {
                                 id="industryType"
                                 name="industryType"
                                 type="text"
-                                required
+                                value={sampleCompany[0].industry}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -267,7 +268,7 @@ export default function CompanyProfile() {
                                 id="companyLink"
                                 name="companyLink"
                                 type="url"
-                                required
+                                value={sampleCompany[0].companyLink}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -281,7 +282,7 @@ export default function CompanyProfile() {
                                 id="address"
                                 name="address"
                                 type="text"
-                                required
+                                value={sampleCompany[0].address}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -291,12 +292,11 @@ export default function CompanyProfile() {
                             Brief Description
                         </label>
                         <div className="mt-2">
-                            <input
+                            <textarea
                                 id="description"
                                 name="description"
-                                type="text"
-                                required
-                                className="block w-full rounded-md border-0 py-12 mb-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                value={sampleCompany[0].description}
+                                className="block w-full h-32 rounded-md border-0 mb-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
