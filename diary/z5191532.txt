@@ -14,3 +14,26 @@ Friday:
 •	Distributed sections of the project proposal to team members.
 •	Agreed on finishing the draft by next Monday tutorial.
 
+Week 3:
+•	Finished the backgroud section of the project proposal. 
+•	Proofread and checked the project proposal with the teammembers. 
+•	Discussed and walked through the user stories with the team.
+
+Week 4:
+•	Started on the first sprint
+•	Distributed backend workload as follow:
+userController.ts
+    Register as User/Professional Account (Return Token) (Can pick the Company Tags, Upload Image) (Nicholas)
+    Login (Return Token) (Nicholas)
+    Logout (Invalidate Token) (Nicholas)
+    View Profile (Eric)
+    Validate Token (Function) (Nicholas)
+projectController.ts:
+    View All Available Projects (Vincent)
+    View All My Company Project  (Eric)
+    Create Project (Make sure you validate Its a Company) (Vincent)
+    View Project Details (Vincent)
+professionalController.ts:
+    View Professional List (Nicholas)
+•	Finished implementing the two functions assigned to me
+
