@@ -1,11 +1,16 @@
 import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
-import User, { IUser } from '@mongodb/userModel';
+import User from '@mongodb/userModel';
+import File from '@mongodb/fileModel';
+import UserPaginate from '@mongodb/userPaginateModel';
 import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
 import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime } from '@utils/utils';
 import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
-export type {IUser} from '@mongodb/userModel'
+import { Buffer } from 'buffer';
+import fileModel from '@mongodb/fileModel';
+
+
 
 export async function register(req: Request, res: Response): Promise<Response> {
     try {
@@ -17,6 +22,7 @@ export async function register(req: Request, res: Response): Promise<Response> {
             'email',
 			'password'
 		];
+        console.log(req.body);
         const validUserTypes = ["professional", "company"]
         if (validUserTypes.includes(userType) === false){
             throw new Error("user type must either be professional or company")
@@ -58,13 +64,14 @@ export async function register(req: Request, res: Response): Promise<Response> {
         }
         let lowerCasedTags:string[] = [];
         if (tags){
-            if(Array.isArray(tags)){
-                for (const item of tags){
+            let tagsArray = tags.split(',')
+            if(Array.isArray(tagsArray)){
+                for (const item of tagsArray){
                     if(typeof item != "string"){
                         throw new Error('Value inside shift_id array must be a string')
                     }
                 }
-                lowerCasedTags = tags.map( (items:string) => items.toLowerCase());
+                lowerCasedTags = tagsArray.map( (items:string) => items.toLowerCase().trim());
             }else{
                 throw new Error('tags field must be an array')
             }
@@ -89,8 +96,14 @@ export async function register(req: Request, res: Response): Promise<Response> {
             throw new Error(`The email ${email} is already registered`);
         }
         const savedUser = await newUser.save();
-        console.log(savedUser._id.toString());
         const jwtToken = await generateNewToken(email,userType,savedUser._id.toString());
+
+        if(req.file){
+            const image = { data: req.file.buffer, contentType: req.file?.mimetype }
+            await fileModel.create({userID: savedUser._id,type:"userprofile" ,image});
+        }
+
+
         return response_success(res,{name,email, jwtToken: `JWT ${jwtToken}`},"Successful Registration")
 
     } catch (error:any) {
@@ -153,20 +166,106 @@ export async function logout(req: Request, res: Response): Promise<Response> {
 }
 
 
-export async function getProfessionalUsers(req: Request, res: Response): Promise<Response> {
+export async function getUsers(req: Request, res: Response): Promise<Response> {
     try {
-        let users = await User.find().byUserType("professional").lean();
-        let professionalUsers = users.map((document) => 
-        {
-            let documentObj = document;
-            let {_id,__v, hash_password, ...rest} = documentObj
-            return {
-                id:_id.toString(),
-                ...rest
-            }
-        })
-        return response_success(res,{professionalUsers},"Request Success")
+        const {userType, size, page, tags} = req.body;
+        let required_fields = [
+            'userType',
+			'size',
+            'page'
+		];
 
+		for (const fields of required_fields) {
+			let valid = check_req_field(req.body[fields])
+            if(!valid){
+                throw new Error(`${fields} cannot be empty`)
+            }
+		}
+
+        if(typeof page != "number" || typeof size != "number"){
+            throw new Error("page and size must be a number")
+        }
+
+        if(page <=0 || size <= 0){
+            throw new Error("page and size number must be greater than 0");
+        }
+
+        const myCustomLabels = {
+            totalDocs: 'amountOfUser',
+            docs: 'userList',
+            limit: 'size',
+            page: 'currentPage'
+        };
+        
+        let lowerCasedTags:string[] = [];
+        if (tags){
+            if(Array.isArray(tags)){
+                for (const item of tags){
+                    if(typeof item != "string"){
+                        throw new Error('Value inside shift_id array must be a string')
+                    }
+                }
+                lowerCasedTags = tags.map( (items:string) => items.toLowerCase());
+            }else{
+                throw new Error('tags field must be an array')
+            }
+        }
+
+        let query = {
+            userType,
+            ...(tags && {tags: {$all: [...lowerCasedTags]}})
+        }
+
+        const options = {
+            page,
+            limit: size,
+            projection: "-__v -hash_password",
+            lean: true,
+            leanWithId: true,
+            customLabels: myCustomLabels,
+            useCustomCountFn: async () => {
+                let count = await User.countDocuments(query);
+                return count;
+            }
+        }
+        let users = await UserPaginate.paginate(query, options);
+        let {userList, ...rest} = users;
+        let usersList = Array.isArray(userList)?userList.map((e) => {
+            let {_id, ...otherFields} = e;
+            return {
+                ...otherFields
+            }
+        }):[]
+        return response_success(res,{usersList, ...rest},"Request Success")
+
+    } catch (error:any) {
+        if(error instanceof Error){
+            return response_bad_request(res,error.message)
+        } 
+        return response_internal_server_error(res, error.message)
+    }
+}
+
+
+const mongoose = require('mongoose');
+const imageSchema = mongoose.Schema({
+    image: { data: Buffer, contentType: String }
+});
+
+const ImageModel = mongoose.model('images', imageSchema);
+
+
+
+export async function tokenTest(req: Request, res: Response): Promise<Response|void> {
+    try {
+        if(req.file){
+        const image = { data: req.file.buffer, contentType: req.file?.mimetype }
+        console.log(image);
+        const savedImage = await ImageModel.create({image});
+        console.log(savedImage);
+        res.setHeader( "Content-Type", savedImage.image.contentType);
+        res.send(savedImage.image.data);
+        }
     } catch (error:any) {
         if(error instanceof Error){
             return response_bad_request(res,error.message)
@@ -178,22 +277,21 @@ export async function getProfessionalUsers(req: Request, res: Response): Promise
 
 
 
-
-
-export async function tokenTest(req: Request, res: Response): Promise<Response> {
+export async function imageSendTest(req: Request, res: Response): Promise<Response|void> {
     try {
-        let users = await User.find().byUserType("professional").lean();
-        let professionalUsers = users.map((document) => 
-        {
-            let documentObj = document;
-            let {_id,__v, hash_password, ...rest} = documentObj
-            return {
-                id:_id.toString(),
-                ...rest
-            }
-        })
-        return response_success(res,{professionalUsers},"Request Success")
+        const { id: _id } = req.params;
+        // If you dont use lean(), you wont decode image as base64
+        const image = await fileModel.findOne({ _id }).lean().exec();
+        
+        // res.type(image.image.contentType);
+        // res.header('Content-Disposition', `attachment; filename="test.png"`);
+        // res.send(image.image.data.buffer);
 
+        // res.setHeader( "Content-Type", image.image.contentType);
+        // res.send(image.image.data.buffer);
+        // res.send(image.image.data.buffer.toString('base64'));
+        
+        res.send(image?.image);
     } catch (error:any) {
         if(error instanceof Error){
             return response_bad_request(res,error.message)

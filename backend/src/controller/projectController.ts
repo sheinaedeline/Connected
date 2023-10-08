@@ -1,12 +1,12 @@
 //Bootstrap Code
 import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
-import User, { IUser } from '@mongodb/userModel';
+import User from '@mongodb/userModel';
 import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
 import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime } from '@utils/utils';
 import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
-export type {IUser} from '@mongodb/userModel'
+export type {IUser} from '@interfaces/mongoDBInterfaces'
 import Project, { IProject } from '@mongodb/projectModel';
 
 //Create project

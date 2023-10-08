@@ -1,11 +1,13 @@
 import express from "express"
 const router = express.Router();
-import {register,tokenTest,login, logout, getProfessionalUsers} from "@controller/userController"
+import {register,tokenTest,login, logout, getUsers, imageSendTest} from "@controller/userController"
 import { checkForRole } from "@utils/authUtils";
+import { uploadMiddleware } from "@utils/fileUploadUtils";
 
-router.post("/register",register);
-router.post("/test",  tokenTest);
+router.post("/register",uploadMiddleware('image','userimage'), register);
+router.post("/test", uploadMiddleware('image','userimage'), tokenTest);
 router.post("/login",login);
 router.get("/logout",checkForRole(),logout);
-router.get("/professionalusers",getProfessionalUsers);
+router.post("/users",getUsers);
+router.get("/imagetest/:id",imageSendTest);
 export default router;

@@ -82,7 +82,7 @@ export function checkForRole(role:string="any") {
         let authorizedTokenObject:AuthorizeTokenResponse = await authorizeToken(req);
         if (authorizedTokenObject.status == "invalid"){
             return response_bad_request(res,"Invalid Token");
-        } else if (authorizedTokenObject.decodedToken.role != role && role!== "any"){
+        } else if (authorizedTokenObject.decodedToken.role != role && role!== "any" && authorizedTokenObject.decodedToken.role != "admin"){
             return response_unauthorized(res,"Invalid Access Level");
         } else {
             req.body["_id"] = authorizedTokenObject.decodedToken._id;
