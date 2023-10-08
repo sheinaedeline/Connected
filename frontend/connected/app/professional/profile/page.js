@@ -1,9 +1,23 @@
-import logo from "assets/Logo Expanded.png"
-import profile from "assets/Profile Icon.png"
-import Image from 'next/image'
-import Link from 'next/link'
+'use client';
+import logo from "assets/Logo Expanded.png";
+import profile from "assets/Profile Icon.png";
+import search from "assets/carbon_search.png";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
 
 export default function ProfessionalProfile() {
+
+    const [searchInput, setSearchInput] = useState("");
+    
+    const handleChange = (e) => {
+        e.preventDefault();
+        setSearchInput(e.target.value);
+    };
+
+    const handleSearch = () => {
+        console.log(searchInput);
+    };
 
     return (
         <div className="bg-white dark:bg-black">
@@ -15,14 +29,31 @@ export default function ProfessionalProfile() {
                         alt="connected logo"
                     />
                 </Link>
-                <div className="flex justify-between">
+                <div className="flex justify-evenly items-center gap-4">
                     {/* Search Bar */}
-                    <button
-                        type="submit"
-                        className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                    >
-                        Create Account
-                    </button>
+                    <form className="flex" role="search">
+                        <input
+                            id="searchBar"
+                            name="searchBar"
+                            type="text"
+                            placeholder="Search"
+                            value={searchInput}
+                            onChange={handleChange}
+                            className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        >
+                        </input>
+                        <button
+                            type="submit"
+                            className="flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            onClick={handleSearch}
+                        >
+                            <Image
+                                src={search}
+                                width={26}
+                                alt="connected logo"
+                            />
+                        </button>
+                    </form>
                     {/* My Projects */}
                     <Link href="/professional">
                         <button
