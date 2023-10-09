@@ -5,7 +5,7 @@ import { checkForRole } from "@utils/authUtils";
 import { uploadMiddleware } from "@utils/fileUploadUtils";
 
 router.post("/register",uploadMiddleware('image','userimage'), register);
-router.post("/test", uploadMiddleware('image','userimage'), tokenTest);
+router.post("/test", checkForRole('professional'), tokenTest);
 router.post("/login",login);
 router.get("/logout",checkForRole(),logout);
 router.post("/users",getUsers);
