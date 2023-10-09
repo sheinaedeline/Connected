@@ -73,7 +73,7 @@ export async function createProject(req: Request, res: Response): Promise<Respon
     }
 }
 
-// Get a list of projects
+// View All Available Projects
 export async function getProjects(req: Request, res: Response): Promise<Response> {
     try {
         // Retrieve all projects from the database
@@ -85,6 +85,27 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             return response_bad_request(res,error.message)
         } 
         return res.status(500).json({ error: 'Internal Server Error' });
+    }
+}
+
+
+export async function viewCompanyProjects(req: Request, res: Response): Promise<Response> {
+    try {
+        const companyId = req.body["_id"];
+        // Query the Project collection to retrieve all projects associated with the company
+        const companyProjects = await Project.find({ owner: companyId });
+        // Check if the company has any projects
+        if (!companyProjects || companyProjects.length === 0) {
+            return response_not_found(res, "No projects found for this company");
+        }
+        // Return the fetched projects in the response
+        return response_success(res, companyProjects, "Projects retrieved successfully for the company");
+
+    } catch (error:any) {
+        if(error instanceof Error){
+            return response_bad_request(res,error.message)
+        } 
+        return response_internal_server_error(res, error.message);
     }
 }
 
@@ -108,3 +129,4 @@ export async function getProjectById(req: Request, res: Response): Promise<Respo
         return res.status(500).json({ error: 'Internal Server Error' });
     }
   }
+

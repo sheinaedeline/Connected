@@ -1,30 +1,62 @@
-import logo from "assets/Logo Expanded.png"
-import profile from "assets/Profile Icon.png"
-import Image from 'next/image'
-import Link from 'next/link'
+'use client';
+import logo from "assets/Logo Expanded.png";
+import profile from "assets/Profile Icon.png";
+import search from "assets/carbon_search.png";
+import Image from 'next/image';
+import Link from 'next/link';
+import { useState } from 'react';
+import { sampleProfessional } from '/public/data.js';
 
 export default function ProfessionalProfile() {
+
+    const [searchInput, setSearchInput] = useState("");
+    
+    const handleChange = (e) => {
+        e.preventDefault();
+        setSearchInput(e.target.value);
+    };
+
+    const handleSearch = () => {
+        console.log(searchInput);
+    };
 
     return (
         <div className="bg-white dark:bg-black">
             <div className="flex justify-between">
-                <Link href="/">
+                <Link href="/professional">
                     <Image
                         src={logo}
                         width={150}
                         alt="connected logo"
                     />
                 </Link>
-                <div className="flex justify-between">
+                <div className="flex justify-evenly items-center gap-4">
                     {/* Search Bar */}
-                    <button
-                        type="submit"
-                        className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                    >
-                        Create Account
-                    </button>
+                    <form className="flex" role="search">
+                        <input
+                            id="searchBar"
+                            name="searchBar"
+                            type="text"
+                            placeholder="Search"
+                            value={searchInput}
+                            onChange={handleChange}
+                            className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        >
+                        </input>
+                        <button
+                            type="submit"
+                            className="flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            onClick={handleSearch}
+                        >
+                            <Image
+                                src={search}
+                                width={26}
+                                alt="connected logo"
+                            />
+                        </button>
+                    </form>
                     {/* My Projects */}
-                    <Link href="/professional">
+                    <Link href="/projects">
                         <button
                             type="submit"
                             className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -85,7 +117,7 @@ export default function ProfessionalProfile() {
                                 id="firstName"
                                 name="firstName"
                                 type="text"
-                                required
+                                value={sampleProfessional[0].firstName}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -99,7 +131,7 @@ export default function ProfessionalProfile() {
                                 id="lastName"
                                 name="lastName"
                                 type="text"
-                                required
+                                value={sampleProfessional[0].lastName}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -114,7 +146,7 @@ export default function ProfessionalProfile() {
                                 name="email"
                                 type="email"
                                 autoComplete="email"
-                                required
+                                value={sampleProfessional[0].email}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -128,7 +160,7 @@ export default function ProfessionalProfile() {
                                 id="phoneNumber"
                                 name="phoneNumber"
                                 type="text"
-                                required
+                                value={sampleProfessional[0].phoneNumber}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -142,7 +174,7 @@ export default function ProfessionalProfile() {
                                 id="username"
                                 name="username"
                                 type="text"
-                                required
+                                value={sampleProfessional[0].username}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -156,7 +188,7 @@ export default function ProfessionalProfile() {
                                 id="password"
                                 name="password"
                                 type="password"
-                                required
+                                value={sampleProfessional[0].password}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -185,7 +217,7 @@ export default function ProfessionalProfile() {
                                 id="DOB"
                                 name="DOB"
                                 type="date"
-                                required
+                                value={sampleProfessional[0].DOB}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -199,7 +231,7 @@ export default function ProfessionalProfile() {
                                 id="industryType"
                                 name="industryType"
                                 type="text"
-                                required
+                                value={sampleProfessional[0].industry}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -213,7 +245,7 @@ export default function ProfessionalProfile() {
                                 id="linkedIn"
                                 name="linkedIn"
                                 type="url"
-                                required
+                                value={sampleProfessional[0].linkedIn}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -227,7 +259,7 @@ export default function ProfessionalProfile() {
                                 id="address"
                                 name="address"
                                 type="text"
-                                required
+                                value={sampleProfessional[0].address}
                                 className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -237,12 +269,11 @@ export default function ProfessionalProfile() {
                             Brief Description
                         </label>
                         <div className="mt-2">
-                            <input
+                            <textarea
                                 id="description"
                                 name="description"
-                                type="text"
-                                required
-                                className="block w-full rounded-md border-0 py-12 mb-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                value={sampleProfessional[0].description}
+                                className="block w-full h-32 rounded-md border-0 mb-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
