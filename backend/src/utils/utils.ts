@@ -1,4 +1,5 @@
 import { DateTime } from "luxon";
+import { Types } from "mongoose";
 
 export const check_req_field = (req_field:any):Boolean => {
     if (req_field == null || req_field == ''){
@@ -34,4 +35,9 @@ export const sql_date_string_checker = (iso_string:string):Boolean => {
     });
 
     return luxonDate.isValid;
+}
+
+export const idToObjectId = (id:string) => {
+    let _id = new Types.ObjectId(id);
+    return _id;
 }

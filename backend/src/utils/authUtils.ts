@@ -1,6 +1,6 @@
 import Token from '@mongodb/tokenModel';
 import * as jwt from 'jsonwebtoken';
-import {getCurrentTime } from '@utils/utils';
+import {getCurrentTime} from '@utils/utils';
 import token from '@mongodb/tokenModel';
 import type {AuthorizeTokenResponse } from '@interfaces/authInterface';
 import type { Request, Response, NextFunction} from 'express';
@@ -77,10 +77,10 @@ Then you want to modify it so that the api can only be called by a professional 
 
 Also adds the _id property to the request object
 */
-export function checkForRole(role:string="any") {
+export function checkForRole(role:string="any", mode:string = "required") {
     return async function roleMiddleware(req: Request, res: Response, next:NextFunction) {
         let authorizedTokenObject:AuthorizeTokenResponse = await authorizeToken(req);
-        if (authorizedTokenObject.status == "invalid"){
+        if (authorizedTokenObject.status == "invalid" && mode == "required"){
             return response_bad_request(res,"Invalid Token");
         } else if (authorizedTokenObject.decodedToken.role != role && role!== "any" && authorizedTokenObject.decodedToken.role != "admin"){
             return response_unauthorized(res,"Invalid Access Level");

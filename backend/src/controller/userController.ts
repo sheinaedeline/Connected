@@ -266,6 +266,9 @@ export async function tokenTest(req: Request, res: Response): Promise<Response|v
         // res.setHeader( "Content-Type", savedImage.image.contentType);
         // res.send(savedImage.image.data);
         console.log(req.body["_id"]);
+        if(req.body["id"] == null){
+            console.log("Is null");
+        }
         return response_success(res,{},"Token is valid");
         
     } catch (error:any) {
@@ -301,12 +304,14 @@ export async function imageSendTest(req: Request, res: Response): Promise<Respon
 
 export async function viewProfile(req: Request, res: Response): Promise<Response> {
     try {
+        const {id} = req.params;
         // Fetch the user's profile using the extracted _id.
-        const user = await User.findById(req.body["_id"]).select("-hash_password -__v"); // Exclude the hash_password field.
+        const user = await User.findById(id).select("-hash_password -__v"); // Exclude the hash_password field.
         // If the user is not found, return a bad request response.
         if (!user) {
             return response_bad_request(res, "User not found.");
         }
+
         // If the user is found, return the user's profile.
         return response_success(res, { user }, "User profile retrieved successfully.");
     } catch (error: any) {

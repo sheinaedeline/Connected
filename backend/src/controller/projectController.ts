@@ -63,13 +63,13 @@ export async function createProject(req: Request, res: Response): Promise<Respon
         const savedProject = await newProject.save();
 
         console.log(savedProject._id.toString());
-        return res.status(201).json(savedProject);
+        return response_success(res,savedProject,"Succesfully Created Project");
 
     } catch (error:any) {
         if(error instanceof Error){
             return response_bad_request(res,error.message)
         } 
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return response_bad_request(error);
     }
 }
 
@@ -79,12 +79,12 @@ export async function getProjects(req: Request, res: Response): Promise<Response
         // Retrieve all projects from the database
         const projects = await Project.find();
         // console.log(projects)
-        return res.status(200).json(projects);
-    } catch (error) {
+        return response_success(res,projects,"Succesfully Get Project");
+    } catch (error:any) {
         if(error instanceof Error){
             return response_bad_request(res,error.message)
         } 
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return response_bad_request(res,error.message);
     }
 }
 
@@ -122,11 +122,11 @@ export async function getProjectById(req: Request, res: Response): Promise<Respo
         }
         
         return response_success(res, project, 'Project retrieved successfully');
-    } catch (error) {
+    } catch (error:any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
         }
-        return res.status(500).json({ error: 'Internal Server Error' });
+        return response_bad_request(res,error.message);
     }
   }
 

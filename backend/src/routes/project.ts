@@ -7,6 +7,6 @@ const router = express.Router();
 // router.post("/create",checkForRole("company"),createProject);
 router.post("/create",checkForRole("company"),createProject);
 router.get("/allProjects",getProjects);
-router.get("/allProjects",checkForRole("company"),viewCompanyProjects);
+router.get("/getAllCompanyProject",checkForRole("company"),viewCompanyProjects);
 router.get("/:id", getProjectById);
 export default router;

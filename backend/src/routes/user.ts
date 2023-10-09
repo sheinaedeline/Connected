@@ -5,10 +5,16 @@ import { checkForRole } from "@utils/authUtils";
 import { uploadMiddleware } from "@utils/fileUploadUtils";
 
 router.post("/register",uploadMiddleware('image','userimage'), register);
-router.post("/test", checkForRole('professional'), tokenTest);
+router.post("/test", checkForRole('any','notRequired'), tokenTest);
 router.post("/login",login);
 router.get("/logout",checkForRole(),logout);
 router.post("/users",getUsers);
 router.get("/imagetest/:id",imageSendTest);
-router.get("/profile",checkForRole(),viewProfile);
+router.get("/profile/:id",viewProfile);
 export default router;
+
+checkForRole('any','free')
+checkForRole() //Same as checkForRole('any','required')
+checkForRole('company')
+checkForRole('professional')
+checkForRole('admin')
