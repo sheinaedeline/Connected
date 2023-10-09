@@ -258,14 +258,16 @@ const ImageModel = mongoose.model('images', imageSchema);
 
 export async function tokenTest(req: Request, res: Response): Promise<Response|void> {
     try {
-        if(req.file){
-        const image = { data: req.file.buffer, contentType: req.file?.mimetype }
-        console.log(image);
-        const savedImage = await ImageModel.create({image});
-        console.log(savedImage);
-        res.setHeader( "Content-Type", savedImage.image.contentType);
-        res.send(savedImage.image.data);
-        }
+        // if(req.file){
+        // const image = { data: req.file.buffer, contentType: req.file?.mimetype }
+        // console.log(image);
+        // const savedImage = await ImageModel.create({image});
+        // console.log(savedImage);
+        // res.setHeader( "Content-Type", savedImage.image.contentType);
+        // res.send(savedImage.image.data);
+        console.log(req.body["_id"]);
+        return response_success(res,{},"Token is valid");
+        
     } catch (error:any) {
         if(error instanceof Error){
             return response_bad_request(res,error.message)
