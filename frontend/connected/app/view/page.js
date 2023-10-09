@@ -139,7 +139,7 @@ export default function ViewProfessional() {
                     <div key={item.id} className="group grid grid-cols-3 gap-2 p-4 rounded-md border-2 border-blue-900 w-full">
                         <p className="col-span-2 text-lg font-bold text-gray-900">{item.name}</p>
                         <p className="text-md text-right text-blue-900">{item.company} Company</p>
-                        <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
+                        <p className="col-span-2 text-xs italic text-gray-600">{item.startDate} - {item.endDate}</p>
                         <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
                         <p className="text-sm text-gray-600">Rating {item.rating}/5</p>
                         <p className="col-span-2 font-medium text-sm italic text-blue-600">"{item.remark}"</p>
