@@ -101,6 +101,7 @@ WK5 Demo:
 
 I have completed the high fidelity for sprint 1 in Figma so that Satrio and I can refer to it when
 coding the frontend. I have also created the logo and the colour palette for the platform.
+I have also updated the README file for the dependencies I have installed.
 
 Sheina Pages:
 - Login
@@ -113,6 +114,7 @@ Sheina Pages:
 - View professional's profile
 - Company create new project post
 - Header and footer
+- Mock data for projects, professionals, companies
 
 Satrio Pages:
 - Landing
@@ -144,3 +146,5 @@ Frontend:
 Everyone:
 - Finish retrospective A report
 - Start sprint 2
+
+Meeting 10/10/2023 5-
