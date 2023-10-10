@@ -98,3 +98,49 @@ WK5 Demo:
 	- Present the application
 	- Show the completed user stories on Jira
 	- No need to make a presentation
+
+I have completed the high fidelity for sprint 1 in Figma so that Satrio and I can refer to it when
+coding the frontend. I have also created the logo and the colour palette for the platform.
+
+Sheina Pages:
+- Login
+- Registration (Professional, Company)
+- Home (Professional, Company)
+- Profile (Professional, Company)
+- View project lists
+- View professional lists
+- View company lists
+- View professional's profile
+- Company create new project post
+- Header and footer
+
+Satrio Pages:
+- Landing
+- Company's own projects list
+- Company project details (new, ongoing, completed)
+
+There was a miscommunication on who's making the registration pages but in the end we decided to use mine
+since it's more detailed and more similar to the high fidelity.
+
+Nicholas took lead in starting the backend and also delegated the tasks for the backend team.
+He used Mongoose JS driver, MongoDB and Postman for the backend. He created a gmail account for the
+Postman and also shared with the frontend team on how the backend works.
+
+
+#######################################
+Meeting 09/10/2023 12-1pm
+The team met on campus to finalise and go through together for the demo, and also explain and show the 
+backend and frontend we have accomplished.
+
+TUT05 09/10/2023 1-3pm
+We presented our demo and the progress we have made for sprint 1. We have finished both frontend and backend,
+however, we have not integrate them together for the first sprint.
+
+Frontend:
+- fix pages landing (Sheina), projects list (Satrio), project details page (Satrio)
+- integrate backend from register and login
+- fix header and make sure everything is sprint 1 is correct before starting sprint 2.
+
+Everyone:
+- Finish retrospective A report
+- Start sprint 2

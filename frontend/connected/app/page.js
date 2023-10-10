@@ -1,5 +1,8 @@
 import Head from "next/head";
 import Link from "next/link";
+import logo from "assets/Logo Expanded.png";
+import Image from 'next/image';
+import Footer from '/components/Footer.js';
 
 const buttonStyles = {
     padding: '10px 20px',
@@ -14,15 +17,24 @@ const buttonStyles = {
 export default function Home() {
   return (
     <div className="bg-white dark:bg-black">
+
       <section className="relative">
         <div className="px-4 pt-10 mx-auto max-w-7xl md:pt-16"> 
           <div className="w-full pb-5 mx-auto text-center md:w-11/12">
             
+          <div className="flex justify-between">
+          <Link href="/company">
+              <Image
+                  src={logo}
+                  width={150}
+                  alt="connected logo"
+              />
+          </Link>
           <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'right' }}>
             <Link href="/registration"><button style={{ ...buttonStyles, marginRight: '10px' }}>Register</button></Link>
             <Link href="/login"><button style={buttonStyles}>Login</button></Link>
           </div>
-
+          </div>
 
             <h1 className="mb-3 text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 md:text-6xl">
               ConnectEd
@@ -99,6 +111,7 @@ export default function Home() {
           style={{ backgroundImage: "url(/images/blur.png)" }}
           className="absolute inset-0 w-full h-full bg-bottom bg-no-repeat bg-cover -z-1"
         /> */}
+        <Footer/>
       </section>
     </div>
   );
