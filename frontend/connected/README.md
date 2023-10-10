@@ -20,17 +20,68 @@ You can start editing the page by modifying `app/page.js`. The page auto-updates
 
 This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
+## Dependencies to install
+1. react-icons
+2. tailwind-scrollbar-hide
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npm install tailwind-scrollbar-hide react-icons --save
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
+## Configuration Files
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+The following configuration files need to be added or modified:
+1. next.config.js
+2. tailwind.config.js
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+#### `next.config.js`
+```javascript
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+    images: {
+        domains: ['dummyimage.com']
+    },
+}
+
+module.exports = nextConfig
+```
+
+#### `tailwind.config.js`
+```javascript
+/** @type {import('tailwindcss').Config} */
+module.exports = {
+  content: [
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+  ],
+  theme: {
+    extend: {
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
+        'gradient-conic':
+          'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+      },
+      colors: {
+        blue: {
+          100: '#DCECF6',
+          300: "#B1D1E6",
+          500: "#57A2D4",
+          600: "#4095CF",
+          900: '#137DC5',
+        },
+        teal: {
+          900: '#42D5F3',
+        },
+        green: {
+          900: "#24D193",
+        },
+      },
+    },
+  },
+  plugins: [require('tailwind-scrollbar-hide')],
+}
+```
