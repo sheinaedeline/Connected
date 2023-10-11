@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 export type {IUser} from '@interfaces/mongoDBInterfaces'
 import Project, { IProject } from '@mongodb/projectModel';
 import { Schema, Types } from 'mongoose';
+import nodemailer from 'nodemailer';
 
 //Project status
 enum ProjectStatus {
@@ -274,6 +275,57 @@ export async function viewApprovedProfessionals(req: Request, res: Response): Pr
         //get user data from user database where id = to any id in project.approved_applicants
         const approvedProfessionals = await User.find({ _id: { $in: project.approved_applicants } });
         return response_success(res, approvedProfessionals, "Approved professionals retrieved successfully for the project");
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }
+}
+
+// send email to invite professionals
+export async function inviteProfessional(req: Request, res: Response): Promise<Response> {
+    try {
+        const { professionalEmail, projectId, link } = req.body;
+        const ownerId = req.body["_id"];
+        const project = await Project.findById(projectId);
+        if (!project) {
+            return response_not_found(res, "Project not found");
+        }
+        if (project.owner.toString() !== ownerId.toString()) {
+            return response_unauthorized(res, "Only the project owner can send invitations.");
+        }
+
+        //Nodemailer transporter
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'okaybuddy646@gmail.com',
+                pass: 'hezg ldar imjg rkkm',
+            },
+        });
+    
+        // Email content
+        const mailOptions = {
+            from: 'okaybuddy646@gmail.com',
+            to: professionalEmail,
+            subject: `Invitation to Join Project - ${project.project_title}`,
+            text: `You are invited to join the project '${project.project_title}' as a professional.\n
+                Click the link below to accept the invitation:\n
+                ${link}`,
+        };
+    
+        // Send the email
+        transporter.sendMail(mailOptions, (error: Error | null, info: nodemailer.SentMessageInfo) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                return response_internal_server_error(res,'Failed to send the invitation email');
+            } else {
+                console.log('Email sent:', info.response);
+                return response_success(res, "Invitation email sent successfully");
+            }
+        });
+        return response_success(res, "Succesfully send email");
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
