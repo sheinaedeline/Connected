@@ -249,7 +249,6 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
             project.potential_applicants = project.potential_applicants.filter((requestId) => requestId.toString() !== userId);
             const userIdApproved = new mongoose.Types.ObjectId(userId);
             project.approved_applicants.push(userIdApproved);
-            //TO DO EMAIL THE PROF APPROVAL 
             mailOptions = {
                 from: 'okaybuddy646@gmail.com',
                 to: professional.email,
@@ -258,7 +257,6 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
             };
         } else if (action === "reject") {
             project.potential_applicants = project.potential_applicants.filter((requestId) => requestId.toString() !== userId);
-            //TO DO EMAIL THE PROF REJECTION
             mailOptions = {
                 from: 'okaybuddy646@gmail.com',
                 to: professional.email,
