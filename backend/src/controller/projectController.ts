@@ -229,22 +229,53 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
         if (!potentialApplicants.includes(userId)) {
             return response_bad_request(res, "User has not requested to join this project.");
         }
-
+        
+        //set up email
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'okaybuddy646@gmail.com',
+                pass: 'hezg ldar imjg rkkm',
+            },
+        });
+        
+        const professional = await User.findById(userId);
+        if (!professional || !professional.email) {
+            return response_bad_request(res, "Professional not found or missing email.");
+        }
+        let mailOptions = {}
         //approve or reject
         if (action === "approve") {
             project.potential_applicants = project.potential_applicants.filter((requestId) => requestId.toString() !== userId);
             const userIdApproved = new mongoose.Types.ObjectId(userId);
             project.approved_applicants.push(userIdApproved);
             //TO DO EMAIL THE PROF APPROVAL 
-
+            mailOptions = {
+                from: 'okaybuddy646@gmail.com',
+                to: professional.email,
+                subject: `Approval to Join Project - ${project.project_title}`,
+                text: `You have been approved to join the project '${project.project_title}' as a professional.`,
+            };
         } else if (action === "reject") {
             project.potential_applicants = project.potential_applicants.filter((requestId) => requestId.toString() !== userId);
             //TO DO EMAIL THE PROF REJECTION
-
+            mailOptions = {
+                from: 'okaybuddy646@gmail.com',
+                to: professional.email,
+                subject: `Rejection to Join Project - ${project.project_title}`,
+                text: `You have been rejected to join the project '${project.project_title}' as a professional.`,
+            };
         } else {
             return response_bad_request(res, "Invalid action. Use 'approve' or 'reject'.");
         }
-
+        // Send the email
+        transporter.sendMail(mailOptions, (error: Error | null, info: nodemailer.SentMessageInfo) => {
+            if (error) {
+                console.error('Error sending email:', error);
+            } else {
+                console.log('Email sent:', info.response);
+            }
+        });
         const updatedProject = await project.save();
         const message = action === "approve" ? "Professional approved successfully" : "Professional rejected successfully";
         return response_success(res, updatedProject, message);
