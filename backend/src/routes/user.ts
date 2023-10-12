@@ -4,7 +4,7 @@ import {register,tokenTest,login, logout, getUsers, imageSendTest, viewProfile} 
 import { checkForRole } from "@utils/authUtils";
 import { uploadMiddleware } from "@utils/fileUploadUtils";
 
-router.post("/register",uploadMiddleware('image','userimage'), register);
+router.post("/register",uploadMiddleware('userimage','image',false), register);
 router.post("/test", checkForRole('any','notRequired'), tokenTest);
 router.post("/login",login);
 router.get("/logout",checkForRole(),logout);

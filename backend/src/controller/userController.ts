@@ -1,10 +1,9 @@
 import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
-import File from '@mongodb/fileModel';
 import UserPaginate from '@mongodb/userPaginateModel';
 import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
-import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime } from '@utils/utils';
+import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime, idToObjectId } from '@utils/utils';
 import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
 import { Buffer } from 'buffer';
@@ -22,7 +21,6 @@ export async function register(req: Request, res: Response): Promise<Response> {
             'email',
 			'password'
 		];
-        console.log(req.body);
         const validUserTypes = ["professional", "company"]
         if (validUserTypes.includes(userType) === false){
             throw new Error("user type must either be professional or company")
@@ -289,11 +287,12 @@ export async function imageSendTest(req: Request, res: Response): Promise<Respon
         // res.header('Content-Disposition', `attachment; filename="test.png"`);
         // res.send(image.image.data.buffer);
 
-        // res.setHeader( "Content-Type", image.image.contentType);
-        // res.send(image.image.data.buffer);
+        console.log(image);
+        // res.setHeader( "Content-Type", image?.image?.contentType?image.image.contentType:"");
+        // res.send(image?.image?.data?.buffer);
         // res.send(image.image.data.buffer.toString('base64'));
-        
-        res.send(image?.image);
+        return response_success(res,{userImage:`data:${image?.image?.contentType};base64,${image?.image?.data?.toString('base64')}`})
+        // res.send(image?.image);
     } catch (error:any) {
         if(error instanceof Error){
             return response_bad_request(res,error.message)
@@ -306,14 +305,18 @@ export async function viewProfile(req: Request, res: Response): Promise<Response
     try {
         const {id} = req.params;
         // Fetch the user's profile using the extracted _id.
-        const user = await User.findById(id).select("-hash_password -__v"); // Exclude the hash_password field.
+        const user = await User.findById(id).select("-hash_password -__v").lean(); // Exclude the hash_password field.
         // If the user is not found, return a bad request response.
         if (!user) {
             return response_bad_request(res, "User not found.");
         }
-
+        const image = await fileModel.findOne({userID:idToObjectId(id),type:"userprofile"}).lean();
         // If the user is found, return the user's profile.
-        return response_success(res, { user }, "User profile retrieved successfully.");
+        let userResponse = {
+            ...user,
+            ...(image !== null && {image: `data:${image?.image?.contentType};base64,${image?.image?.data?.toString('base64')}`}) 
+        }
+        return response_success(res, {user:userResponse}, "User profile retrieved successfully.");
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
