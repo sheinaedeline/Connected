@@ -7,4 +7,7 @@ Week 2:
 Decided on our project preference for the project raffle;roject 18, project 16, project 17, project 23 and project 23, the result we got project 23. Decided that Eric, Vincent, and Nicolas will be working on the backend. Sheina and myself will be working on the frontend. Started on the project proposal backbone structure and will fill in all the details when the project selection is finalised. Also made the profesional user flow diagram and possible action per page.
 
 Week 3: 
-Discussed and refined the user flow with fellow members
+Discussed and refined the user flow with fellow members, made the proposal and i did my part which was the user flow, I also joined the meeting where we did a final review and revamp the storyboards while also scheduling up the sprints for our project. Also did some brainstorming on how the design and theme of the UI and made up the company name
+
+Week 4:
+Me and the scrum master got the UI part, so i started doing that, we decided that we'll use react js with next.js as our framework, i was still new to this so i only made barebone pages to prepare for the week 5 lab. i was doing around 8 pages with routing.
