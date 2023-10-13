@@ -30,3 +30,18 @@ Week 4
 - meeting with the backend team -> me, eric and nicholas
 - scan through jira and distribute workload among the backend team
 - finished coding sprint 1 and prepare for first demo on week 5 monday
+- My task for Sprint 1:
+	- Create project API
+	- View all Available projects API
+	- View Project Details API
+
+Week 5
+- Finished demo on monday for retrospective A
+- Starting on Sprint 2
+- My task for Sprint 2:
+	- Updating Project Status API
+	- Request Join Project API
+	- Approve/Reject Professionals API
+	- View Approved Professionals API
+	- Invite Professionals API
+- make a recording for client demo
