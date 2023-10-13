@@ -147,4 +147,12 @@ Everyone:
 - Finish retrospective A report
 - Start sprint 2
 
-Meeting 10/10/2023 5-
+Retrospective A Meeting 10/10/2023 5-6pm
+We went through what went wrong, what could be better, what should we do to improve, while documenting
+it on the report. I submitted the report afterwards but realised few days later that it was not
+received on Moodle so I resubmitted the report.
+
+Meeting 13/10/2023 2.45-3pm
+Meeting to integrate the frontend and backend as well as going through the demo recording. I have created
+a slide to show the scope and context of the project using Canva. I will go through the project description
+aspect and record the frontend. Then, I will combine the backend.
