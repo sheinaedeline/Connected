@@ -24,17 +24,19 @@ function fileFilter(_: Request, file: Express.Multer.File, cb: FileFilterCallbac
 
 
 
-export function uploadMiddleware(filetype:string = "image", filename:string){
+export function uploadMiddleware(filename:string,filetype:string = "image",required=true){
     return function(req:Request,res:Response,next:NextFunction){
         const upload_var = upload.single(filename);
         upload_var(req,res,function(err){
-            if(filetype == "image"){
-                if(req.file?.mimetype != 'image/png' && req.file?.mimetype != 'image/jpeg'){
-                    return response_bad_request(res,"Image must be a png or jpeg")
-                }
-            } else {
-                if(req.file?.mimetype != 'application/pdf'){
-                    return response_bad_request(res,"File must be a pdf")
+            if(required || (required === false && req.file)){
+                if(filetype == "image"){
+                    if(req.file?.mimetype != 'image/png' && req.file?.mimetype != 'image/jpeg'){
+                        return response_bad_request(res,"Image must be a png or jpeg")
+                    }
+                } else {
+                    if(req.file?.mimetype != 'application/pdf'){
+                        return response_bad_request(res,"File must be a pdf")
+                    }
                 }
             }
             if(err instanceof Error){

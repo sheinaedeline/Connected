@@ -3,6 +3,8 @@ import Link from "next/link";
 import logo from "assets/Logo Expanded.png";
 import Image from 'next/image';
 import Footer from '/components/Footer.js';
+import professional from "assets/Professional Icon.png"
+import company from "assets/Company Icon.png"
 
 const buttonStyles = {
     padding: '10px 20px',
@@ -13,6 +15,7 @@ const buttonStyles = {
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
 };
+
 
 export default function Home() {
   return (
@@ -39,72 +42,108 @@ export default function Home() {
             <h1 className="mb-3 text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 md:text-6xl">
               ConnectEd
             </h1>
-            
-            <div className="max-w-xl mx-auto bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                <p className="text-sm text-gray-500 dark:text-gray-400">
-                Connecting professionals, building success through projects        
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
+              <div className="max-w-xl bg-white dark:bg-gray-800 p-4 text-left">
+                <p className="text-lg text-gray-500 dark:text-gray-400 font-semibold">
+                  Connecting professionals, building success through projects
                 </p>
-                <p className="text-xs text-gray-500 dark:text-gray-300">
-                Bringing expertise together, one project at a time. Find the best people to work with. Build connections.
+                <br></br>
+                <p className="text-base text-gray-500 dark:text-gray-300">
+                  Bringing expertise together, one project at a time. Find the best people to work with. Build connections.
                 </p>
-
-            </div>
-
-            <div className="max-w-xl mx-auto bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg flex justify-between">
-                <div className="max-w-xl p-4 text-gray-600 dark:text-gray-400">
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                        <p className="text-lg">
-                        Unlock your company's potential 
-                        </p>
-                        <br></br>
-                        <p className="text-xs text-gray-500 dark:text-gray-300">
-                            Showcase your projects and connect with a global network of professionals to drive innovation and growth.
-                        </p>
-                    </div>
+                <div className="mt-6 text-left md:ml-6">
+                  <Link href="/registration">
+                    <button style={{ ...buttonStyles, marginRight: '10px' }}>Get Started</button>
+                  </Link>
+                  <br className="sm:hidden" />
                 </div>
-                <div className="max-w-xl p-4 text-gray-600 dark:text-gray-400">
-                    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                        <p className="text-lg">
-                            Elevate your career and connections
-                        </p>
-                        <br></br>
-                        <p className="text-xs text-gray-500 dark:text-gray-300">
-                            Discover and apply for exciting projects easily. Expand your horizons and connect with leading companies worldwide.
-                        </p>
-                    </div>
+              </div>
+              
+              <div className="grid-item">
+                <Link href="/registration/professional">
+                  <button className="p-4 rounded-md">
+                        <Image
+                          src={professional}
+                          width={150}
+                          alt="professional icon" 
+                        />
+                  </button>
+                </Link>
+              </div>
+            </div>
+
+            <div className="bg-white dark:bg-gray-800 p-4 flex">
+              <div className="p-4 text-gray-600 dark:text-gray-400 flex-1">
+                <div className="bg-blue-500 dark:bg-gray-800 p-4 rounded-lg">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
+                  <div className="grid-item">
+                    <Link href="/registration/professional">
+                      <button className="p-4 rounded-md">
+                        <Image
+                          src={company}
+                          width={150}
+                          alt="professional icon" 
+                        />
+                      </button>
+                    </Link>
+                  </div>
+                  <p className="text-lg font-bold">Unlock your company's potential</p>
                 </div>
+                  
+                  <br></br>
+                  <p className="text-xs text-gray-900 dark:text-gray-300">
+                    Showcase your projects and connect with a global network of professionals to drive innovation and growth.
+                  </p>
+                  <br></br>
+                  <p className="text-sm font-semibold">Post a project and find top talent</p>
+                  <br></br>
+                  <p className="text-xs text-gray-900 dark:text-gray-300">
+                    Finding talented professionals doesn’t have to be challenging and time-consuming. Post a project and wait for applications!
+                  </p>
+                  <br></br>
+                  <p className="text-sm font-semibold">Connect with global excellence</p>
+                  <br></br>
+                  <p className="text-xs text-gray-900 dark:text-gray-300">
+                    Connected allows you to be connected with professionals around the world.
+                  </p>
+                </div>
+              </div>
+              
+              <div className="p-4 text-gray-600 dark:text-gray-400 flex-1 rounded">
+                <div className="bg-blue-400 dark:bg-gray-800 p-4 rounded-lg">
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
+                  <div className="grid-item">
+                    <Link href="/registration/professional">
+                      <button className="p-4 rounded-md">
+                            <Image
+                              src={professional}
+                              width={150}
+                              alt="professional icon" 
+                            />
+                      </button>
+                    </Link>
+                  </div>
+                  <p className="text-lg font-bold">Elevate your career and connections</p>
+                </div>  
+                  <br></br>
+                  <p className="text-xs text-gray-900 dark:text-gray-300">
+                    Discover and apply for exciting projects easily. Expand your horizons and connect with leading companies worldwide.
+                  </p>
+                  <br></br>
+                  <p className="text-sm font-semibold">Apply quickly to projects with ease</p>
+                  <br></br>
+                  <p className="text-xs text-gray-900 dark:text-gray-300">
+                    Finding interesting projects to work on shouldn’t be tedious. Just apply on the project posts you're interested in!
+                  </p>
+                  <br></br>
+                  <p className="text-sm font-semibold">Earn certificates and recognition</p>
+                  <br></br>
+                  <p className="text-xs text-gray-900 dark:text-gray-300">
+                    Enhance your profile and experiences through working on various projects.
+                  </p>
+                </div>
+              </div>
             </div>
-
-
-            <div className="mt-6 text-center md:ml-6">
-              <a
-                className="inline-flex items-center px-5 py-3 text-sm font-medium text-gray-300 transition duration-300 bg-black rounded hover:bg-gray-800 dark:hover:bg-gray-200 dark:text-gray-700 dark:bg-white"
-                aria-label="learn more"
-                rel="noreferrer"
-                href="https://github.com/minor/plutonium/"
-              >
-                <span className="flex justify-center">GitHub Link</span>
-              </a>
-              <br className="sm:hidden" />
-            </div>
-          </div>
-          <div className="relative w-full py-10 mx-auto text-center md:py-32 md:my-12 md:w-10/12">
-            <div className="relative z-10">
-              <a
-                target="_blank"
-                rel="noreferrer"
-                href="https://unsplash.com/photos/e9TrFZZ72DQ"
-              >
-                <img
-                  className="transition duration-700 shadow-xl rounded-xl ring-1 ring-black ring-opacity-5 hover:transform hover:scale-105"
-                  src="/images/placeholder.webp"
-                  alt="Placeholder Image"
-                />
-              </a>
-            </div>
-            <p className="z-10 my-8 text-sm font-medium text-gray-500">
-              Maybe we&apos;re bringing brightness too?
-            </p>
           </div>
         </div>
         {/* <div

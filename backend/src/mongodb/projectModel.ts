@@ -14,6 +14,9 @@ export interface IProject {
     online_offline: string;        
     price_budget: string;
     req_prof_criteria: string;      //resume or CV or aything
+    status: string;
+    potential_applicants: Array<Schema.Types.ObjectId>;
+    approved_applicants: Array<Schema.Types.ObjectId>;
 
 }
 
@@ -72,7 +75,15 @@ const projectSchema = new Schema<IProject, ProjectModel>({
     req_prof_criteria: {
         type: String,
     },
-    // Add other fields as needed
+    status: {
+        type: String,
+    },
+    potential_applicants: {
+        type: [Schema.Types.ObjectId],
+    },
+    approved_applicants: {
+        type: [Schema.Types.ObjectId],
+    },
 },projectSchemaOptions);
 
 const Project = model<IProject>('Project', projectSchema);
