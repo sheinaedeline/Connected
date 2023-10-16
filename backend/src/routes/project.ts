@@ -1,5 +1,5 @@
 import express from "express"
-import {createProject, inviteProfessional,viewApprovedProfessionals,getProjects, getProjectById, viewCompanyProjects, updateProjectStatus, requestJoinProject, manageProfessionalRequest} from "@controller/projectController"
+import {createProject, inviteProfessional,viewApprovedProfessionals,getProjects, getProjectById, viewCompanyProjects, updateProjectStatus, requestJoinProject, manageProfessionalRequest, editProjectDetails, deleteProject} from "@controller/projectController"
 import { checkForRole } from "@utils/authUtils";
 const router = express.Router();
 
@@ -14,4 +14,6 @@ router.put("/:id/join", checkForRole("professional"), requestJoinProject);
 router.put("/:id/:action/:userId", checkForRole("company"), manageProfessionalRequest);
 router.get("/:id/approvedProfessionals", checkForRole("company"), viewApprovedProfessionals);
 router.post('/inviteProfessional', checkForRole('company'), inviteProfessional);
+router.put("/:id/edit", checkForRole("company"), editProjectDetails);
+router.delete("/:id/delete", checkForRole("company"), deleteProject);
 export default router;

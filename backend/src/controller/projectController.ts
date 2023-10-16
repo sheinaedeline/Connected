@@ -32,7 +32,7 @@ export async function createProject(req: Request, res: Response): Promise<Respon
             'expected_working_hours',
             'online_offline'
 		];
-        console.log(project_title)
+        // console.log(project_title)
 		for (const fields of required_fields) {
 			let valid = check_req_field(req.body[fields])
             if(!valid){
@@ -75,7 +75,7 @@ export async function createProject(req: Request, res: Response): Promise<Respon
         
         const savedProject = await newProject.save();
 
-        console.log(savedProject._id.toString());
+        // console.log(savedProject._id.toString());
         return response_success(res,savedProject,"Succesfully Created Project");
 
     } catch (error:any) {
@@ -91,7 +91,7 @@ export async function getProjects(req: Request, res: Response): Promise<Response
     try {
         // Retrieve all projects from the database
         const projects = await Project.find();
-        // console.log(projects)
+        console.log(projects)
         return response_success(res,projects,"Succesfully Get Project");
     } catch (error:any) {
         if(error instanceof Error){
@@ -101,7 +101,7 @@ export async function getProjects(req: Request, res: Response): Promise<Response
     }
 }
 
-
+// Company users can view their listed projects
 export async function viewCompanyProjects(req: Request, res: Response): Promise<Response> {
     try {
         const companyId = req.body["_id"];
@@ -122,7 +122,7 @@ export async function viewCompanyProjects(req: Request, res: Response): Promise<
     }
 }
 
-// view project detail by ID
+// view project details by ID
 export async function getProjectById(req: Request, res: Response): Promise<Response> {
     try {
         const projectId = req.params.id; // Get the project ID from the request parameters
@@ -148,10 +148,9 @@ export async function getProjectById(req: Request, res: Response): Promise<Respo
 export async function updateProjectStatus(req: Request, res: Response): Promise<Response> {
     try {
         const projectId = req.params.id;
-        console.log(projectId)
         const { newStatus } = req.body;
         const userId = req.body["_id"];
-
+        console.log('user id: ',userId)
         // Validate the project status
         if (!Object.values(ProjectStatus).includes(newStatus)) {
             return response_bad_request(res, "Invalid new status provided. e.g. ongoing, new or completed");
@@ -175,6 +174,65 @@ export async function updateProjectStatus(req: Request, res: Response): Promise<
         return response_internal_server_error(res, error.message);
     }
 }
+
+// Company users can edit their project details, and have the option to delete the project.
+export async function editProjectDetails(req: Request, res: Response): Promise<Response> {
+    try {
+        const projectId = req.params.id;
+        const userId = req.body["_id"];
+        const updatedDetails = req.body;
+        const project = await Project.findById(projectId);
+        // console.log(project)
+        // console.log(updatedDetails)
+        if (!project) {
+            return response_bad_request(res, "Project not found.");
+        }
+        // Check if the user making the request is the owner of the project
+        if (project.owner.toString() !== userId) {
+            return response_bad_request(res, "Only the project owner can edit the details of this project.");
+        }
+        // If not deleting, update the project details
+        Object.keys(updatedDetails).forEach(key => {
+            if (key in project) {
+                (project as any)[key] = updatedDetails[key];
+            }
+        });
+        // console.log(project)
+        await project.save();
+        return response_success(res, project, `Project details updated for ${project}`);
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }
+};
+
+// Company users can delete their listed projects
+export async function deleteProject(req: Request, res: Response): Promise<Response> {
+    try {
+        const projectId = req.params.id;
+        const userId = req.body["_id"];
+        // Fetch the project by its ID
+        const project = await Project.findById(projectId);
+        if (!project) {
+            return response_bad_request(res, "Project not found.");
+        }
+        // Check if the user making the request is the owner of the project
+        if (project.owner.toString() !== userId) {
+            return response_bad_request(res, "Only the project owner can delete this project.");
+        }
+        
+        await Project.findByIdAndDelete(projectId);
+        return response_success(res, "Project deleted successfully!");
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }
+}
+    
 
 // Join project
 export async function requestJoinProject(req: Request, res: Response): Promise<Response> {
