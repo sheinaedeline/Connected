@@ -182,21 +182,39 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
         const userId = req.body["_id"];
         const updatedDetails = req.body;
         const project = await Project.findById(projectId);
+
+        // Define which fields can be edited
+        const editableFields: (keyof IProject)[] = [
+            'project_title',
+            'tags',
+            'description',
+            'start_date',
+            'end_date',
+            'No_professional',
+            'expected_working_hours',
+            'skills',
+            'experiences',
+            'online_offline',
+            'price_budget',
+            'req_prof_criteria'
+        ];
         // console.log(project)
         // console.log(updatedDetails)
-        if (!project) {
+        if (project === null) {
             return response_bad_request(res, "Project not found.");
         }
         // Check if the user making the request is the owner of the project
         if (project.owner.toString() !== userId) {
             return response_bad_request(res, "Only the project owner can edit the details of this project.");
         }
-        // If not deleting, update the project details
-        Object.keys(updatedDetails).forEach(key => {
-            if (key in project) {
-                (project as any)[key] = updatedDetails[key];
+        // Update the fields
+        editableFields.forEach(field => {
+            if (req.body[field]) {
+                project[field] = req.body[field];
             }
         });
+        // Save the updated project
+        await project.save();
         // console.log(project)
         await project.save();
         return response_success(res, project, `Project details updated for ${project}`);
@@ -222,7 +240,7 @@ export async function deleteProject(req: Request, res: Response): Promise<Respon
         if (project.owner.toString() !== userId) {
             return response_bad_request(res, "Only the project owner can delete this project.");
         }
-        
+
         await Project.findByIdAndDelete(projectId);
         return response_success(res, "Project deleted successfully!");
     } catch (error: any) {
