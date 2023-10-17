@@ -1,8 +1,48 @@
-import logo from "assets/Logo Expanded.png"
-import Image from 'next/image'
-import Link from 'next/link'
+'use client';
+import logo from "assets/Logo Expanded.png";
+import Image from 'next/image';
+import Link from 'next/link';
+import axios from 'axios';
+import { useState } from 'react';
 
 export default function RegistrationProfessional() {
+    
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        
+        // Get form data
+        const formData = document.getElementById("formID");
+        console.log(formData);
+
+        // Extract data
+        const data = {
+            userType: 'professional',
+            firstName: document.getElementById('firstName').value,
+            lastName: document.getElementById('lastName').value,
+            name: document.getElementById('username').value,
+            email: document.getElementById('email').value,
+            phoneNumber: document.getElementById('phoneNumber').value,
+            address: document.getElementById('address').value,
+            dob: document.getElementById('DOB').value,
+            socialURL: document.getElementById('linkedIn').value,
+            password: document.getElementById('password').value,
+            tags: document.getElementById('industryType').value,
+        };
+
+        console.log(data);
+
+        // Make an HTTP POST request to your API route
+        try {
+            const response = await axios.post('http://127.0.0.1:3000/user/register', data);
+            // Handle the response as needed (e.g., show a success message or redirect the user)
+            console.log('Registration successful', response.data);
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('Registration failed', error);
+        }
+    };
+
     return (
         <div className="bg-white dark:bg-black">
             <div className="flex justify-between">
@@ -24,7 +64,7 @@ export default function RegistrationProfessional() {
                 <h2 className="my-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                     Sign up to find projects you’re interested
                 </h2>
-                <form className="space-y-6" action="#" method="POST">
+                <form id="formID" className="space-y-6" action="#" method="POST" >
                     <div className="grid grid-cols-2 gap-4">
                         <div>
                             <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
@@ -41,13 +81,27 @@ export default function RegistrationProfessional() {
                             </div>
                         </div>
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-                                Name
+                            <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
+                                First Name
                             </label>
                             <div className="mt-2">
                                 <input
-                                    id="name"
-                                    name="name"
+                                    id="firstName"
+                                    name="firstName"
+                                    type="text"
+                                    required
+                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">
+                                Last Name
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="lastName"
+                                    name="lastName"
                                     type="text"
                                     required
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
@@ -203,6 +257,7 @@ export default function RegistrationProfessional() {
                         <Link href="/professional">
                             <button
                                 type="submit"
+                                onClick={handleSubmit}
                                 className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                             >
                                 Create Account
