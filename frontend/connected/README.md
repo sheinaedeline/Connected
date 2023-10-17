@@ -24,9 +24,10 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 ## Dependencies to install
 1. react-icons
 2. tailwind-scrollbar-hide
+3. axios
 
 ```bash
-npm install tailwind-scrollbar-hide react-icons --save
+npm install axios tailwind-scrollbar-hide react-icons --save
 ```
 
 

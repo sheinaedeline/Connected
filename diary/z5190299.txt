@@ -139,7 +139,7 @@ We presented our demo and the progress we have made for sprint 1. We have finish
 however, we have not integrate them together for the first sprint.
 
 Frontend:
-- fix pages landing (Sheina), projects list (Satrio), project details page (Satrio)
+- fix pages landing (Satrio & Sheina), projects list (Satrio), project details page (Satrio)
 - integrate backend from register and login
 - fix header and make sure everything is sprint 1 is correct before starting sprint 2.
 
@@ -152,7 +152,17 @@ We went through what went wrong, what could be better, what should we do to impr
 it on the report. I submitted the report afterwards but realised few days later that it was not
 received on Moodle so I resubmitted the report.
 
-Meeting 13/10/2023 2.45-3pm
+Meeting 13/10/2023 2.45-4pm (With Vincent only) 4-5pm (With the whole group)
 Meeting to integrate the frontend and backend as well as going through the demo recording. I have created
 a slide to show the scope and context of the project using Canva. I will go through the project description
-aspect and record the frontend. Then, I will combine the backend.
+aspect and record the frontend. Then, I will combine with the backend demo recorded by Nick.
+I have created a channel on Microsoft Teams to publish the recording demo with Dr. Basem and the team.
+
+Setting up Backend on Mac:
+1. Install mongodb using homebrew and install the compass GUI.
+2. Set up the .env file
+3. Start the mongo services
+- brew services start mongodb-community@7.0
+4. Run the backend using npm run dev
+5. Stop mongo services when stopping backend too
+- brew services stop mongodb-community@7.0
