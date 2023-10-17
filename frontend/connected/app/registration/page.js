@@ -7,6 +7,7 @@ import Link from 'next/link'
 export default function Registration() {
     return (
         <div className="bg-white dark:bg-black">
+          <section className="relative pb-20">
             <Link href="/">
                 <Image
                     src={logo}
@@ -47,6 +48,7 @@ export default function Registration() {
                     </a>
                 </p>
             </div>
+            </section>
         </div>
     )
 }
