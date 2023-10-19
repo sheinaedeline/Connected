@@ -8,6 +8,10 @@ import search from "assets/carbon_search.png";
 import { AiOutlinePlus, AiOutlineMail } from 'react-icons/ai';
 import { useState } from 'react';
 import Footer from '/components/Footer.js';
+import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { trendingProjects, trendingProfessionals, sampleProject } from '/public/data.js';
+import { AiOutlineHeart, AiFillLinkedin } from 'react-icons/ai';
+import trading from "assets/Trading Background.png";
 
 export default function page() {
 
@@ -97,33 +101,46 @@ export default function page() {
       </div>
       <section className="relative">
         <div className="px-4 pt-10 mx-auto max-w-7xl md:pt-16">
-          <h1 className="mb-3 text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 md:text-3xl">
-                ConnectEd
-          </h1> 
-
           <br>
           </br>
           <div className="w-full pb-5 mx-auto text-left md:w-11/12">
-            <h1 className="mb-3 text-5xl font-underline tracking-tight text-gray-900 dark:text-gray-100 md:text-2xl">
-                Project 1
-            </h1>
-            <div className="max-w-xs bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg">
-                <h1 className="mb-3 text-5xl font-underline tracking-tight text-gray-900 dark:text-gray-100 md:text-2xl">
-                      2023-10-09 to 2023-10-10
-                </h1>
-            </div>
-            <div className="max-w-4xl bg-white dark:bg-gray-800 p-3 rounded-lg shadow-lg">
-                <h1 className="mb-3 text-5xl font-underline tracking-tight text-gray-900 dark:text-gray-100 md:text-2xl">
-                      Project
-                      <br>
-                      </br>
-                      Description 
-                </h1>
-            </div>
 
             <br></br>
 
-            <h1 className="mb-3 text-5xl font-underline tracking-tight text-gray-900 dark:text-gray-100 md:text-2xl">
+            <div className="flex flex-col rounded-md border-2 border-blue-900 w-full">
+                    {sampleProject.map((item) => (
+                    <div key={item.id} className="group grid grid-cols-4 grid-rows-2">
+                        <div className="aspect-h-1 aspect-w-1 overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                            <Image
+                                src={item.imageSrc}
+                                alt={item.imageAlt}
+                                width={300}
+                                height={200}
+                                className="object-cover object-center group-hover:opacity-75"
+                            />
+                        </div>
+                        <div className="col-span-3 grid grid-cols-4 gap-2 p-4 mr-10">
+                            <p className="col-span-3 text-3xl font-bold text-gray-900">{item.projectName} {item.industryType}</p>
+                            <div className="flex flex-evenly gap-x-4 justify-start items-center">
+                                <AiOutlineHeart size={40}/>
+                                <AiFillLinkedin size={40}/>
+                            </div>
+                            <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">{item.industry}</p>
+                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.startDate}</p>
+                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.endDate}</p>
+                            <p className="col-span-4 text-xs text-gray-600">Price: {item.price}</p>
+                            <p className="text-xs text-gray-600">Company: {item.companyName}</p>
+                            <p className="col-span-3 text-left text-xs text-gray-600">{item.email}</p>
+                        </div>
+                        <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
+                            <p className="text-lg font-medium text-gray-900">Description</p>
+                            <p className="mt-4 text-left text-xs text-gray-600">{item.description}</p>
+                        </div>
+                    </div>
+                    ))}
+                </div>
+
+            {/* <h1 className="mb-3 text-5xl font-underline tracking-tight text-gray-900 dark:text-gray-100 md:text-2xl">
                 Professional
             </h1>
 
@@ -136,12 +153,7 @@ export default function page() {
                     <button
                       className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     >
-                      Accept
-                    </button>
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Reject
+                      Remove
                     </button>
                   </div>
                 </a>
@@ -155,12 +167,7 @@ export default function page() {
                     <button
                       className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     >
-                      Accept
-                    </button>
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Reject
+                      Remove
                     </button>
                   </div>
                 </a>
@@ -174,12 +181,7 @@ export default function page() {
                     <button
                       className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     >
-                      Accept
-                    </button>
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Reject
+                      Remove
                     </button>
                   </div>
                 </a>
@@ -193,12 +195,7 @@ export default function page() {
                     <button
                       className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     >
-                      Accept
-                    </button>
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Reject
+                      Remove
                     </button>
                   </div>
                 </a>
@@ -212,12 +209,7 @@ export default function page() {
                     <button
                       className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     >
-                      Accept
-                    </button>
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Reject
+                      Remove
                     </button>
                   </div>
                 </a>
@@ -231,20 +223,57 @@ export default function page() {
                     <button
                       className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                     >
-                      Accept
-                    </button>
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Reject
+                      Remove
                     </button>
                   </div>
                 </a>
               </div>
-            </div>
+            </div> */}
 
-            
-  
+            <div>
+                  <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                      Onboard{' '}
+                      <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                        Professionals
+                      </a>
+                  </h2>
+                  <div className="relative flex items-center">
+                    <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                    <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                      {trendingProfessionals.map((item) => (
+                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                          <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                            <Image
+                              src={item.imageSrc}
+                              alt={item.imageAlt}
+                              width={300}
+                              height={200}
+                              className="object-cover object-center group-hover:opacity-75"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 p-4">
+                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
+                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
+                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
+                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
+                            <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
+                            <button
+                      className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    >
+                      Accept
+                    </button>
+                    <button
+                      className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    >
+                      Reject
+                    </button>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                    <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                  </div>
+                </div>  
           </div>
         </div>
 
