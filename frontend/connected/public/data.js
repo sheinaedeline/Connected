@@ -490,3 +490,21 @@ export const sampleCompany = [{
     ],
   },
 ];
+
+export const sampleProject = [{
+  id: 1,
+  projectName: "Makan",
+  industryType: "bang",
+  startDate: "10 Aug 2023",
+  endDate: "1 Oct 2023",
+  price: "10000",
+  companyName: "Brainverse",
+  industry: "Technology",
+  imageSrc: "http://dummyimage.com/300x200.png/ff4444/ffffff",
+  imageAlt: "tortor",
+  description: "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis.",
+  ABN: '712398712',
+  phoneNumber: '+6189032853',
+  companyLink: 'https://www.linkedin.com/in/nicholas-ed-03c8a61b7/',
+},
+];
