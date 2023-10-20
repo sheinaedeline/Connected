@@ -6,7 +6,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import { sampleProfessional } from '/public/data.js';
-import { AiOutlineHeart, AiFillLinkedin } from 'react-icons/ai';
+import { AiOutlineHeart, AiFillLinkedin, AiOutlinePlus } from 'react-icons/ai';
 import trading from "assets/Trading Background.png";
 import Footer from '/components/Footer.js';
 
@@ -60,8 +60,18 @@ export default function ViewProfessional() {
                             />
                         </button>
                     </form>
+                    {/* Create new project */}
+                    <Link href="/company/post">
+                        <button
+                            type="submit"
+                            className="flex gap-1 justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                            <AiOutlinePlus/> 
+                            <div>Create new project</div>
+                        </button>
+                    </Link> 
                     {/* My Projects */}
-                    <Link href="/projects">
+                    <Link href="/company/project">
                         <button
                             type="submit"
                             className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
@@ -79,7 +89,7 @@ export default function ViewProfessional() {
                         </button>
                     </Link> 
                     {/* Profile Icon */}
-                    <Link href="/professional/profile">
+                    <Link href="/company/profile">
                         <Image
                             src={profile}
                             width={38}
