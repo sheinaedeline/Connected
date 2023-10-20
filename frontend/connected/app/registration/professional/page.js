@@ -6,29 +6,64 @@ import axios from 'axios';
 import { useState } from 'react';
 
 export default function RegistrationProfessional() {
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [confirmEmail, setConfirmEmail] = useState("");
+    const [emailMatch, setEmailMatch] = useState(true);
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [address, setAddress] = useState("");
+    const [DOB, setDOB] = useState("");
+    const [linkedIn, setLinkedIn] = useState("");
+    const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordMatch, setPasswordMatch] = useState(true);
+    const [industryType, setIndustryType] = useState("");
+
+    const handleEmail = (e) => {
+        setEmail(e.target.value);
+        if (confirmEmail) {
+            setEmailMatch(e.target.value === confirmEmail);
+        }
+    };
+
+    const handleConfirmEmail = (e) => {
+        setConfirmEmail(e.target.value);
+        setEmailMatch(email === e.target.value);
+    };
+
+    const handlePassword = (e) => {
+        setPassword(e.target.value);
+        if (confirmPassword) {
+            setPasswordMatch(e.target.value === confirmPassword);
+        }
+    };
+
+    const handleConfirmPassword = (e) => {
+        setConfirmPassword(e.target.value);
+        setPasswordMatch(password === e.target.value);
+    };
     
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        
-        // Get form data
-        const formData = document.getElementById("formID");
-        console.log(formData);
 
         // Extract data
         const data = {
             userType: 'professional',
-            firstName: document.getElementById('firstName').value,
-            lastName: document.getElementById('lastName').value,
-            name: document.getElementById('username').value,
-            email: document.getElementById('email').value,
-            phoneNumber: document.getElementById('phoneNumber').value,
-            address: document.getElementById('address').value,
-            dob: document.getElementById('DOB').value,
-            socialURL: document.getElementById('linkedIn').value,
-            password: document.getElementById('password').value,
-            tags: document.getElementById('industryType').value,
+            firstName: firstName,
+            lastName: lastName,
+            username: username,
+            email: email,
+            phoneNumber: phoneNumber,
+            address: address,
+            dob: DOB,
+            socialURL: linkedIn,
+            password: password,
+            tags: industryType,
         };
+        
 
         console.log(data);
 
@@ -76,7 +111,9 @@ export default function RegistrationProfessional() {
                                     name="username"
                                     type="text"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={username}
+                                    onChange={e => setUsername(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -90,7 +127,9 @@ export default function RegistrationProfessional() {
                                     name="firstName"
                                     type="text"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={firstName}
+                                    onChange={e => setFirstName(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -104,7 +143,9 @@ export default function RegistrationProfessional() {
                                     name="lastName"
                                     type="text"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={lastName}
+                                    onChange={e => setLastName(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -118,7 +159,9 @@ export default function RegistrationProfessional() {
                                     name="address"
                                     type="text"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={address}
+                                    onChange={e => setAddress(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -132,7 +175,9 @@ export default function RegistrationProfessional() {
                                     name="linkedIn"
                                     type="url"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={linkedIn}
+                                    onChange={e => setLinkedIn(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -146,7 +191,9 @@ export default function RegistrationProfessional() {
                                     name="DOB"
                                     type="date"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={DOB}
+                                    onChange={e => setDOB(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -160,7 +207,9 @@ export default function RegistrationProfessional() {
                                     name="phoneNumber"
                                     type="text"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={phoneNumber}
+                                    onChange={e => setPhoneNumber(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -174,21 +223,9 @@ export default function RegistrationProfessional() {
                                     name="industryType"
                                     type="text"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
-                                Brief Description
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="description"
-                                    name="description"
-                                    type="text"
-                                    required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={industryType}
+                                    onChange={e => setIndustryType(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -203,7 +240,9 @@ export default function RegistrationProfessional() {
                                     type="email"
                                     autoComplete="email"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={email}
+                                    onChange={handleEmail}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -218,9 +257,12 @@ export default function RegistrationProfessional() {
                                     type="email"
                                     autoComplete="email"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={confirmEmail}
+                                    onChange={handleConfirmEmail}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
+                            {!emailMatch && <p className="text-xs text-red-400">Emails do not match!</p>}
                         </div>
                         <div>
                             <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
@@ -232,7 +274,9 @@ export default function RegistrationProfessional() {
                                     name="password"
                                     type="password"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={password}
+                                    onChange={handlePassword}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -246,9 +290,12 @@ export default function RegistrationProfessional() {
                                     name="confirmPassword"
                                     type="password"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={confirmPassword}
+                                    onChange={handleConfirmPassword}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
+                            {!passwordMatch && <p className="text-xs text-red-400">Passwords do not match!</p>}
                         </div>
                     </div>
                     

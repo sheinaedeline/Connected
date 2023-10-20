@@ -4,6 +4,7 @@ import logo from "assets/Logo Expanded.png";
 import Image from 'next/image';
 import Footer from '/components/Footer.js';
 import professional from "assets/Professional Icon.png"
+import group from "assets/Group.png";
 import company from "assets/Company Icon.png"
 
 const buttonStyles = {
@@ -20,12 +21,8 @@ const buttonStyles = {
 export default function Home() {
   return (
     <div className="bg-white dark:bg-black">
-
       <section className="relative">
-        <div className="px-4 pt-10 mx-auto max-w-7xl md:pt-16"> 
-          <div className="w-full pb-5 mx-auto text-center md:w-11/12">
-            
-          <div className="flex justify-between">
+        <div className="flex justify-between">
           <Link href="/company">
               <Image
                   src={logo}
@@ -33,46 +30,40 @@ export default function Home() {
                   alt="connected logo"
               />
           </Link>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'right' }}>
+          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'right', margin: '10pt' }}>
             <Link href="/registration"><button style={{ ...buttonStyles, marginRight: '10px' }}>Register</button></Link>
             <Link href="/login"><button style={buttonStyles}>Login</button></Link>
           </div>
-          </div>
+        </div>
 
-            <h1 className="mb-3 text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 md:text-6xl">
-              ConnectEd
-            </h1>
+        <div className="mx-auto max-w-7xl"> 
+          <div className="w-full pb-5 mx-auto text-center">
+            
             <div style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
               <div className="max-w-xl bg-white dark:bg-gray-800 p-4 text-left">
-                <p className="text-lg text-gray-500 dark:text-gray-400 font-semibold">
+                <h1 className="mb-3 text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100">
                   Connecting professionals, building success through projects
-                </p>
+                </h1>
                 <br></br>
-                <p className="text-base text-gray-500 dark:text-gray-300">
+                <p className="text-xl text-gray-500 dark:text-gray-300">
                   Bringing expertise together, one project at a time. Find the best people to work with. Build connections.
                 </p>
-                <div className="mt-6 text-left md:ml-6">
                   <Link href="/registration">
-                    <button style={{ ...buttonStyles, marginRight: '10px' }}>Get Started</button>
+                    <button style={{ ...buttonStyles, marginRight: '10px', marginTop: '10px' }}>Get Started</button>
                   </Link>
                   <br className="sm:hidden" />
-                </div>
               </div>
               
-              <div className="grid-item">
-                <Link href="/registration/professional">
-                  <button className="p-4 rounded-md">
-                        <Image
-                          src={professional}
-                          width={150}
-                          alt="professional icon" 
-                        />
-                  </button>
-                </Link>
+              <div className="grid-item mt-12 mx-32">
+                <Image
+                  src={group}
+                  width={300}
+                  alt="group icon" 
+                />
               </div>
             </div>
 
-            <div className="bg-white dark:bg-gray-800 p-4 flex">
+            <div className="bg-white dark:bg-gray-800 flex">
               <div className="p-4 text-gray-600 dark:text-gray-400 flex-1">
                 <div className="bg-blue-500 dark:bg-gray-800 p-4 rounded-lg">
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr auto' }}>
@@ -146,10 +137,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-        {/* <div
-          style={{ backgroundImage: "url(/images/blur.png)" }}
-          className="absolute inset-0 w-full h-full bg-bottom bg-no-repeat bg-cover -z-1"
-        /> */}
         <Footer/>
       </section>
     </div>
