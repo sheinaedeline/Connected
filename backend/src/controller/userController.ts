@@ -13,11 +13,10 @@ import fileModel from '@mongodb/fileModel';
 
 export async function register(req: Request, res: Response): Promise<Response> {
     try {
-        const {userType, firstName, lastName, name, email, phoneNumber, address, dob, socialURL, abn, password, tags} = req.body;
+        const {userType, firstName, lastName, userName, email, description, phoneNumber, address, dob, socialURL, abn, password, tags} = req.body;
         let required_fields = [
 			'firstName',
-            'lastName',
-            'name',
+            'userName',
             'email',
 			'password'
 		];
@@ -78,11 +77,12 @@ export async function register(req: Request, res: Response): Promise<Response> {
         let newUser = new User({
             userType,
             firstName, 
-            lastName,
-            name,
+            ...(lastName && {lastName}),
+            userName,
             email,
             hash_password : bcrypt.hashSync(password,10),
             ...(phoneNumber && {phoneNumber}),
+            ...(description && {description}),
             ...(address && {address}),
             ...((dob && userType === "professional") && {dob}),
             ...(socialURL && {socialURL}),
@@ -102,7 +102,7 @@ export async function register(req: Request, res: Response): Promise<Response> {
         }
 
 
-        return response_success(res,{name,email, jwtToken: `JWT ${jwtToken}`},"Successful Registration")
+        return response_success(res,{userName,email, jwtToken: `JWT ${jwtToken}`},"Successful Registration")
 
     } catch (error:any) {
         if(error instanceof Error){

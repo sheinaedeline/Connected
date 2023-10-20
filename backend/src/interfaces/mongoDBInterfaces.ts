@@ -3,8 +3,9 @@ import type { QueryWithHelpers, Types} from 'mongoose';
 export interface IUser {
     userType: string,
     firstName: string,
-    lastName?: string,
-    name: string,
+    lastName: string,
+    userName: string,
+    description?:string,
     email: string,
     phoneNumber: string,
     address: string,

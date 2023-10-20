@@ -13,10 +13,14 @@ export const userObj = {
         type: String,
         trim: true
     },
-    name: {
+    userName: {
         type: String,
         trim: true,
         required: true
+    },
+    description: {
+        type: String,
+        trim: true,
     },
     email: {
         type: String,
