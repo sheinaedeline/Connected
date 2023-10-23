@@ -137,7 +137,7 @@ export async function login(req: Request, res: Response): Promise<Response> {
                 return response_unauthorized(res,"Wrong Password");
             } else {
                 let jwtToken = await generateNewToken(existingUser.email, existingUser.userType, existingUser._id.toString());
-                return response_success(res,{jwtToken: `JWT ${jwtToken}`},"Successful Login")
+                return response_success(res,{userType: existingUser.userType ,jwtToken: `JWT ${jwtToken}`},"Successful Login")
             }
         }
     } catch (error:any) {
