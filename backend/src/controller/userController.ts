@@ -102,7 +102,7 @@ export async function register(req: Request, res: Response): Promise<Response> {
         }
 
 
-        return response_success(res,{userName,email, jwtToken: `JWT ${jwtToken}`},"Successful Registration")
+        return response_success(res,{userName,email,_id:savedUser._id.toString(),userType: savedUser.userType,jwtToken: `JWT ${jwtToken}`},"Successful Registration")
 
     } catch (error:any) {
         if(error instanceof Error){
@@ -137,7 +137,7 @@ export async function login(req: Request, res: Response): Promise<Response> {
                 return response_unauthorized(res,"Wrong Password");
             } else {
                 let jwtToken = await generateNewToken(existingUser.email, existingUser.userType, existingUser._id.toString());
-                return response_success(res,{userType: existingUser.userType ,jwtToken: `JWT ${jwtToken}`},"Successful Login")
+                return response_success(res,{_id:existingUser._id.toString(),userType: existingUser.userType ,jwtToken: `JWT ${jwtToken}`},"Successful Login")
             }
         }
     } catch (error:any) {
