@@ -37,3 +37,22 @@ professionalController.ts:
     View Professional List (Nicholas)
 •	Finished implementing the two functions assigned to me
 
+Week 5:
+•	Finished retrospective A demo on monday and received feedback.
+•	Started working on Sprint 2 and assigned tasks to teammembers on Jira
+•	My task for Sprint 2:
+	- As a professional user, I want to be able to view a company’s profile, so that I can learn more about the company and view their available projects.
+	- As a company user, I want to be able to view professionals who have requested to work on my project, so that I can approve or reject them.
+	- As a company user, I want to be able to edit my project lists and its details, so that I can ensure all the information is correct.
+•	Started integrating frontend with the backend using APIs
+
+Week 6:
+•	Since it's flexibility week so we had no labs and we did not meet as a team in-person
+•   Fixed previous sprint (sprint 1) issues
+•   Finished my backend API functions in speint(2)
+
+Week 7:
+•   Reviewd sprint2 backend functions as a team and tested it.
+
+
+
