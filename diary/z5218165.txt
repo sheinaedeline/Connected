@@ -45,3 +45,8 @@ Week 5
 	- View Approved Professionals API
 	- Invite Professionals API
 - make a recording for client demo
+
+Week 6
+- Finished Sprint 2 development
+- Tested the APIs in postman
+- Fixed the code based on feedback from retrospective A
