@@ -4,8 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
 import { useState } from 'react';
+import { useRouter } from "next/router";
 
 export default function RegistrationProfessional() {
+    const router = useRouter();
+    
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
@@ -54,7 +57,7 @@ export default function RegistrationProfessional() {
             userType: 'professional',
             firstName: firstName,
             lastName: lastName,
-            username: username,
+            userName: username,
             email: email,
             phoneNumber: phoneNumber,
             address: address,
@@ -72,6 +75,7 @@ export default function RegistrationProfessional() {
             const response = await axios.post('http://127.0.0.1:3000/user/register', data);
             // Handle the response as needed (e.g., show a success message or redirect the user)
             console.log('Registration successful', response.data);
+            router.push('/professional');
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Registration failed', error);

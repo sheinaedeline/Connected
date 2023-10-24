@@ -1,8 +1,40 @@
-import logo from "assets/Logo Expanded.png"
-import Image from 'next/image'
-import Link from 'next/link'
+'use client';
+import logo from "assets/Logo Expanded.png";
+import Image from 'next/image';
+import Link from 'next/link';
+import axios from 'axios';
+import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 export default function Login() {
+    const router = useRouter();
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [id, setID] = useState("");
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Extract data
+        const data = {
+            email: email,
+            password: password,
+        };
+
+        // Make an HTTP POST request to your API route
+        try {
+            const response = await axios.post('http://127.0.0.1:3000/user/login', data);
+            // Handle the response as needed (e.g., show a success message or redirect the user)
+            console.log('Login successful', response.data);
+            if (response.data.content.userType === 'company') {
+                router.push('/company');
+            }
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('Login failed', error);
+        }
+    };
+
     return (
         <div className="bg-white dark:bg-black">
             <section className="relative">
@@ -20,7 +52,7 @@ export default function Login() {
                     <form className="space-y-6" action="#" method="POST">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
-                                Username or Email address
+                                Email address
                             </label>
                             <div className="mt-2">
                                 <input
@@ -29,6 +61,8 @@ export default function Login() {
                                     type="email"
                                     autoComplete="email"
                                     required
+                                    value={email}
+                                    onChange={e => setEmail(e.target.value)}
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -52,6 +86,8 @@ export default function Login() {
                                 type="password"
                                 autoComplete="current-password"
                                 required
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -61,6 +97,7 @@ export default function Login() {
                             <Link href="/company">
                                 <button
                                     type="submit"
+                                    onClick={handleSubmit}
                                     className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                                 >
                                     Log in

@@ -390,7 +390,13 @@ export const trendingProfessionals = [{
     industry: "Technology",
     imageSrc: "http://dummyimage.com/293x206.png/ff4444/ffffff",
     imageAlt: "nisi",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat."
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat.",
+    address: '7 Moon Palace, Canley, NSW 2010',
+    email: 'c.coutts@gmail.com',
+    username: 'caesar.coutts',
+    password: 'caesarCoutts7',
+    abn: '23489071326',
+    phoneNumber: '+61489032852'
   }
 ];
 
@@ -457,8 +463,8 @@ export const sampleCompany = [{
     imageSrc: "http://dummyimage.com/300x200.png/ff4444/ffffff",
     imageAlt: "tortor",
     description: "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis.",
-    ABN: '712398712',
-    phoneNumber: '+6189032853',
+    ABN: '71239871256', // has to be 11 digits
+    phoneNumber: '+61489032853',
     companyLink: 'https://www.linkedin.com/in/nicholas-ed-03c8a61b7/',
     projectHistory: [
         {
