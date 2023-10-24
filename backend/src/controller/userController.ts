@@ -8,7 +8,8 @@ import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils
 import * as bcrypt from 'bcrypt';
 import { Buffer } from 'buffer';
 import fileModel from '@mongodb/fileModel';
-
+import crypto from 'crypto';
+import nodemailer from 'nodemailer';
 
 
 export async function register(req: Request, res: Response): Promise<Response> {
@@ -317,6 +318,63 @@ export async function viewProfile(req: Request, res: Response): Promise<Response
             ...(image !== null && {image: `data:${image?.image?.contentType};base64,${image?.image?.data?.toString('base64')}`}) 
         }
         return response_success(res, {user:userResponse}, "User profile retrieved successfully.");
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        } 
+        return response_internal_server_error(res, error.message);
+    }
+}
+
+// Forget password
+export async function forgetPassword(req: Request, res: Response): Promise<Response> {
+    try {
+        const {email} = req.params;
+        // Fetch the user's profile using email
+        const user = await User.findOne({ email });
+        // If the user is not found, return a bad request response.
+        if (!user) {
+            return response_bad_request(res, "User not found.");
+        }
+
+        //generate temporary password (update password in database)
+        const temporaryPassword = crypto.randomBytes(10).toString("base64url");
+        const hashedPassword = await bcrypt.hashSync(temporaryPassword, 10);
+        await User.updateOne({ email: email }, { $set: { hash_password: hashedPassword } });
+        console.log(temporaryPassword)
+        console.log(hashedPassword)
+
+        //send temp password to user
+        //Nodemailer transporter
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'okaybuddy646@gmail.com',
+                pass: 'hezg ldar imjg rkkm',
+            },
+        });
+        // Email content
+        const mailOptions = {
+            from: 'okaybuddy646@gmail.com',
+            to: email,
+            subject: `Temporary Password`,
+            text: 
+            `This is your temporary password: '${temporaryPassword}'\n
+            You are recommended to create a new password after succesfully logging in.\n`,
+        };
+    
+        // Send the email
+        transporter.sendMail(mailOptions, (error: Error | null, info: nodemailer.SentMessageInfo) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                return response_internal_server_error(res,'Failed to send forget password email');
+            } else {
+                console.log('Email sent:', info.response);
+                return response_success(res, "Temporary password sent successfully");
+            }
+        });
+
+        return response_success(res, "Temporary password is sent to User. User must be reminded to create a new password once logged in.");
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);

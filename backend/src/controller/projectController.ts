@@ -278,8 +278,13 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
     try {
         const projectId = req.params.id;
         const userId = req.body["_id"];
+        // get from database based on userId
+        const user = await User.findById(userId);
         const project = await Project.findById(projectId);
-
+        
+        if (!user) {
+            return response_not_found(res, "User not found");
+        }
         if (!project) {
             return response_not_found(res, "Project not found");
         }
@@ -295,6 +300,36 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
         project.potential_applicants.push(userId);
         const updatedProject = await project.save();
 
+        //Send confirmation email to user
+        //Nodemailer transporter
+        const transporter = nodemailer.createTransport({
+            service: 'Gmail',
+            auth: {
+                user: 'okaybuddy646@gmail.com',
+                pass: 'hezg ldar imjg rkkm',
+            },
+        });
+    
+        // Email content
+        const mailOptions = {
+            from: 'okaybuddy646@gmail.com',
+            to: user.email,
+            subject: `Confirmation for requested project - ${project.project_title}`,
+            text: `Your request to join '${project.project_title}' has been sent.\n
+                You will get an update on the status of your application soon.\n
+                `,
+        };
+    
+        // Send the email
+        transporter.sendMail(mailOptions, (error: Error | null, info: nodemailer.SentMessageInfo) => {
+            if (error) {
+                console.error('Error sending email:', error);
+                return response_internal_server_error(res,'Failed to send request confirmation email');
+            } else {
+                console.log('Email sent:', info.response);
+                return response_success(res, "request to join email sent successfully");
+            }
+        });
         return response_success(res, updatedProject, "Request to join project submitted successfully");
     } catch (error: any) {
         if (error instanceof Error) {
