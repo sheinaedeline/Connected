@@ -26,16 +26,6 @@ export default function page() {
       console.log(searchInput);
   };
 
-  const slideLeft = (id) => {
-    var slider = document.getElementById(id);
-    slider.scrollLeft = slider.scrollLeft - 500;
-  };
-
-  const slideRight = (id) => {
-    var slider = document.getElementById(id);
-    slider.scrollLeft = slider.scrollLeft + 500;
-  };
-
   return (
     <div className="bg-white dark:bg-black">
       <div className="flex justify-between">
@@ -130,40 +120,134 @@ export default function page() {
                             />
                         </div>
                         <div className="col-span-3 grid grid-cols-4 gap-2 p-4 mr-10">
-                            <p className="col-span-3 text-3xl font-bold text-gray-900">{item.projectName} {item.industryType}</p>
-                            <div className="flex flex-evenly gap-x-4 justify-start items-center">
+                            {/* <p className="col-span-3 text-3xl font-bold text-gray-900">{item.projectName} {item.industryType}</p> */}
+                            <div className="col-span-2" >
+                                <label htmlFor="projectName" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Project Name
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="projectName"
+                                        name="projectName"
+                                        type="text"
+                                        value={sampleProject[0].projectName}
+                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-span-2">
+                                <label htmlFor="industryType" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Industry Type
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="industryType"
+                                        name="industryType"
+                                        type="text"
+                                        value={sampleProject[0].industryType}
+                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div>
+                            {/* <div className="flex flex-evenly gap-x-4 justify-start items-center">
                                 <AiOutlineHeart size={40}/>
                                 <AiFillLinkedin size={40}/>
+                            </div> */}
+                            <div className="col-span-2">
+                                <label htmlFor="industry" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Industry
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="industry"
+                                        name="industry"
+                                        type="text"
+                                        value={sampleProject[0].industry}
+                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
                             </div>
-                            <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">{item.industry}</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.startDate}</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.endDate}</p>
-                            <p className="col-span-4 text-xs text-gray-600">Price: {item.price}</p>
-                            <p className="text-xs text-gray-600">Company: {item.companyName}</p>
+                            <div>
+                                <label htmlFor="startDate" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Start Date
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="startDate"
+                                        name="startDate"
+                                        type="text"
+                                        value={sampleProject[0].startDate}
+                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div>
+                            <div>
+                                <label htmlFor="endDate" className="block text-sm font-medium leading-6 text-gray-900">
+                                    End Date
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="endDate"
+                                        name="endDate"
+                                        type="text"
+                                        value={sampleProject[0].endDate}
+                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div>
+                            <div className="col-span-2">
+                                <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
+                                    Price
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="price"
+                                        name="price"
+                                        type="text"
+                                        value={sampleProject[0].price}
+                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div>
+                            {/* <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.startDate}</p> */}
+                            {/* <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.endDate}</p> */}
+                            {/* <p className="col-span-4 text-xs text-gray-600">Price: {item.price}</p> */}
+                            <p className="col-span-4 text-xs text-gray-600">Company: {item.companyName}</p>
                             <p className="col-span-3 text-left text-xs text-gray-600">{item.email}</p>
-                        </div>
-                        <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
-                            <p className="text-lg font-medium text-gray-900">Description</p>
-                            <p className="mt-4 text-left text-xs text-gray-600">{item.description}</p>
-                        </div>
-                        <br></br>
-                              <Link href="/company/project/planned/edit" >
+                            <Link href="/company/project/current" >
                                 <button
                                     type="submit"
                                     className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                                 >
-                                    Edit Project
+                                    Save Changes
                                 </button>
-                              </Link> 
-                        <br></br>
-                        <br></br>
+                            </Link>
+                        </div>
+                        
+                        <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
+                            {/* <p className="text-lg font-medium text-gray-900">Description</p>
+                            <p className="mt-4 text-left text-xs text-gray-600">{item.description}</p> */}
+                            <div className="col-span-4">
+                              <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                                  Brief Description
+                              </label>
+                              <div className="mt-2">
+                                  <textarea
+                                      id="description"
+                                      name="description"
+                                      value={sampleProject[0].description}
+                                      className="block w-full h-32 rounded-md border-0 mb-10 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                  />
+                              </div>
+                          </div>
+                        </div>
                     </div>
                     ))}
                 </div>
 
             <div>
-                  <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-                      Accepted{' '}
+                  {/* <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                      Onboard{' '}
                       <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
                         Professionals
                       </a>
@@ -189,61 +273,17 @@ export default function page() {
                             <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                             <button
-                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                              >
-                                Remove
-                              </button>
+                      className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    >
+                      Remove
+                    </button>
                           </div>
                         </a>
                       ))}
                     </div>
                     <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
-                  </div>
+                  </div> */}
                 </div>  
-                <div>
-                  <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-                      Apply{' '}
-                      <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
-                        List
-                      </a>
-                  </h2>
-                  <div className="relative flex items-center">
-                    <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
-                    <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                      {trendingProfessionals.map((item) => (
-                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                          <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                              src={item.imageSrc}
-                              alt={item.imageAlt}
-                              width={300}
-                              height={200}
-                              className="object-cover object-center group-hover:opacity-75"
-                            />
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 p-4">
-                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
-                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
-                            <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
-                            <button
-                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                              >
-                                Accept
-                              </button>
-                              <button
-                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                              >
-                                Reject
-                            </button>
-                          </div>
-                        </a>
-                      ))}
-                    </div>
-                    <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
-                  </div>
-                </div> 
           </div>
         </div>
 
