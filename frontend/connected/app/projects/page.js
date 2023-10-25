@@ -23,6 +23,16 @@ export default function ProfessionalHome() {
         console.log(searchInput);
     };
 
+    const slideLeft = (id) => {
+        var slider = document.getElementById(id);
+        slider.scrollLeft = slider.scrollLeft - 500;
+      };
+  
+    const slideRight = (id) => {
+        var slider = document.getElementById(id);
+        slider.scrollLeft = slider.scrollLeft + 500;
+    };
+
 
     return (
         <div className="bg-white dark:bg-black">

@@ -277,8 +277,27 @@ export default function ProfessionalProfile() {
                                 className="block w-full h-32 rounded-md border-0 mb-10 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
+                        <div className="flex justify-end m-4">
+                            <button
+                                type="submit"
+                                className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"style={{ marginRight: "10px" }}
+                            >
+                                Upload Resume
+                            </button>
+                            <button
+                                type="submit"
+                                className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            >
+                                Upload CV
+                            </button>
+                        </div>
                     </div>
                 </div>
+                <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                    My Tags
+                </h2>
+
+
             </div>
             <Footer/>
         </div>
