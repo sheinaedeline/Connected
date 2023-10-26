@@ -11,6 +11,7 @@ export default function Login() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [id, setID] = useState("");
+    const [userType, setUserType] = useState("");
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -26,8 +27,12 @@ export default function Login() {
             const response = await axios.post('http://127.0.0.1:3000/user/login', data);
             // Handle the response as needed (e.g., show a success message or redirect the user)
             console.log('Login successful', response.data);
-            if (response.data.content.userType === 'company') {
+            setID(response.data.content._id);
+            setUserType(response.data.content.userType);
+            if (userType === 'company') {
                 router.push('/company');
+            } else if (userType === 'professional') {
+                router.push('/professional');
             }
         } catch (error) {
             // Handle any errors (e.g., display an error message)
