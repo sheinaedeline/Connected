@@ -9,6 +9,7 @@ import { trendingProjects } from '/public/data.js';
 import trading from "assets/Trading Background.png";
 import Footer from '/components/Footer.js';
 
+const options = ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
 
 export default function ProfessionalHome() {
 
@@ -32,6 +33,54 @@ export default function ProfessionalHome() {
         var slider = document.getElementById(id);
         slider.scrollLeft = slider.scrollLeft + 500;
     };
+
+    function Filter() {
+        const [selectedOptions, setSelectedOptions] = useState([]);
+        const [showFilter, setShowFilter] = useState(false);
+      
+        const handleCheckboxChange = (option) => {
+            setSelectedOptions(prevState => {
+                if(prevState.includes(option)) {
+                    return prevState.filter(opt => opt !== option);
+                } else {
+                    return [...prevState, option];
+                }
+            });
+        };
+      
+        return (
+            <div>
+                <button 
+                className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" 
+                onClick={() => setShowFilter(!showFilter)}>
+                    Toggle Filter
+                </button>
+                {showFilter && (
+                    <div 
+                    className="ml-2 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                    >
+                        <h2>Filter</h2>
+                        {options.map((option, index) => (
+                            <div key={index}>
+                                <input 
+                                    type="checkbox" 
+                                    id={`option-${index}`} 
+                                    name={`option-${index}`} 
+                                    value={option}
+                                    onChange={() => handleCheckboxChange(option)}
+                                />
+                                <label htmlFor={`option-${index}`}>{option}</label>
+                            </div>
+                        ))}
+                        {/* <h2>Selected Options</h2>
+                        {selectedOptions.map((option, index) => (
+                            <p key={index}>{option}</p>
+                        ))} */}
+                    </div>
+                )}
+            </div>
+        );
+      }
 
 
     return (
@@ -106,6 +155,32 @@ export default function ProfessionalHome() {
                         Projects
                       </a>
                   </h2>
+
+                  <form className="flex" role="search">
+                        <input
+                            id="searchBar"
+                            name="searchBar"
+                            type="text"
+                            placeholder="Search"
+                            value={searchInput}
+                            onChange={handleChange}
+                            className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        >
+                        </input>
+                        <button
+                            type="submit"
+                            className="flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            onClick={handleSearch}
+                        >
+                            <Image
+                                src={search}
+                                width={26}
+                                alt="connected logo"
+                            />
+                        </button>
+                </form>
+                <br></br>
+                <Filter />
                   <div className="grid grid-cols-4 gap-x-10">
                       {trendingProjects.map((item) => (
                         <a key={item.id} href={item.href} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
