@@ -2,12 +2,13 @@
 import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
-import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
-import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime } from '@utils/utils';
-import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
-import * as bcrypt from 'bcrypt';
+import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime, idToObjectId } from '@utils/utils';
 export type {IUser} from '@interfaces/mongoDBInterfaces'
-import Project, { IProject } from '@mongodb/projectModel';
+import ProjectPaginate from '@mongodb/projectPaginateModel';
+import Project from '@mongodb/projectModel';
+import { IProject } from '@interfaces/mongoDBInterfaces';
+import { DateTime } from "luxon";
+import projectPaginateModel from '@mongodb/projectPaginateModel';
 import { Schema, Types } from 'mongoose';
 import nodemailer from 'nodemailer';
 
@@ -23,7 +24,6 @@ const mongoose = require('mongoose');
 export async function createProject(req: Request, res: Response): Promise<Response> {
     try {
         const {project_title,tags, description, start_date,end_date,No_professional,expected_working_hours,skills,experiences,online_offline,price_budget,req_prof_criteria,} = req.body;
-        
         let required_fields = [
             'project_title',
             'start_date',
@@ -57,7 +57,7 @@ export async function createProject(req: Request, res: Response): Promise<Respon
         let newProject = new Project({
             owner: req.body["_id"],// From the function
             project_title,
-            tags,
+            tags: lowerCasedTags,
             description,
             start_date,
             end_date,
@@ -86,20 +86,134 @@ export async function createProject(req: Request, res: Response): Promise<Respon
     }
 }
 
-// View All Available Projects
+
+
 export async function getProjects(req: Request, res: Response): Promise<Response> {
     try {
-        // Retrieve all projects from the database
-        const projects = await Project.find();
-        console.log(projects)
-        return response_success(res,projects,"Succesfully Get Project");
+        const {tags, size, page, companyId, projectName, startsAt, endsAt, userStatus ,userId, status} = req.body;
+        let required_fields = [
+			'size',
+            'page'
+		];
+
+		for (const fields of required_fields) {
+			let valid = check_req_field(req.body[fields])
+            if(!valid){
+                throw new Error(`${fields} cannot be empty`)
+            }
+		}
+
+        if(userStatus){
+            if(!check_req_field(userId)) {
+                throw new Error('userId cant be empty if user status is enabled')
+            }
+        }
+
+        if(typeof page != "number" || typeof size != "number"){
+            throw new Error("page and size must be a number")
+        }
+
+        if(page <=0 || size <= 0){
+            throw new Error("page and size number must be greater than 0");
+        }
+        if(startsAt){
+            if(!sql_date_string_checker(startsAt)){
+                throw new Error("Starts at must be in YYYY-MM-dd string format");
+            }
+        }
+        if(endsAt){
+            if(!sql_date_string_checker(endsAt)){
+                throw new Error("Starts at must be in YYYY-MM-dd string format");
+            }
+        }
+
+        const myCustomLabels = {
+            totalDocs: 'amountOfProjects',
+            docs: 'projectList',
+            limit: 'size',
+            page: 'currentPage'
+        };
+        
+        let lowerCasedTags:string[] = [];
+        if (tags){
+            if(Array.isArray(tags)){
+                for (const item of tags){
+                    if(typeof item != "string"){
+                        throw new Error('Value inside shift_id array must be a string')
+                    }
+                }
+                lowerCasedTags = tags.map( (items:string) => items.toLowerCase());
+            }else{
+                throw new Error('tags field must be an array')
+            }
+        }
+
+        let query = {
+            ...(companyId && {owner: companyId }),
+            ...(projectName && {project_title: {$regex:new RegExp(`^${projectName}`,'i')}}),
+            ...(tags && {tags: {$all: [...lowerCasedTags]}}),
+            ...(startsAt && {start_date: {$gte:DateTime.fromSQL(startsAt).toJSDate()}}),
+            ...(status && {status: status.toLowerCase()}),
+            ...((userStatus && userStatus === 'joined') && {approved_applicants:userId}),
+            ...((userStatus && userStatus === 'pending') && {potential_applicants: userId}),
+            // potential_applicants: {$all: ['6535e5e72684b34926774d92']}
+        }
+
+        console.log(query);
+        let populate = [
+            {
+                path: 'owner',
+                select: 'userName',
+                model:'User',
+            }
+        ]
+
+        const options = {
+            page,
+            limit: size,
+            populate,
+            projection: "-__v -hash_password",
+            lean: true,
+            leanWithId: true,
+            customLabels: myCustomLabels,
+            useCustomCountFn: async () => {
+                let count = await Project.countDocuments(query);
+                return count;
+            }
+        }
+        let projects = await ProjectPaginate.paginate(query, options);
+        let {projectList, ...rest} = projects;
+        let projectsList = Array.isArray(projectList)?projectList.map((e) => {
+            let {_id, ...otherFields} = e;
+            return {
+                ...otherFields
+            }
+        }):[]
+        return response_success(res,{projectsList, ...rest},"Request Success")
+
     } catch (error:any) {
         if(error instanceof Error){
             return response_bad_request(res,error.message)
         } 
-        return response_bad_request(res,error.message);
+        return response_internal_server_error(res, error.message)
     }
 }
+
+
+// View All Available Projects
+// export async function getProjects(req: Request, res: Response): Promise<Response> {
+//     try {
+//         // Retrieve all projects from the database
+//         const projects = await Project.find();
+//         console.log(projects)
+//         return response_success(res,projects,"Succesfully Get Project");
+//     } catch (error:any) {
+//         if(error instanceof Error){
+//             return response_bad_request(res,error.message)
+//         } 
+//         return response_bad_request(res,error.message);
+//     }
+// }
 
 // Company users can view their own projects
 export async function getMyCompanyProjects(req: Request, res: Response): Promise<Response> {

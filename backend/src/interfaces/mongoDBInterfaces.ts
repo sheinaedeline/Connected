@@ -1,4 +1,5 @@
 import {HydratedDocument} from 'mongoose';
+import { Schema} from 'mongoose';
 import type { QueryWithHelpers, Types} from 'mongoose';
 export interface IUser {
     userType: string,
@@ -14,7 +15,9 @@ export interface IUser {
     socialURL: string,
     hash_password: string,
     industryType: string,
-    tags: Array<string>
+    tags: Array<string>,
+    userImage: string,
+    userFile: string
 }
 
 export interface IUserMethods {
@@ -27,4 +30,24 @@ export interface UserQueryHelpers {
       HydratedDocument<IUser>,
       UserQueryHelpers
     >
+}
+
+export interface IProject {
+    owner: Schema.Types.ObjectId; // You can use the user's ObjectId here to reference the owner
+    project_title: string;
+    tags: Array<string>;
+    description: string;
+    start_date: Date;
+    end_date: Date;
+    No_professional: string;        //5 means 5 professionals dont forget to convert to int
+    expected_working_hours: string; // 3 means 3 hrs dont forget to convert to int
+    skills: string;
+    experiences: string;
+    online_offline: string;        
+    price_budget: string;
+    req_prof_criteria: string;      //resume or CV or aything
+    status: string;
+    potential_applicants: Array<Schema.Types.ObjectId>;
+    approved_applicants: Array<Schema.Types.ObjectId>;
+
 }

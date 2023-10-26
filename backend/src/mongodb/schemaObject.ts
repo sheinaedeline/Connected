@@ -1,3 +1,5 @@
+import { Schema} from 'mongoose';
+
 export const userObj = {
     userType: {
         type: String,
@@ -55,6 +57,73 @@ export const userObj = {
         type: String,
         trim: true
     },
-    tags: [String]
+    tags: [String],
+    userImage: {
+        type: String,
+
+    },
+    userFile: {
+        type: String,
+    }
+    
 }
 
+export const projectObj = {
+    owner: {
+        type: Schema.Types.ObjectId,
+        // ref: 'User', // Reference to the User model
+        // required: true,
+    },
+    project_title: {
+        type: String,
+        required: true,
+    },
+    tags: {
+        type: [String],
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    start_date: {
+        type: Date,
+        required: true,
+    },
+    end_date: {
+        type: Date,
+        required: true,
+    },
+    No_professional: {
+        type: String,
+        required: true,
+    },
+    expected_working_hours: {
+        type: String,
+        required: true,
+    },
+    skills: {
+        type: String,
+    },
+    experiences: {
+        type: String,
+    },
+    online_offline: {
+        type: String,
+        required: true,
+    },
+    price_budget: {
+        type: String,
+    },
+    req_prof_criteria: {
+        type: String,
+    },
+    status: {
+        type: String,
+    },
+    potential_applicants: {
+        type: [Schema.Types.ObjectId],
+    },
+    approved_applicants: {
+        type: [Schema.Types.ObjectId],
+    }
+}
