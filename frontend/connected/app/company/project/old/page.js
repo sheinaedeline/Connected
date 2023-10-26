@@ -36,6 +36,55 @@ export default function page() {
     slider.scrollLeft = slider.scrollLeft + 500;
   };
 
+  function Rating() {
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
+    const [submitted, setSubmitted] = useState(false);
+
+    const handleStarClick = (starIndex) => {
+        if (!submitted) {
+            setRating(starIndex);
+        }
+    };
+
+    const handleCommentChange = (event) => {
+        if (!submitted) {
+            setComment(event.target.value);
+        }
+    };
+
+    const handleSubmit = () => {
+        // Handle the submission of the rating and comment here
+        console.log(`Rating: ${rating}, Comment: ${comment}`);
+        setSubmitted(true);
+    };
+
+    return (
+        <div>
+            <p>Rating:</p>
+            {[1, 2, 3, 4, 5].map((starIndex) => (
+                <span 
+                    key={starIndex} 
+                    onClick={() => handleStarClick(starIndex)}
+                    style={{ cursor: submitted ? 'default' : 'pointer', color: starIndex <= rating ? 'gold' : 'gray' }}
+                >
+                    ★
+                </span>
+            ))}
+            <br></br>
+            <textarea 
+                value={comment}
+                onChange={handleCommentChange}
+                disabled={submitted}
+                className="rounded-md border-2 border-blue-900"
+            />
+            <button onClick={handleSubmit} disabled={submitted}  className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                Submit
+            </button>
+        </div>
+    );
+}
+
   return (
     <div className="bg-white dark:bg-black">
       <div className="flex justify-between">
@@ -160,7 +209,7 @@ export default function page() {
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                       {trendingProfessionals.map((item) => (
-                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[450px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
                               src={item.imageSrc}
@@ -183,19 +232,7 @@ export default function page() {
                                     />
                                 </div>
                             </div> */}
-                            <br></br>
-                            <div className="col-span-2 rating" id="starRating">
-                              <input type="radio" id="star5" name="rating" value="5" style={{ display: 'none' }} />
-                              <label htmlFor="star5" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                              <input type="radio" id="star4" name="rating" value="4" style={{ display: 'none' }} />
-                              <label htmlFor="star4" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                              <input type="radio" id="star3" name="rating" value="3" style={{ display: 'none' }} />
-                              <label htmlFor="star3" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                              <input type="radio" id="star2" name="rating" value="2" style={{ display: 'none' }} />
-                              <label htmlFor="star2" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                              <input type="radio" id="star1" name="rating" value="1" style={{ display: 'none' }} />
-                              <label htmlFor="star1" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                            </div>
+                            <Rating />
                           </div>
                         </a>
                       ))}
