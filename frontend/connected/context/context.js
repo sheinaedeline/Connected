@@ -7,13 +7,14 @@ const UserContext = createContext();
 const initialState = {
   accountId: null,
   userType: null,
+  jwtToken: null,
 };
 
 // Define actions (for setting account ID, etc.)
 const userReducer = (state, action) => {
   switch (action.type) {
     case 'SET_USER_STATE':
-      return { ...state, accountId: action.payload.accountId, userType: action.payload.userType };
+      return { ...state, accountId: action.payload.accountId, userType: action.payload.userType, jwtToken: action.payload.jwtToken };
     default:
       return state;
   }

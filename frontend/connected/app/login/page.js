@@ -30,7 +30,8 @@ export default function Login() {
             console.log('Login successful', response.data);
             const payloadData = {
                 accountId: response.data.content._id, 
-                userType: response.data.content.userType
+                userType: response.data.content.userType,
+                jwtToken: response.data.content.jwtToken,
             };
 
             console.log (payloadData);
