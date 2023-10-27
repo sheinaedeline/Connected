@@ -85,7 +85,12 @@ export function checkForRole(role:string="any", mode:string = "required") {
         } else if (authorizedTokenObject.decodedToken.role != role && role!== "any" && authorizedTokenObject.decodedToken.role != "admin"){
             return response_unauthorized(res,"Invalid Access Level");
         } else {
-            req.body["_id"] = authorizedTokenObject.decodedToken._id;
+            if(authorizedTokenObject.decodedToken._id) {
+                req.body["_id"] = authorizedTokenObject.decodedToken._id;
+            }
+            if(authorizedTokenObject.decodedToken.role) {
+                req.body["role"] = authorizedTokenObject.decodedToken.role; 
+            }
             next();
         }
     } 

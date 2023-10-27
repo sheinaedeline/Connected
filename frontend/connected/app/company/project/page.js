@@ -12,6 +12,8 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { trendingProjects, trendingProfessionals } from '/public/data.js';
 import trading from "assets/Trading Background.png";
 
+const options = ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
+
 export default function page() {
 
   const [searchInput, setSearchInput] = useState("");
@@ -24,6 +26,65 @@ export default function page() {
   const handleSearch = () => {
       console.log(searchInput);
   };
+
+  const slideLeft = (id) => {
+    var slider = document.getElementById(id);
+    slider.scrollLeft = slider.scrollLeft - 500;
+  };
+
+  const slideRight = (id) => {
+    var slider = document.getElementById(id);
+    slider.scrollLeft = slider.scrollLeft + 500;
+  };
+
+function Filter() {
+  const [selectedOptions, setSelectedOptions] = useState([]);
+  const [showFilter, setShowFilter] = useState(false);
+
+  const handleCheckboxChange = (option) => {
+      setSelectedOptions(prevState => {
+          if(prevState.includes(option)) {
+              return prevState.filter(opt => opt !== option);
+          } else {
+              return [...prevState, option];
+          }
+      });
+  };
+
+  return (
+      <div>
+          <button 
+          className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" 
+          onClick={() => setShowFilter(!showFilter)}>
+              Toggle Filter
+          </button>
+          {showFilter && (
+              <div 
+              className="ml-2 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+              >
+                  <h2>Filter</h2>
+                  {options.map((option, index) => (
+                      <div key={index}>
+                          <input 
+                              type="checkbox" 
+                              id={`option-${index}`} 
+                              name={`option-${index}`} 
+                              value={option}
+                              onChange={() => handleCheckboxChange(option)}
+                          />
+                          <label htmlFor={`option-${index}`}>{option}</label>
+                      </div>
+                  ))}
+                  {/* <h2>Selected Options</h2>
+                  {selectedOptions.map((option, index) => (
+                      <p key={index}>{option}</p>
+                  ))} */}
+              </div>
+          )}
+      </div>
+  );
+}
+
 
   return (
     <div className="bg-white dark:bg-black">
@@ -131,6 +192,7 @@ export default function page() {
                   </button>
             </form>
         <br></br>
+        <Filter />
  
         <div className="relative flex items-center">
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
@@ -188,8 +250,9 @@ export default function page() {
                           alt="connected logo"
                       />
                   </button>
-            </form>
+          </form>
         <br></br>
+        <Filter />
  
         <div className="relative flex items-center">
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
@@ -249,6 +312,7 @@ export default function page() {
                   </button>
             </form>
         <br></br>
+        <Filter />
  
         <div className="relative flex items-center">
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />

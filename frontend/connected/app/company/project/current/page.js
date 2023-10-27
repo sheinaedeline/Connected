@@ -26,6 +26,16 @@ export default function page() {
       console.log(searchInput);
   };
 
+  const slideLeft = (id) => {
+    var slider = document.getElementById(id);
+    slider.scrollLeft = slider.scrollLeft - 500;
+  };
+
+  const slideRight = (id) => {
+    var slider = document.getElementById(id);
+    slider.scrollLeft = slider.scrollLeft + 500;
+  };
+
   return (
     <div className="bg-white dark:bg-black">
       <div className="flex justify-between">
@@ -99,6 +109,7 @@ export default function page() {
             </Link>
         </div>
       </div>
+
       <section className="relative">
         <div className="px-4 pt-10 mx-auto max-w-7xl md:pt-16">
           <br>
@@ -108,9 +119,9 @@ export default function page() {
             <br></br>
 
             <div className="flex flex-col rounded-md border-2 border-blue-900 w-full">
-                    {sampleProject.map((item) => (
-                    <div key={item.id} className="group grid grid-cols-4 grid-rows-2">
-                        <div className="aspect-h-1 aspect-w-1 overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+              {sampleProject.map((item) => (
+                <div key={item.id} className="group grid grid-cols-4 grid-rows-2">
+                  <div className="aspect-h-1 aspect-w-1 overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
                                 src={item.imageSrc}
                                 alt={item.imageAlt}
@@ -118,12 +129,13 @@ export default function page() {
                                 height={200}
                                 className="object-cover object-center group-hover:opacity-75"
                             />
-                        </div>
+                    </div>
                         <div className="col-span-3 grid grid-cols-4 gap-2 p-4 mr-10">
                             <p className="col-span-3 text-3xl font-bold text-gray-900">{item.projectName} {item.industryType}</p>
                             <div className="flex flex-evenly gap-x-4 justify-start items-center">
                                 <AiOutlineHeart size={40}/>
                                 <AiFillLinkedin size={40}/>
+                                
                             </div>
                             <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">{item.industry}</p>
                             <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.startDate}</p>
@@ -136,107 +148,36 @@ export default function page() {
                             <p className="text-lg font-medium text-gray-900">Description</p>
                             <p className="mt-4 text-left text-xs text-gray-600">{item.description}</p>
                         </div>
-                    </div>
+                        <br></br>
+                              <Link href="/company/project/current/edit" >
+                                <button
+                                    type="submit"
+                                    className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                                >
+                                    Edit Project
+                                </button>
+                              </Link> 
+                              <Link href="/company/project/old" >
+                                <button
+                                    type="submit"
+                                    className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                                >
+                                    Mark as finished
+                                </button>
+                              </Link> 
+                        <br></br>
+                        <br></br>                            
+                    </div>   
                     ))}
                 </div>
 
-            {/* <h1 className="mb-3 text-5xl font-underline tracking-tight text-gray-900 dark:text-gray-100 md:text-2xl">
-                Professional
-            </h1>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link1">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 1</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link2">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 2</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link3">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 3</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link4">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 4</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link5">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 5</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link6">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 6</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-            </div> */}
-
-            <div>
-                  <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-                      Onboard{' '}
-                      <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
-                        Professionals
-                      </a>
-                  </h2>
+                  <div>
+                    <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                        Onboard{' '}
+                        <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                          Professionals
+                        </a>
+                    </h2>
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
@@ -268,11 +209,56 @@ export default function page() {
                     </div>
                     <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
                   </div>
+                </div>
+                <div>
+                  <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                      Apply{' '}
+                      <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                        List
+                      </a>
+                  </h2>
+                  <div className="relative flex items-center">
+                    <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                    <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                      {trendingProfessionals.map((item) => (
+                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                          <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                            <Image
+                              src={item.imageSrc}
+                              alt={item.imageAlt}
+                              width={300}
+                              height={200}
+                              className="object-cover object-center group-hover:opacity-75"
+                            />
+                          </div>
+                          <div className="grid grid-cols-2 gap-2 p-4">
+                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
+                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
+                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
+                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
+                            <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
+                            <button
+                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                              >
+                                Accept
+                              </button>
+                              <button
+                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                              >
+                                Reject
+                            </button>
+                          </div>
+                        </a>
+                      ))}
+                    </div>
+                    <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                  </div>
                 </div>  
           </div>
         </div>
 
         
+
         {/* <div
           style={{ backgroundImage: "url(/images/blur.png)" }}
           className="absolute inset-0 w-full h-full bg-bottom bg-no-repeat bg-cover -z-1"

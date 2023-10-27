@@ -6,7 +6,7 @@ const router = express.Router();
 //To add a route add something like router.post("urlpath",function)
 // router.post("/create",checkForRole("company"),createProject);
 router.post("/create",checkForRole("company"),createProject);
-router.get("/allProjects",getProjects);
+router.post("/getProjects",getProjects);
 router.get("/getMyCompanyProject",checkForRole("company"),getMyCompanyProjects);
 router.get("/:ownerID/getCompanyProject",getCompanyProjects);
 router.get("/:id", getProjectById);

@@ -26,6 +26,65 @@ export default function page() {
       console.log(searchInput);
   };
 
+  const slideLeft = (id) => {
+    var slider = document.getElementById(id);
+    slider.scrollLeft = slider.scrollLeft - 500;
+  };
+
+  const slideRight = (id) => {
+    var slider = document.getElementById(id);
+    slider.scrollLeft = slider.scrollLeft + 500;
+  };
+
+  function Rating() {
+    const [rating, setRating] = useState(0);
+    const [comment, setComment] = useState('');
+    const [submitted, setSubmitted] = useState(false);
+
+    const handleStarClick = (starIndex) => {
+        if (!submitted) {
+            setRating(starIndex);
+        }
+    };
+
+    const handleCommentChange = (event) => {
+        if (!submitted) {
+            setComment(event.target.value);
+        }
+    };
+
+    const handleSubmit = () => {
+        // Handle the submission of the rating and comment here
+        console.log(`Rating: ${rating}, Comment: ${comment}`);
+        setSubmitted(true);
+    };
+
+    return (
+        <div>
+            <p>Rating:</p>
+            {[1, 2, 3, 4, 5].map((starIndex) => (
+                <span 
+                    key={starIndex} 
+                    onClick={() => handleStarClick(starIndex)}
+                    style={{ cursor: submitted ? 'default' : 'pointer', color: starIndex <= rating ? 'gold' : 'gray' }}
+                >
+                    ★
+                </span>
+            ))}
+            <br></br>
+            <textarea 
+                value={comment}
+                onChange={handleCommentChange}
+                disabled={submitted}
+                className="rounded-md border-2 border-blue-900"
+            />
+            <button onClick={handleSubmit} disabled={submitted}  className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">
+                Submit
+            </button>
+        </div>
+    );
+}
+
   return (
     <div className="bg-white dark:bg-black">
       <div className="flex justify-between">
@@ -139,100 +198,9 @@ export default function page() {
                     </div>
                     ))}
                 </div>
-
-            {/* <h1 className="mb-3 text-5xl font-underline tracking-tight text-gray-900 dark:text-gray-100 md:text-2xl">
-                Professional
-            </h1>
-
-            <div className="grid grid-cols-2 gap-4">
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link1">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 1</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link2">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 2</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link3">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 3</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link4">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 4</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link5">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 5</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-
-              <div className="p-3 text-gray-600 dark:text-gray-400">
-                <a href="#link6">
-                  <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-lg">
-                    <p className="text-lg">Professional 6</p>
-                    <br />
-                    <button
-                      className="ml-2 py-2 px-10 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                  </div>
-                </a>
-              </div>
-            </div> */}
-
             <div>
                   <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-                      Onboard{' '}
+                      Past{' '}
                       <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
                         Professionals
                       </a>
@@ -241,7 +209,7 @@ export default function page() {
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                       {trendingProfessionals.map((item) => (
-                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[450px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
                               src={item.imageSrc}
@@ -253,22 +221,18 @@ export default function page() {
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
-                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
-                            <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
-                            <div className="rating" id="starRating">
-                          <input type="radio" id="star5" name="rating" value="5" style={{ display: 'none' }} />
-                          <label htmlFor="star5" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                          <input type="radio" id="star4" name="rating" value="4" style={{ display: 'none' }} />
-                          <label htmlFor="star4" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                          <input type="radio" id="star3" name="rating" value="3" style={{ display: 'none' }} />
-                          <label htmlFor="star3" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                          <input type="radio" id="star2" name="rating" value="2" style={{ display: 'none' }} />
-                          <label htmlFor="star2" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                          <input type="radio" id="star1" name="rating" value="1" style={{ display: 'none' }} />
-                          <label htmlFor="star1" style={{ fontSize: '24px', padding: '5px', cursor: 'pointer' }}>&#9733;</label>
-                      </div>
+                            {/* <div>
+                                <div className="mt-2">
+                                    <input
+                                        id="review"
+                                        name="review"
+                                        type="text"
+                                        value={"review"}
+                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    />
+                                </div>
+                            </div> */}
+                            <Rating />
                           </div>
                         </a>
                       ))}

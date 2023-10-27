@@ -10,4 +10,15 @@ Week 3:
 Discussed and refined the user flow with fellow members, made the proposal and i did my part which was the user flow, I also joined the meeting where we did a final review and revamp the storyboards while also scheduling up the sprints for our project. Also did some brainstorming on how the design and theme of the UI and made up the company name
 
 Week 4:
-Me and the scrum master got the UI part, so i started doing that, we decided that we'll use react js with next.js as our framework, i was still new to this so i only made barebone pages to prepare for the week 5 lab. i was doing around 8 pages with routing.
+Me and the scrum master got the UI part, so i started doing that, we decided that we'll use react js with next.js as our framework, i was still new to this so i only made barebone pages to prepare for the week 5 lab. i was doing around 8 pages with routing. I did project details page, the landing page, the page for old, current, and planned project for companies
+
+Week 5:
+
+Demo time!. We did well on the demo, my pages was integrated well with the other and it showed swimmingly. Mine and sheina pages can move seamlessly. We did all of our target for our sprint 1. After the demo we made the after demo report and i helped with what went right part.
+
+Week 6:
+I adjusted my pages to fit the overall theme of the project, matching vision on how of my pages would intertwine with the backend, and the logic on how it';; work
+
+
+Week 7:
+Starting to integrate between frontend and backend

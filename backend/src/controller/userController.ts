@@ -7,9 +7,9 @@ import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid
 import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
 import { Buffer } from 'buffer';
-import fileModel from '@mongodb/fileModel';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
+import { IUser } from './projectController';
 
 
 export async function register(req: Request, res: Response): Promise<Response> {
@@ -21,15 +21,15 @@ export async function register(req: Request, res: Response): Promise<Response> {
             'email',
 			'password'
 		];
-        const validUserTypes = ["professional", "company"]
+        const validUserTypes = ['professional', 'company']
         if (validUserTypes.includes(userType) === false){
-            throw new Error("user type must either be professional or company")
+            throw new Error('user type must either be professional or company')
         }
         
-        if (userType === "professional"){
-            required_fields = [...required_fields, "dob"]
+        if (userType === 'professional'){
+            required_fields = [...required_fields, 'dob']
         } else{
-            required_fields = [...required_fields, "abn"]
+            required_fields = [...required_fields, 'abn']
         }
 
 		for (const fields of required_fields) {
@@ -40,24 +40,24 @@ export async function register(req: Request, res: Response): Promise<Response> {
 		}
 
         if(!valid_email(email)){
-            throw new Error("Email format invalid");
+            throw new Error('Email format invalid');
         }
 
         if(phoneNumber){
             if(!valid_phone_number(phoneNumber)){
-                throw new Error("Invalid phone number format");
+                throw new Error('Invalid phone number format');
             }
         }
         
-        if (abn && userType=="company"){
+        if (abn && userType=='company'){
             if(!valid_abn(abn)){
-                throw new Error("Invalid abn format");
+                throw new Error('Invalid abn format');
             }
         }
 
-        if (dob && userType=="professional"){
+        if (dob && userType=='professional'){
             if(!sql_date_string_checker(dob)){
-                throw new Error("Birthdate must be in YYYY-MM-dd string format");
+                throw new Error('Birthdate must be in YYYY-MM-dd string format');
             }
         }
         let lowerCasedTags:string[] = [];
@@ -65,8 +65,8 @@ export async function register(req: Request, res: Response): Promise<Response> {
             let tagsArray = tags.split(',')
             if(Array.isArray(tagsArray)){
                 for (const item of tagsArray){
-                    if(typeof item != "string"){
-                        throw new Error('Value inside shift_id array must be a string')
+                    if(typeof item != 'string'){
+                        throw new Error('Value inside tags array must be a string')
                     }
                 }
                 lowerCasedTags = tagsArray.map( (items:string) => items.toLowerCase().trim());
@@ -75,7 +75,7 @@ export async function register(req: Request, res: Response): Promise<Response> {
             }
         }
         
-        let newUser = new User({
+        let userObject = {
             userType,
             firstName, 
             ...(lastName && {lastName}),
@@ -85,25 +85,25 @@ export async function register(req: Request, res: Response): Promise<Response> {
             ...(phoneNumber && {phoneNumber}),
             ...(description && {description}),
             ...(address && {address}),
-            ...((dob && userType === "professional") && {dob}),
+            ...((dob && userType === 'professional') && {dob}),
             ...(socialURL && {socialURL}),
-            ...((abn && userType === "company") && {abn}),
+            ...((abn && userType === 'company') && {abn}),
             ...(tags && {tags:lowerCasedTags})
-        })
+        }
         let emailExists = await User.exists({ email });
         if (emailExists != null){
             throw new Error(`The email ${email} is already registered`);
         }
+        if(req.file){
+            const image = { data: req.file.buffer, contentType: req.file?.mimetype }
+            userObject.userImage = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+        }
+
+        let newUser = new User(userObject)
         const savedUser = await newUser.save();
         const jwtToken = await generateNewToken(email,userType,savedUser._id.toString());
 
-        if(req.file){
-            const image = { data: req.file.buffer, contentType: req.file?.mimetype }
-            await fileModel.create({userID: savedUser._id,type:"userprofile" ,image});
-        }
-
-
-        return response_success(res,{userName,email,_id:savedUser._id.toString(),userType: savedUser.userType,jwtToken: `JWT ${jwtToken}`},"Successful Registration")
+        return response_success(res,{userName,email,_id:savedUser._id.toString(),userType: savedUser.userType,jwtToken: `JWT ${jwtToken}`},'Successful Registration')
 
     } catch (error:any) {
         if(error instanceof Error){
@@ -131,14 +131,167 @@ export async function login(req: Request, res: Response): Promise<Response> {
         let existingUser = await User.findOne({email});
 
         if( existingUser == null){
-            return response_not_found(res,"User not found");
+            return response_not_found(res,'User not found');
         } else {
             let passwordValid:boolean = existingUser.comparePassword(password);
             if (passwordValid == false){
-                return response_unauthorized(res,"Wrong Password");
+                return response_unauthorized(res,'Wrong Password');
             } else {
                 let jwtToken = await generateNewToken(existingUser.email, existingUser.userType, existingUser._id.toString());
-                return response_success(res,{_id:existingUser._id.toString(),userType: existingUser.userType ,jwtToken: `JWT ${jwtToken}`},"Successful Login")
+                return response_success(res,{_id:existingUser._id.toString(),userType: existingUser.userType ,jwtToken: `JWT ${jwtToken}`},'Successful Login')
+            }
+        }
+    } catch (error:any) {
+        if(error instanceof Error){
+            return response_bad_request(res,error.message)
+        } 
+        return response_internal_server_error(res, error.message)
+    }
+}
+
+export async function editProfile(req: Request, res: Response): Promise<Response> {
+    try {
+        const {userId,firstName, lastName, userName, email, description, phoneNumber, address, dob, socialURL, abn, password, tags} = req.body;
+        let userToUpdateId =  userId?userId:req.body['_id'];
+        let existingUser = await User.findById(userToUpdateId);
+        if( existingUser === null || existingUser === undefined){
+            return response_not_found(res,'User not found');
+        } 
+        if(userId){
+            if(req.body['role'] !== 'admin'){
+                if(userId !== req.body['_id']) {
+                    throw new Error('Users can only edit their own profile');
+                }
+            } 
+        }
+        let nonEmptyFields = [
+            'firstName',
+            'lastName',
+            'userName',
+            'description',
+            'address',
+            'socialURL',
+			'password'
+		];
+        nonEmptyFields.forEach((fields) => {
+            if(req.body[fields]){
+                let valid = check_req_field(req.body[fields])
+                if(!valid){
+                    throw new Error(`${fields} cannot be empty`)
+                }
+            }
+        })
+        if(email){  
+            if(!valid_email(email)){
+                throw new Error('Email format invalid');
+            }
+            if(email !== existingUser.email){
+                let emailExists = await User.exists({ email });
+                if (emailExists != null){
+                    throw new Error(`The email ${email} is currently being used by another account`);
+                }
+            }
+        }
+
+        if(phoneNumber){
+            if(!valid_phone_number(phoneNumber)){
+                throw new Error('Invalid phone number format');
+            }
+        }
+        
+        if (abn && existingUser.userType ==='company'){
+            if(!valid_abn(abn)){
+                throw new Error('Invalid abn format');
+            }
+        }
+
+        if (dob && existingUser.userType ==='professional'){
+            if(!sql_date_string_checker(dob)){
+                throw new Error('Birthdate must be in YYYY-MM-dd string format');
+            }
+        }
+        let lowerCasedTags:string[] = [];
+        if (tags){
+            let tagsArray = tags.split(',')
+            if(Array.isArray(tagsArray)){
+                for (const item of tagsArray){
+                    if(typeof item != 'string'){
+                        throw new Error('Value inside tags array must be a string')
+                    }
+                }
+                lowerCasedTags = tagsArray.map( (items:string) => items.toLowerCase().trim());
+            }else{
+                throw new Error('tags field must be an array')
+            }
+        }
+        let updateableFields: (keyof IUser)[] = [
+            'firstName',
+            'lastName',
+            'userName',
+            'email',
+            'hash_password',
+            'phoneNumber',
+            'description',
+            'address',
+            'dob',
+            'socialURL',
+            'tags',
+            'abn',
+            'tags',
+            'userImage'
+        ];
+
+        let updatedUserObject = {
+            ...(firstName && {firstName}),
+            ...(lastName && {lastName}),
+            ...(userName && {userName}),
+            ...(email && {email}),
+            ...(password && {hash_password:bcrypt.hashSync(password,10)}),
+            ...(phoneNumber && {phoneNumber}),
+            ...(description && {description}),
+            ...(address && {address}),
+            ...((dob && existingUser.userType === 'professional') && {dob}),
+            ...(socialURL && {socialURL}),
+            ...((abn && existingUser.userType === 'company') && {abn}),
+            ...(tags && {tags:lowerCasedTags})
+        }
+        if(req.file){
+            const image = { data: req.file.buffer, contentType: req.file?.mimetype }
+            updatedUserObject.userImage = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+        }
+
+        updateableFields.forEach((key) => {
+            if(updatedUserObject[key]){
+                if(existingUser !== null && existingUser !== undefined){
+                    existingUser[key] = updatedUserObject[key]
+                }
+            }
+        })
+
+        await existingUser.save();
+        return response_success(res,{},`Succesfully Editted Profile for User ID ${userToUpdateId}`);
+
+    } catch (error:any) {
+        if(error instanceof Error){
+            return response_bad_request(res,error.message)
+        } 
+        return response_internal_server_error(res, error.message)
+    }
+}
+
+
+export async function uploadCV(req: Request, res: Response): Promise<Response> {
+    try {
+        const user = await User.findById(req.body['_id']);
+        if(user === null){
+            return response_not_found(res,'User not found')
+        } else {
+            if(req.file) {
+                user.userFile = `data:${req.file.mimetype};base64,${req.file.buffer.toString('base64')}`;
+                await user.save();
+                return response_success(res, {}, 'User CV uploaded successfully.');
+            } else {
+                return response_bad_request(res,'PDF file not found');
             }
         }
     } catch (error:any) {
@@ -152,10 +305,10 @@ export async function login(req: Request, res: Response): Promise<Response> {
 
 export async function logout(req: Request, res: Response): Promise<Response> {
     try {
-        const token_header = req.headers.authorization?.split(" ");
+        const token_header = req.headers.authorization?.split(' ');
         const token = getTokenFromHeader(token_header?token_header:[]);
         await deleteToken(token);
-        return response_success(res,{},"Succesfully Log Out");
+        return response_success(res,{},'Succesfully Log Out');
     } catch (error:any) {
         if(error instanceof Error){
             return response_bad_request(res,error.message)
@@ -181,12 +334,12 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
             }
 		}
 
-        if(typeof page != "number" || typeof size != "number"){
-            throw new Error("page and size must be a number")
+        if(typeof page != 'number' || typeof size != 'number'){
+            throw new Error('page and size must be a number')
         }
 
         if(page <=0 || size <= 0){
-            throw new Error("page and size number must be greater than 0");
+            throw new Error('page and size number must be greater than 0');
         }
 
         const myCustomLabels = {
@@ -200,8 +353,8 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
         if (tags){
             if(Array.isArray(tags)){
                 for (const item of tags){
-                    if(typeof item != "string"){
-                        throw new Error('Value inside shift_id array must be a string')
+                    if(typeof item != 'string'){
+                        throw new Error('Value inside tags array must be a string')
                     }
                 }
                 lowerCasedTags = tags.map( (items:string) => items.toLowerCase());
@@ -218,7 +371,7 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
         const options = {
             page,
             limit: size,
-            projection: "-__v -hash_password",
+            projection: '-__v -hash_password',
             lean: true,
             leanWithId: true,
             customLabels: myCustomLabels,
@@ -235,7 +388,7 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
                 ...otherFields
             }
         }):[]
-        return response_success(res,{usersList, ...rest},"Request Success")
+        return response_success(res,{usersList, ...rest},'Request Success')
 
     } catch (error:any) {
         if(error instanceof Error){
@@ -245,13 +398,6 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
     }
 }
 
-
-const mongoose = require('mongoose');
-const imageSchema = mongoose.Schema({
-    image: { data: Buffer, contentType: String }
-});
-
-const ImageModel = mongoose.model('images', imageSchema);
 
 
 
@@ -262,38 +408,14 @@ export async function tokenTest(req: Request, res: Response): Promise<Response|v
         // console.log(image);
         // const savedImage = await ImageModel.create({image});
         // console.log(savedImage);
-        // res.setHeader( "Content-Type", savedImage.image.contentType);
+        // res.setHeader( 'Content-Type', savedImage.image.contentType);
         // res.send(savedImage.image.data);
-        console.log(req.body["_id"]);
-        if(req.body["id"] == null){
-            console.log("Is null");
+        console.log(req.body['_id']);
+        if(req.body['id'] == null){
+            console.log('Is null');
         }
-        return response_success(res,{},"Token is valid");
+        return response_success(res,{},'Token is valid');
         
-    } catch (error:any) {
-        if(error instanceof Error){
-            return response_bad_request(res,error.message)
-        } 
-        return response_internal_server_error(res, error.message)
-    }
-}
-
-export async function imageSendTest(req: Request, res: Response): Promise<Response|void> {
-    try {
-        const { id: _id } = req.params;
-        // If you dont use lean(), you wont decode image as base64
-        const image = await fileModel.findOne({ _id }).lean().exec();
-        
-        // res.type(image.image.contentType);
-        // res.header('Content-Disposition', `attachment; filename="test.png"`);
-        // res.send(image.image.data.buffer);
-
-        console.log(image);
-        // res.setHeader( "Content-Type", image?.image?.contentType?image.image.contentType:"");
-        // res.send(image?.image?.data?.buffer);
-        // res.send(image.image.data.buffer.toString('base64'));
-        return response_success(res,{userImage:`data:${image?.image?.contentType};base64,${image?.image?.data?.toString('base64')}`})
-        // res.send(image?.image);
     } catch (error:any) {
         if(error instanceof Error){
             return response_bad_request(res,error.message)
@@ -306,18 +428,13 @@ export async function viewProfile(req: Request, res: Response): Promise<Response
     try {
         const {id} = req.params;
         // Fetch the user's profile using the extracted _id.
-        const user = await User.findById(id).select("-hash_password -__v").lean(); // Exclude the hash_password field.
+        const user = await User.findById(id).select('-hash_password -__v').lean(); // Exclude the hash_password field.
         // If the user is not found, return a bad request response.
         if (!user) {
-            return response_bad_request(res, "User not found.");
+            return response_bad_request(res, 'User not found.');
         }
-        const image = await fileModel.findOne({userID:idToObjectId(id),type:"userprofile"}).lean();
         // If the user is found, return the user's profile.
-        let userResponse = {
-            ...user,
-            ...(image !== null && {image: `data:${image?.image?.contentType};base64,${image?.image?.data?.toString('base64')}`}) 
-        }
-        return response_success(res, {user:userResponse}, "User profile retrieved successfully.");
+        return response_success(res, {user}, 'User profile retrieved successfully.');
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
@@ -334,11 +451,11 @@ export async function forgetPassword(req: Request, res: Response): Promise<Respo
         const user = await User.findOne({ email });
         // If the user is not found, return a bad request response.
         if (!user) {
-            return response_bad_request(res, "User not found.");
+            return response_bad_request(res, 'User not found.');
         }
 
         //generate temporary password (update password in database)
-        const temporaryPassword = crypto.randomBytes(10).toString("base64url");
+        const temporaryPassword = crypto.randomBytes(10).toString('base64url');
         const hashedPassword = await bcrypt.hashSync(temporaryPassword, 10);
         await User.updateOne({ email: email }, { $set: { hash_password: hashedPassword } });
         console.log(temporaryPassword)
@@ -370,11 +487,11 @@ export async function forgetPassword(req: Request, res: Response): Promise<Respo
                 return response_internal_server_error(res,'Failed to send forget password email');
             } else {
                 console.log('Email sent:', info.response);
-                return response_success(res, "Temporary password sent successfully");
+                return response_success(res, 'Temporary password sent successfully');
             }
         });
 
-        return response_success(res, "Temporary password is sent to User. User must be reminded to create a new password once logged in.");
+        return response_success(res, 'Temporary password is sent to User. User must be reminded to create a new password once logged in.');
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
