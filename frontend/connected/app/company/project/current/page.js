@@ -12,6 +12,8 @@ import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { trendingProjects, trendingProfessionals, sampleProject } from '/public/data.js';
 import { AiOutlineHeart, AiFillLinkedin } from 'react-icons/ai';
 import trading from "assets/Trading Background.png";
+import axios from 'axios';
+import { useUserData } from "context/context";
 
 export default function page() {
 

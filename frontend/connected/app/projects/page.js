@@ -4,14 +4,42 @@ import profile from "assets/Profile Icon.png";
 import search from "assets/carbon_search.png";
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { trendingProjects } from '/public/data.js';
 import trading from "assets/Trading Background.png";
 import Footer from '/components/Footer.js';
+import axios from 'axios';
 
-const options = ['Option 1', 'Option 2', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
 
-export default function ProfessionalHome() {
+const options = ['bizz', 'software3', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
+
+export default function Projects() {
+    const [projectList, setProjectList] = useState([]);
+
+    // GET View Profile
+    useEffect(() => {
+        const viewProfile = async () => {
+            const data = { 
+                size: 2,
+                page: 1
+              };
+
+            try {
+                const response = await axios.post(`http://127.0.0.1:3000/project/getProjects`, data);
+    
+                // Dispatch
+                console.log('View Profile Successful', response.data);
+                setProjectList(response.data.content.projectsList);
+                // Set variable states
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View Profile failed', error);
+            }
+        };
+
+        viewProfile();
+    }, []);
 
     const [searchInput, setSearchInput] = useState("");
     
@@ -72,10 +100,10 @@ export default function ProfessionalHome() {
                                 <label htmlFor={`option-${index}`}>{option}</label>
                             </div>
                         ))}
-                        {/* <h2>Selected Options</h2>
+                        <h2>Selected Options</h2>
                         {selectedOptions.map((option, index) => (
                             <p key={index}>{option}</p>
-                        ))} */}
+                        ))}
                     </div>
                 )}
             </div>
@@ -182,7 +210,7 @@ export default function ProfessionalHome() {
                 <br></br>
                 <Filter />
                   <div className="grid grid-cols-4 gap-x-10">
-                      {trendingProjects.map((item) => (
+                      {projectList.length > 0  && projectList.map((item) => (
                         <a key={item.id} href={item.href} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
@@ -194,7 +222,7 @@ export default function ProfessionalHome() {
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
-                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.name}</p>
+                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
                             <p className="col-span-2 text-xs italic text-gray-600">{item.startDate} - {item.endDate}</p>
                             <p className="col-span-2 text-sm font-medium text-blue-900">{item.company} Company</p>
                             <p className="mt-1 text-sm font-medium text-gray-600">${item.price}</p>
