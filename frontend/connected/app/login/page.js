@@ -5,13 +5,13 @@ import Link from 'next/link';
 import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useUserData } from "../../context/context";
 
 export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [id, setID] = useState("");
-    const [userType, setUserType] = useState("");
+    const { dispatch } = useUserData();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -25,13 +25,21 @@ export default function Login() {
         // Make an HTTP POST request to your API route
         try {
             const response = await axios.post('http://127.0.0.1:3000/user/login', data);
-            // Handle the response as needed (e.g., show a success message or redirect the user)
+
+            // Dispatch
             console.log('Login successful', response.data);
-            setID(response.data.content._id);
-            setUserType(response.data.content.userType);
-            if (userType === 'company') {
+            const payloadData = {
+                accountId: response.data.content._id, 
+                userType: response.data.content.userType
+            };
+
+            console.log (payloadData);
+            dispatch({ type: 'SET_USER_STATE', payload: payloadData});
+
+            // Home redirect
+            if (response.data.content.userType === 'company') {
                 router.push('/company');
-            } else if (userType === 'professional') {
+            } else if (response.data.content.userType === 'professional') {
                 router.push('/professional');
             }
         } catch (error) {

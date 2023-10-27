@@ -10,9 +10,12 @@ import { AiOutlinePlus, AiOutlineMail } from 'react-icons/ai';
 import { trendingProjects, trendingProfessionals } from '/public/data.js';
 import trading from "assets/Trading Background.png";
 import Footer from '/components/Footer.js';
+import { useUserData } from "../../context/context";
 
 
 export default function CompanyHome() {
+    const { state } = useUserData();
+    console.log('state is ', state);
 
     const [searchInput, setSearchInput] = useState("");
     

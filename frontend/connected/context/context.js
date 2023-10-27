@@ -6,13 +6,14 @@ const UserContext = createContext();
 // Define the initial state
 const initialState = {
   accountId: null,
+  userType: null,
 };
 
 // Define actions (for setting account ID, etc.)
 const userReducer = (state, action) => {
   switch (action.type) {
-    case 'SET_ACCOUNT_ID':
-      return { ...state, accountId: action.payload };
+    case 'SET_USER_STATE':
+      return { ...state, accountId: action.payload.accountId, userType: action.payload.userType };
     default:
       return state;
   }

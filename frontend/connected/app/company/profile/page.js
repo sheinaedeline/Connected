@@ -4,13 +4,38 @@ import profile from "assets/Profile Icon.png";
 import search from "assets/carbon_search.png";
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { sampleCompany } from 'public/data.js';
 import Footer from '/components/Footer.js';
+import axios from 'axios';
+import { useUserData } from "context/context";
 
 export default function CompanyProfile() {
+    const { state } = useUserData();
+    const { accountId, userType } = state;
+    console.log('state is profile', state);
+
+    // GET View Profile
+    useEffect(() => {
+        const viewProfile = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:3000/user/profile/${accountId}`);
     
+                // Dispatch
+                console.log('View Profile Successful', response.data);
+    
+                // Set variable states
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View Profile failed', error);
+            }
+        };
+
+        viewProfile();
+    }, [accountId]);
+
     const [searchInput, setSearchInput] = useState("");
     
     const handleChange = (e) => {
