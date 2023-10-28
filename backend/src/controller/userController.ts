@@ -1,5 +1,5 @@
 import type { Request, Response } from 'express';
-import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
+import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found, response_forbidden } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
 import UserPaginate from '@mongodb/userPaginateModel';
 import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
@@ -10,6 +10,8 @@ import { Buffer } from 'buffer';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { IUser } from './projectController';
+import Project from '@mongodb/projectModel';
+import Rating from '@mongodb/ratingModel';
 
 
 export async function register(req: Request, res: Response): Promise<Response> {
@@ -34,7 +36,7 @@ export async function register(req: Request, res: Response): Promise<Response> {
 
 		for (const fields of required_fields) {
 			let valid = check_req_field(req.body[fields])
-            if(!valid){
+            if(!valid){ ``
                 throw new Error(`${fields} cannot be empty for user type ${userType}`)
             }
 		}
@@ -499,3 +501,99 @@ export async function forgetPassword(req: Request, res: Response): Promise<Respo
         return response_internal_server_error(res, error.message);
     }
 }
+
+export async function rateProfessionalUser(req: Request, res: Response): Promise<Response> {
+    try {
+        const {projectId, userId, ratings} = req.body;
+        const project = await Project.findById(projectId);
+        const user = await User.findById(userId);
+        const existingRating = await Rating.findOne({ userId, projectId, ratingType: "Professional" });
+        // const rateUser = await Rating.find({ userId: userId });
+        if (!project) {
+            return response_not_found(res, "Project not found");
+        } if (project.status != "completed") {
+            return response_forbidden(res, "Project not completed, cannot rate the professional user")
+        } if (!user) {
+            return response_not_found(res, "User not found");
+        } // Check if the user has already rated this professional for this project.
+        if (existingRating) {
+            // If the rating already exists, update it.
+            existingRating.ratings = ratings;
+            const updatedRating = await existingRating.save();
+            return response_success(res, updatedRating, "Your rating has been updated successfully!");
+        }
+        
+        // user does not have a rating
+        let newRating = new Rating({
+            userId,
+            projectId,
+            ratings,
+            ratingType: "Professional",
+        });
+        const savedRating = await newRating.save();
+        return response_success(res, savedRating, "You have successfully rated this professional user!")
+
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }   
+}
+
+
+export async function rateProject(req: Request, res: Response): Promise<Response> {
+    try {
+        const {projectId, userId, ratings, reviews} = req.body;
+        const project = await Project.findById(projectId);
+        const existingRating = await Rating.findOne({ projectId, userId, ratingType: "Company" });
+
+        if (!project) {
+            return response_not_found(res, "Project not found");
+        } if (project.status != "completed") {
+            return response_forbidden(res, "Project not completed, cannot rate it yet!")
+        } if (existingRating) {
+            existingRating.ratings = ratings;
+            const updatedRating = await existingRating.save();
+            return response_success(res, updatedRating, "Your rating has been updated successfully!");
+        }
+        let newRating = new Rating({
+            projectId,
+            ratings,
+            ratingType: "Company",
+            reviews
+        });
+        const savedRating = await newRating.save();
+        return response_success(res, savedRating, "You have successfully rated this project!")
+
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    } 
+}
+
+// export async function getProfessionalRating(req: Request, res: Response): Promise<Response> {
+//     try {
+//         const {userId} = req.body
+//         const user = await User.findById(userId);
+//         const allRatings = await Rating.find({ userId, ratingType: "Professional" });
+
+//         if (!user) {
+//             return response_not_found(res, "User not found");
+//         } if (!allRatings) {
+//             return response_not_found(res, "Ratings not found");
+//         }
+//         const averageRating = allRatings.reduce((acc, rating) => acc + rating.ratings, 0) / allRatings.length;
+//         user.averageRating = averageRating
+//         await user.save()
+
+
+//     } catch (error: any) {
+//         if (error instanceof Error) {
+//             return response_bad_request(res, error.message);
+//         }
+//         return response_internal_server_error(res, error.message);
+//     }
+// }
