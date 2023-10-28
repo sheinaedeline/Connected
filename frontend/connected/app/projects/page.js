@@ -9,10 +9,10 @@ import { trendingProjects } from '/public/data.js';
 import trading from "assets/Trading Background.png";
 import Footer from '/components/Footer.js';
 import axios from 'axios';
+import { useUserData } from "context/context";
 
 
 const options = ['bizz', 'software3', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
-
 
 
 export default function Projects() {
