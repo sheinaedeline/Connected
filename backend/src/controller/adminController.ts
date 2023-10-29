@@ -45,16 +45,18 @@ export async function getStatistics(req: Request, res: Response): Promise<Respon
             }
         ).toJSDate();
         
-        let amountOfProjectsPerYear = await Project.countDocuments({start_date:{$gte:statisticsStartDate,$lt:statisticsEndDate}})
-        let amountOfOngoingProjects = await Project.countDocuments({start_date:{$lte:statisticsEndDate}, status:"ongoing"});
-        let amountOfNewProjects = await Project.countDocuments({start_date:{$gte:statisticsStartDate, $lte:statisticsEndDate},status:"new"});
-        let amountOfCompletedProjects = await Project.countDocuments({end_date:{$gte:statisticsStartDate, $lte:statisticsEndDate},status:"new"});
+        let amountOfCreatedProjects = await Project.countDocuments({start_date:{$gte:statisticsStartDate, $lte:statisticsEndDate}});
+        let amountOfProjectsTillSpecificYear = await Project.countDocuments({end_date:{$gte:statisticsStartDate,$lte:statisticsEndDate}});
+        let amountOfOngoingProjects = await Project.countDocuments({end_date:{$gte:statisticsStartDate,$lte:statisticsEndDate}, status:"ongoing"});
+        let amountOfCompletedProjects = await Project.countDocuments({end_date:{$gte:statisticsStartDate, $lte:statisticsEndDate},status:"completed"});
      
 
         let response = {
             professionalUser: amountOfProfessionalUser,
             companyUser: amountOfCompanyUser,
-            projectsPerYear: amountOfProjectsPerYear
+            projectsPerYear: amountOfCreatedProjects + amountOfProjectsTillSpecificYear,
+            ongoingProjects: amountOfOngoingProjects,
+            completedProjects: amountOfCompletedProjects
         }
 
         return response_success(res,{...response},'Successfuly fetched statistics')
