@@ -1,19 +1,18 @@
 'use client';
-import logo from "assets/Logo Expanded.png";
-import profile from "assets/Profile Icon.png";
-import search from "assets/carbon_search.png";
-import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
-import { sampleCompany } from 'public/data.js';
 import Footer from '/components/Footer.js';
+import Header from '/components/Header.js';
 import axios from 'axios';
 import { useRouter } from "next/navigation";
+import { useUserData } from "context/context";
 
 export default function CreateNewJob() {
     const router = useRouter();
+    const { state } = useUserData();
+    console.log(state);
 
+    // Project Information States
     const [projectTitle, setProjectTitle] = useState("");
     const [tags, setTags] = useState("");
     const [description, setDesription] = useState("");
@@ -21,22 +20,11 @@ export default function CreateNewJob() {
     const [endDate, setEndDate] = useState("");
     const [numProfessional, setNumProfessional] = useState("");
     const [hours, setHours] = useState("");
-    const [skills, setSkills] = useState("");
     const [experiences, setExperiences] = useState("");
     const [onlineOffline, setOnlineOffline] = useState("");
     const [price, setPrice] = useState("");
+    const [skills, setSkills] = useState("");
     const [requiredCriteria, setRequiredCriteria] = useState("");
-    
-    const [searchInput, setSearchInput] = useState("");
-    
-    const handleChange = (e) => {
-        e.preventDefault();
-        setSearchInput(e.target.value);
-    };
-
-    const handleSearch = () => {
-        console.log(searchInput);
-    };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -58,11 +46,12 @@ export default function CreateNewJob() {
         };
         
 
-        console.log(data);
+        console.log("data is ", data);
 
         // Make an HTTP POST request to your API route
         try {
-            const response = await axios.post('http://127.0.0.1:3000/project/create', data);
+            // POST NOT WORKING AUTHENTICATION ERROR?
+            const response = await axios.post('http://127.0.0.1:3000/project/create', data, { headers: { 'Authorization': `Bearer Token ${state.jwtToken}` }});
             // Handle the response as needed (e.g., show a success message or redirect the user)
             console.log('Create new job successful', response.data);
             router.push('/company');
@@ -70,81 +59,12 @@ export default function CreateNewJob() {
             // Handle any errors (e.g., display an error message)
             console.error('Create new job failed', error);
         }
-    };
+    };        
+
 
     return (
         <div className="bg-white dark:bg-black">
-            <div className="flex justify-between">
-                <Link href="/company">
-                    <Image
-                        src={logo}
-                        width={150}
-                        alt="connected logo"
-                    />
-                </Link>
-                <div className="flex justify-evenly items-center gap-4">
-                    {/* Search Bar */}
-                    <form className="flex" role="search">
-                        <input
-                            id="searchBar"
-                            name="searchBar"
-                            type="text"
-                            placeholder="Search"
-                            value={searchInput}
-                            onChange={handleChange}
-                            className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                        >
-                        </input>
-                        <button
-                            type="submit"
-                            className="flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            onClick={handleSearch}
-                        >
-                            <Image
-                                src={search}
-                                width={26}
-                                alt="connected logo"
-                            />
-                        </button>
-                    </form>
-                    {/* Create new project */}
-                    <Link href="/company/post">
-                        <button
-                            type="submit"
-                            className="flex gap-1 justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            <AiOutlinePlus/> 
-                            <div>Create new project</div>
-                        </button>
-                    </Link>
-                    {/* My Projects */}
-                    <Link href="/company/project">
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            My Projects
-                        </button>
-                    </Link> 
-                    {/* Logout */}
-                    <Link href="/">
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            Logout
-                        </button>
-                    </Link> 
-                    {/* Profile Icon */}
-                    <Link href="/company/profile">
-                        <Image
-                            src={profile}
-                            width={38}
-                            alt="connected logo"
-                        />
-                    </Link>
-                </div>
-            </div>
+            <Header/>
 
             <div className="flex flex-col justify-center mx-64 my-10 p-10 mb-36 rounded-md border-2 border-blue-900">
                 <h2 className="pb-6 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
@@ -178,6 +98,7 @@ export default function CreateNewJob() {
                                     name="tags"
                                     type="text"
                                     required
+                                    placeholder="Web Development"
                                     value={tags}
                                     onChange={e => setTags(e.target.value)}
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
@@ -226,13 +147,12 @@ export default function CreateNewJob() {
                                     name="numProfessional"
                                     type="number"
                                     required
+                                    placeholder="5"
                                     value={numProfessional}
                                     onChange={e => setNumProfessional(e.target.value)}
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
-                        </div>
-                        <div>
                             <label htmlFor="hours" className="block text-sm font-medium leading-6 text-gray-900">
                                 Expected Working Hours
                             </label>
@@ -242,13 +162,12 @@ export default function CreateNewJob() {
                                     name="hours"
                                     type="number"
                                     required
+                                    placeholder="60"
                                     value={hours}
                                     onChange={e => setHours(e.target.value)}
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
-                        </div>
-                        <div>
                             <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
                                 Price per hr
                             </label>
@@ -261,23 +180,6 @@ export default function CreateNewJob() {
                                     placeholder="$50/hr"
                                     value={price}
                                     onChange={e => setPrice(e.target.value)}
-                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="skills" className="block text-sm font-medium leading-6 text-gray-900">
-                                Skills Criteria
-                            </label>
-                            <div className="mt-2">
-                                <input
-                                    id="skills"
-                                    name="skills"
-                                    type="text"
-                                    required
-                                    placeholder="React, JavaScript"
-                                    value={skills}
-                                    onChange={e => setSkills(e.target.value)}
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
@@ -298,38 +200,53 @@ export default function CreateNewJob() {
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
-                        </div>
-                        <div>
-                            <label htmlFor="onlineOffline" className="block text-sm font-medium leading-6 text-gray-900">
-                                Online or Offline Work
-                            </label>
-                            <div class="flex" value={onlineOffline} onChange={e => setOnlineOffline(e.target.value)}>
-                                <div class="flex items-center mr-4">
-                                    <input id="online-radio" type="radio" value="online" name="onlineOffline" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                    <label for="online-radio" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Online</label>
-                                </div>
-                                <div class="flex items-center mr-4">
-                                    <input id="offline-radio" type="radio" value="offline" name="onlineOffline" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
-                                    <label for="offline-radio" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Offline</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <label htmlFor="image" className="block text-sm font-medium leading-6 text-gray-900">
-                                Image
+                            <label htmlFor="skills" className="block text-sm font-medium leading-6 text-gray-900">
+                                Technical Skills
                             </label>
                             <div className="mt-2">
                                 <input
-                                    id="image"
-                                    name="image"
-                                    type="file"
+                                    id="skills"
+                                    name="skills"
+                                    type="text"
                                     required
-                                    
+                                    placeholder="React JS"
+                                    value={skills}
+                                    onChange={e => setSkills(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                            <label htmlFor="requiredCriteria" className="block text-sm font-medium leading-6 text-gray-900">
+                                Soft Skills
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="requiredCriteria"
+                                    name="requiredCriteria"
+                                    type="text"
+                                    required
+                                    placeholder="Team player, Good communication skills"
+                                    value={requiredCriteria}
+                                    onChange={e => setRequiredCriteria(e.target.value)}
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
-                        <div className="col-span-2">
+                        <div>
+                            <label htmlFor="onlineOffline" className="block text-sm font-medium leading-6 text-gray-900">
+                                Work Placement
+                            </label>
+                            <div className="flex" value={onlineOffline} onChange={e => setOnlineOffline(e.target.value)}>
+                                <div className="flex items-center mr-4">
+                                    <input id="online-radio" type="radio" value="online" name="onlineOffline" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    <label htmlFor="online-radio" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Online</label>
+                                </div>
+                                <div className="flex items-center mr-4">
+                                    <input id="offline-radio" type="radio" value="offline" name="onlineOffline" className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    <label htmlFor="offline-radio" className="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Offline</label>
+                                </div>
+                            </div>
+                        </div>
+                        <div>
                             <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
                                 Brief Description
                             </label>
@@ -338,6 +255,8 @@ export default function CreateNewJob() {
                                     id="description"
                                     name="description"
                                     required
+                                    value={description}
+                                    onChange={e => setDesription(e.target.value)}
                                     className="block w-full h-32 rounded-md border-0 mb-10 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>

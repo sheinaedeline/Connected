@@ -415,7 +415,7 @@ export const sampleProfessional = [{
     username: 'patsy.ullrich',
     password: 'MockPassPatsy10',
     DOB: '2000-10-12',
-    phoneNumber: '+6112345678',
+    phoneNumber: '+61412345678',
     linkedIn: 'https://www.linkedin.com/in/nicholas-ed-03c8a61b7/',
     projectHistory: [
         {

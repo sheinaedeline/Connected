@@ -1,24 +1,17 @@
 'use client';
-import logo from "assets/Logo Expanded.png";
-import profile from "assets/Profile Icon.png";
-import search from "assets/carbon_search.png";
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
-import { AiOutlinePlus, AiOutlineMail } from 'react-icons/ai';
-import { trendingProjects, trendingProfessionals } from '/public/data.js';
-import trading from "assets/Trading Background.png";
+import { trendingProjects } from '/public/data.js';
 import Footer from '/components/Footer.js';
+import Header from '/components/Header.js';
 import { useUserData } from "../../context/context";
 import axios from 'axios';
+import Link from 'next/link';
 
 export default function CompanyHome() {
     const { state } = useUserData();
-    console.log('state is ', state);
-
     const { accountId, userType } = state;
-    console.log('state is profile', state);
 
     const [professionalList, setProfessionalList] = useState([]);
 
@@ -48,17 +41,6 @@ export default function CompanyHome() {
         viewProfile();
     }, [accountId]);
 
-    const [searchInput, setSearchInput] = useState("");
-    
-    const handleChange = (e) => {
-        e.preventDefault();
-        setSearchInput(e.target.value);
-    };
-
-    const handleSearch = () => {
-        console.log(searchInput);
-    };
-
     const slideLeft = (id) => {
       var slider = document.getElementById(id);
       slider.scrollLeft = slider.scrollLeft - 500;
@@ -71,86 +53,16 @@ export default function CompanyHome() {
 
     return (
         <div className="bg-white dark:bg-black">
-            <div className="flex justify-between">
-                <Link href="/company">
-                    <Image
-                        src={logo}
-                        width={150}
-                        alt="connected logo"
-                    />
-                </Link>
-                <div className="flex justify-evenly items-center gap-4">
-                    {/* Search Bar */}
-                    <form className="flex" role="search">
-                        <input
-                            id="searchBar"
-                            name="searchBar"
-                            type="text"
-                            placeholder="Search"
-                            value={searchInput}
-                            onChange={handleChange}
-                            className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                        >
-                        </input>
-                        <button
-                            type="submit"
-                            className="flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            onClick={handleSearch}
-                        >
-                            <Image
-                                src={search}
-                                width={26}
-                                alt="connected logo"
-                            />
-                        </button>
-                    </form>
-                    {/* Create new project */}
-                    <Link href="/company/post">
-                        <button
-                            type="submit"
-                            className="flex gap-1 justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            <AiOutlinePlus/> 
-                            <div>Create new project</div>
-                        </button>
-                    </Link> 
-                    {/* My Projects */}
-                    <Link href="/company/project">
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            My Projects
-                        </button>
-                    </Link> 
-                    {/* Logout */}
-                    <Link href="/">
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            Logout
-                        </button>
-                    </Link> 
-                    {/* Profile Icon */}
-                    <Link href="/company/profile">
-                        <Image
-                            src={profile}
-                            width={38}
-                            alt="connected logo"
-                        />
-                    </Link>
-                </div>
-            </div>
+            <Header/>
 
             <div className="flex flex-col justify-center px-32 gap-y-8">
                 {/* Trending Projects */}
                 <div>
                   <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                       Trending{' '}
-                      <a href="/projects" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+                      <Link href="/projects" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
                         Projects
-                      </a>
+                      </Link>
                   </h2>
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
@@ -185,9 +97,9 @@ export default function CompanyHome() {
                 <div>
                   <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                       Hire{' '}
-                      <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                      <Link href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
                         Professionals
-                      </a>
+                      </Link>
                   </h2>
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
@@ -221,9 +133,9 @@ export default function CompanyHome() {
                 <div>
                   <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                       Projects in {' '}
-                      <a href="/companies" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+                      <Link href="/companies" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
                         Manufacturing
-                      </a>
+                      </Link>
                   </h2>
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderProjects')} size={40} />
