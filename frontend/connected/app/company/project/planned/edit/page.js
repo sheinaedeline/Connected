@@ -6,12 +6,14 @@ import logo from "assets/Logo Expanded.png";
 import profile from "assets/Profile Icon.png";
 import search from "assets/carbon_search.png";
 import { AiOutlinePlus, AiOutlineMail } from 'react-icons/ai';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Footer from '/components/Footer.js';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { trendingProjects, trendingProfessionals, sampleProject } from '/public/data.js';
 import { AiOutlineHeart, AiFillLinkedin } from 'react-icons/ai';
 import trading from "assets/Trading Background.png";
+import axios from 'axios';
+import { useUserData } from "context/context";
 
 export default function page() {
 
@@ -25,6 +27,63 @@ export default function page() {
   const handleSearch = () => {
       console.log(searchInput);
   };
+
+  const [projectList, setProjectList] = useState([]);
+  const [project, setProject] = useState({});
+
+    // GET View Profile
+  useEffect(() => {
+    const viewProfile = async () => {
+        const data = { 
+            size: 2,
+            page: 1
+            };
+
+        try {
+            const response = await axios.post(`http://127.0.0.1:3000/project/getProjects`, data);
+
+            // Dispatch
+            console.log('View Profile Successful', response.data);
+            setProjectList(response.data.content.projectsList);
+            // Set variable states
+            
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('View Profile failed', error);
+        }
+
+        
+    };
+    viewProfile();
+    }, []);
+
+    useEffect(() => {
+        // Fetch projects and set the first project as the current project
+        // ...
+        if (projectList.length > 0) {
+          setProject(projectList[0]);
+          console.log("it isnt empty")
+          console.log(projectList[0])
+        }
+
+      }, [projectList]);
+
+      const handleInputChange = (e) => {
+        setProject({
+          ...project,
+          [e.target.name]: e.target.value,
+        });
+      };
+    
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        try {
+          const response = await axios.put('http://127.0.0.1:3000/project/652cf219f25295494af04c68/edit', project);
+          console.log(response.data);
+        } catch (error) {
+          console.error(error);
+        }
+      };  
 
   return (
     <div className="bg-white dark:bg-black">
@@ -100,198 +159,197 @@ export default function page() {
         </div>
       </div>
       <section className="relative">
-        <div className="px-4 pt-10 mx-auto max-w-7xl md:pt-16">
-          <br>
-          </br>
-          <div className="w-full pb-5 mx-auto text-left md:w-11/12">
-
-            <br></br>
-
-            <div className="flex flex-col rounded-md border-2 border-blue-900 w-full">
-                    {sampleProject.map((item) => (
-                    <div key={item.id} className="group grid grid-cols-4 grid-rows-2">
-                        <div className="aspect-h-1 aspect-w-1 overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                                src={item.imageSrc}
-                                alt={item.imageAlt}
-                                width={300}
-                                height={200}
-                                className="object-cover object-center group-hover:opacity-75"
-                            />
-                        </div>
-                        <div className="col-span-3 grid grid-cols-4 gap-2 p-4 mr-10">
-                            {/* <p className="col-span-3 text-3xl font-bold text-gray-900">{item.projectName} {item.industryType}</p> */}
-                            <div className="col-span-2" >
-                                <label htmlFor="projectName" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Project Name
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="projectName"
-                                        name="projectName"
-                                        type="text"
-                                        value={sampleProject[0].projectName}
-                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-span-2">
-                                <label htmlFor="industryType" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Industry Type
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="industryType"
-                                        name="industryType"
-                                        type="text"
-                                        value={sampleProject[0].industryType}
-                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                    />
-                                </div>
-                            </div>
-                            {/* <div className="flex flex-evenly gap-x-4 justify-start items-center">
-                                <AiOutlineHeart size={40}/>
-                                <AiFillLinkedin size={40}/>
-                            </div> */}
-                            <div className="col-span-2">
-                                <label htmlFor="industry" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Industry
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="industry"
-                                        name="industry"
-                                        type="text"
-                                        value={sampleProject[0].industry}
-                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <label htmlFor="startDate" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Start Date
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="startDate"
-                                        name="startDate"
-                                        type="text"
-                                        value={sampleProject[0].startDate}
-                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                    />
-                                </div>
-                            </div>
-                            <div>
-                                <label htmlFor="endDate" className="block text-sm font-medium leading-6 text-gray-900">
-                                    End Date
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="endDate"
-                                        name="endDate"
-                                        type="text"
-                                        value={sampleProject[0].endDate}
-                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                    />
-                                </div>
-                            </div>
-                            <div className="col-span-2">
-                                <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
-                                    Price
-                                </label>
-                                <div className="mt-2">
-                                    <input
-                                        id="price"
-                                        name="price"
-                                        type="text"
-                                        value={sampleProject[0].price}
-                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                    />
-                                </div>
-                            </div>
-                            {/* <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.startDate}</p> */}
-                            {/* <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.endDate}</p> */}
-                            {/* <p className="col-span-4 text-xs text-gray-600">Price: {item.price}</p> */}
-                            <p className="col-span-4 text-xs text-gray-600">Company: {item.companyName}</p>
-                            <p className="col-span-3 text-left text-xs text-gray-600">{item.email}</p>
-                            <Link href="/company/project/planned" >
-                                <button
-                                    type="submit"
-                                    className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                                >
-                                    Save Changes
-                                </button>
-                            </Link>
-                        </div>
-                        
-                        <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
-                            {/* <p className="text-lg font-medium text-gray-900">Description</p>
-                            <p className="mt-4 text-left text-xs text-gray-600">{item.description}</p> */}
-                            <div className="col-span-4">
-                              <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
-                                  Brief Description
-                              </label>
-                              <div className="mt-2">
-                                  <textarea
-                                      id="description"
-                                      name="description"
-                                      value={sampleProject[0].description}
-                                      className="block w-full h-32 rounded-md border-0 mb-10 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                  />
-                              </div>
-                          </div>
-                        </div>
+      <form onSubmit={handleSubmit}>
+        <div className="flex flex-col rounded-md border-2 border-blue-900 w-full">
+            {project && (
+            <div key={project.id} className="group grid grid-cols-4 grid-rows-2">
+                <div className="col-span-3 grid grid-cols-4 gap-2 p-4 mr-10">
+                {/* Project Title */}
+                <div className="col-span-2">
+                    <label htmlFor="project_title" className="block text-sm font-medium leading-6 text-gray-900">
+                    Project Title
+                    </label>
+                    <div className="mt-2">
+                    <input
+                        id="project_title"
+                        name="project_title"
+                        type="text"
+                        value={project.project_title}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                    />
                     </div>
-                    ))}
+                    <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
+                    Description
+                    </label>
+                    <div className="mt-2">
+                        <textarea
+                        id="description"
+                        name="description"
+                        value={project.description}
+                        onChange={handleInputChange}
+                        className="block w-full h-20 rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    {/* Start Date */}
+                    <div className="col-span-2">
+                    <label htmlFor="start_date" className="block text-sm font-medium leading-6 text-gray-900">
+                        Start Date
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="start_date"
+                        name="start_date"
+                        type="date"
+                        value={project.start_date ? new Date(project.start_date).toISOString().split('T')[0] : ''}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    </div>
+
+                    {/* End Date */}
+                    <div className="col-span-2">
+                    <label htmlFor="end_date" className="block text-sm font-medium leading-6 text-gray-900">
+                        End Date
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="end_date"
+                        name="end_date"
+                        type="date"
+                        value={project.end_date ? new Date(project.end_date).toISOString().split('T')[0] : ''}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    </div>
+
+                    <div className="col-span-2">
+                    <label htmlFor="online_offline" className="block text-sm font-medium leading-6 text-gray-900">
+                        Work Mode
+                    </label>
+                    <div className="mt-2">
+                        <select
+                        id="online_offline"
+                        name="online_offline"
+                        value={project.online_offline}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        >
+                        <option value="online">Online</option>
+                        <option value="offline">Offline</option>
+                        <option value="mixed">Mixed</option>
+                        </select>
+                    </div>
+                    </div>
+                    {/* Number of Professionals */}
+                    <div className="col-span-2">
+                    <label htmlFor="No_professional" className="block text-sm font-medium leading-6 text-gray-900">
+                        Number of Professionals
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="No_professional"
+                        name="No_professional"
+                        type="number"
+                        value={project.No_professional}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    </div>
+
+                    {/* Expected Working Hours */}
+                    <div className="col-span-2">
+                    <label htmlFor="expected_working_hours" className="block text-sm font-medium leading-6 text-gray-900">
+                        Expected Working Hours
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="expected_working_hours"
+                        name="expected_working_hours"
+                        type="number"
+                        value={project.expected_working_hours}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    </div>
+
+                    {/* Skills */}
+                    <div className="col-span-2">
+                    <label htmlFor="skills" className="block text-sm font-medium leading-6 text-gray-900">
+                        Skills
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="skills"
+                        name="skills"
+                        type="text"
+                        value={project.skills}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    </div>
+                    {/* Experiences */}
+                    <div className="col-span-2">
+                    <label htmlFor="experiences" className="block text-sm font-medium leading-6 text-gray-900">
+                        Experiences
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="experiences"
+                        name="experiences"
+                        type="text"
+                        value={project.experiences}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    </div>
+
+                    {/* Price Budget */}
+                    <div className="col-span-2">
+                    <label htmlFor="price_budget" className="block text-sm font-medium leading-6 text-gray-900">
+                        Price Budget
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="price_budget"
+                        name="price_budget"
+                        type="text"
+                        value={project.price_budget}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    </div>
+
+                    {/* Required Professional Criteria */}
+                    <div className="col-span-2">
+                    <label htmlFor="req_prof_criteria" className="block text-sm font-medium leading-6 text-gray-900">
+                        Required Professional Criteria
+                    </label>
+                    <div className="mt-2">
+                        <input
+                        id="req_prof_criteria"
+                        name="req_prof_criteria"
+                        type="text"
+                        value={project.req_prof_criteria}
+                        onChange={handleInputChange}
+                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                        />
+                    </div>
+                    </div>
+                  </div>
                 </div>
-
-            <div>
-                  {/* <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-                      Onboard{' '}
-                      <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
-                        Professionals
-                      </a>
-                  </h2>
-                  <div className="relative flex items-center">
-                    <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
-                    <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                      {trendingProfessionals.map((item) => (
-                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                          <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                              src={item.imageSrc}
-                              alt={item.imageAlt}
-                              width={300}
-                              height={200}
-                              className="object-cover object-center group-hover:opacity-75"
-                            />
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 p-4">
-                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
-                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
-                            <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
-                            <button
-                      className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                    >
-                      Remove
-                    </button>
-                          </div>
-                        </a>
-                      ))}
-                    </div>
-                    <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
-                  </div> */}
-                </div>  
-          </div>
+            </div>
+            )}
+            <button type="submit" className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600">Save Changes</button>
         </div>
-
-        
-        {/* <div
-          style={{ backgroundImage: "url(/images/blur.png)" }}
-          className="absolute inset-0 w-full h-full bg-bottom bg-no-repeat bg-cover -z-1"
-        /> */}
+        </form>
         <Footer/>
       </section>
     </div>
