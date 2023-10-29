@@ -503,5 +503,72 @@ export const sampleProject = [{
   ABN: '712398712',
   phoneNumber: '+6189032853',
   companyLink: 'https://www.linkedin.com/in/nicholas-ed-03c8a61b7/',
+  potential_applicants: [],
+  approved_applicants: []
+
+},
+];
+
+export const sampleProject2 = [{
+  id: 1,
+  project_title: "Makan",
+  tags: "bang",
+  start_date: "10 Aug 2023",
+  end_date: "1 Oct 2023",
+  price_budget: "10000",
+  owner: "Brainverse",
+  industry: "Technology",
+  imageSrc: "http://dummyimage.com/300x200.png/ff4444/ffffff",
+  imageAlt: "tortor",
+  description: "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis.",
+  ABN: '712398712',
+  phoneNumber: '+6189032853',
+  companyLink: 'https://www.linkedin.com/in/nicholas-ed-03c8a61b7/',
+  potential_applicants: [
+    {
+      _id: {
+        $oid: "6528d5d9130060e6f0fdb778"
+      },
+      userType: "professional",
+      firstName: "vin",
+      lastName: "lin",
+      name: "vincent.lin",
+      email: "vincent.lin@gmail.com",
+      phoneNumber: "0404123414",
+      address: "123 Moon Rd",
+      dob: {
+        $date: "2000-10-20T00:00:00.000Z"
+      },
+      socialURL: "https://www.linkedin.com/in/nicholas-ed-03c8a61b7/",
+      hash_password: "$2b$10$xSfH33nzZpYShikimTHLC.E46qrh4UucardTBTpQgHXKqPSFkIjSy",
+      tags: [
+        "software"
+      ],
+      __v: 0
+  }],
+  approved_applicants: [
+    {
+      _id: {
+        $oid: "6528d62d130060e6f0fdb77e"
+      },
+      userType: "professional",
+      firstName: "jj",
+      lastName: "lin",
+      name: "vincent.lin",
+      email: "vincent.lin@gmail.com",
+      phoneNumber: "0404123414",
+      address: "123 Moon Rd",
+      dob: {
+        $date: "2000-10-20T00:00:00.000Z"
+      },
+      socialURL: "https://www.linkedin.com/in/nicholas-ed-03c8a61b7/",
+      hash_password: "$2b$10$xSfH33nzZpYShikimTHLC.E46qrh4UucardTBTpQgHXKqPSFkIjSy",
+      tags: [
+        "software"
+      ],
+      __v: 0
+  }
+  ]
+
 },
 ];
