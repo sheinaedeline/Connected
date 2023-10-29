@@ -9,12 +9,15 @@ import { trendingProjects } from '/public/data.js';
 import trading from "assets/Trading Background.png";
 import Footer from '/components/Footer.js';
 import axios from 'axios';
+import { useUserData } from "context/context";
 
 
 const options = ['bizz', 'software3', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
 
+
 export default function Projects() {
     const [projectList, setProjectList] = useState([]);
+    const [selectedOptions, setSelectedOptions] = useState([]);
 
     // GET View Profile
     useEffect(() => {
@@ -36,34 +39,41 @@ export default function Projects() {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
             }
+
+            
         };
 
         viewProfile();
     }, []);
 
+    useEffect(() => {
+        setFilteredProjectList(projectList);
+    }, [projectList]);
+
     const [searchInput, setSearchInput] = useState("");
+    const [filteredProjectList, setFilteredProjectList] = useState([]);
     
     const handleChange = (e) => {
         e.preventDefault();
         setSearchInput(e.target.value);
     };
 
-    const handleSearch = () => {
-        console.log(searchInput);
-    };
-
-    const slideLeft = (id) => {
-        var slider = document.getElementById(id);
-        slider.scrollLeft = slider.scrollLeft - 500;
-      };
-  
-    const slideRight = (id) => {
-        var slider = document.getElementById(id);
-        slider.scrollLeft = slider.scrollLeft + 500;
+    const handleSearch = (event) => {
+        event.preventDefault(); // Prevent page refresh
+    
+        if (searchInput.trim() === '') {
+            // If search bar is empty, show all projects
+            setFilteredProjectList(projectList);
+        } else {
+            // Filter projects based on search input
+            const filteredProjects = projectList.filter(item => item.project_title.toLowerCase().includes(searchInput.toLowerCase()));
+    
+            // Update filtered project list with filtered projects
+            setFilteredProjectList(filteredProjects);
+        }
     };
 
     function Filter() {
-        const [selectedOptions, setSelectedOptions] = useState([]);
         const [showFilter, setShowFilter] = useState(false);
       
         const handleCheckboxChange = (option) => {
@@ -96,6 +106,7 @@ export default function Projects() {
                                     name={`option-${index}`} 
                                     value={option}
                                     onChange={() => handleCheckboxChange(option)}
+                                    checked={selectedOptions.includes(option)}
                                 />
                                 <label htmlFor={`option-${index}`}>{option}</label>
                             </div>
@@ -109,7 +120,8 @@ export default function Projects() {
             </div>
         );
       }
-
+    
+      
 
     return (
         <div className="bg-white dark:bg-black">
@@ -208,10 +220,9 @@ export default function Projects() {
                         </button>
                 </form>
                 <br></br>
-                <Filter />
+                <Filter setSelectedOptions={setSelectedOptions} />
                   <div className="grid grid-cols-4 gap-x-10">
-                      {projectList.length > 0  && projectList.map((item) => (
-                        <a key={item.id} href={item.href} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                  {filteredProjectList.length > 0  && filteredProjectList.filter(item => selectedOptions.length === 0 || selectedOptions.some(opt => item.tags.includes(opt))).map((item) => (                        <a key={item.id} href={item.href} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
                               src={item.imageSrc}
@@ -226,7 +237,7 @@ export default function Projects() {
                             <p className="col-span-2 text-xs italic text-gray-600">{item.startDate} - {item.endDate}</p>
                             <p className="col-span-2 text-sm font-medium text-blue-900">{item.company} Company</p>
                             <p className="mt-1 text-sm font-medium text-gray-600">${item.price}</p>
-                            <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
+                            <p className="mt-1 text-sm text-right text-gray-600">{item.tags}</p>
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                           </div>
                         </a>

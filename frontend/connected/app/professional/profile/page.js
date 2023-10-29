@@ -7,6 +7,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { sampleProfessional } from '/public/data.js';
 import Footer from '/components/Footer.js';
+import axios from 'axios';
 
 export default function ProfessionalProfile() {
 
@@ -20,6 +21,26 @@ export default function ProfessionalProfile() {
     const handleSearch = () => {
         console.log(searchInput);
     };
+
+    const handleFileUpload = async (event) => {
+        const file = event.target.files[0];
+        const formData = new FormData();
+        formData.append('file', file);
+    
+        try {
+            const response = await axios.post('http://localhost/user/uploadcv', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            });
+            console.log('Upload successful', response.data);
+            alert('Upload successful'); // Popup on success
+        } catch (error) {
+            console.error('Upload failed', error);
+            alert('Upload failed'); // Popup on failure
+        }
+    };
+    
 
     return (
         <div className="bg-white dark:bg-black">
@@ -278,25 +299,26 @@ export default function ProfessionalProfile() {
                             />
                         </div>
                         <div className="flex justify-end m-4">
-                            <button
-                                type="submit"
-                                className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"style={{ marginRight: "10px" }}
-                            >
-                                Upload Resume
-                            </button>
-                            <button
-                                type="submit"
-                                className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            <label
+                                htmlFor="upload-cv"
+                                className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer"
                             >
                                 Upload CV
-                            </button>
+                            </label>
+                            <input
+                                id="upload-cv"
+                                name="upload-cv"
+                                type="file"
+                                accept=".pdf"
+                                onChange={handleFileUpload}
+                                style={{ display: 'none' }}
+                            />
                         </div>
                     </div>
                 </div>
                 <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                     My Tags
                 </h2>
-
 
             </div>
             <Footer/>
