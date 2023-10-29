@@ -1,6 +1,6 @@
 import express from "express"
 const router = express.Router();
-import {register,login, logout,editProfile, getUsers, viewProfile, forgetPassword, uploadCV} from "@controller/userController"
+import {register,login, logout,editProfile, getUsers, viewProfile, forgetPassword, uploadCV, rateProfessionalUser, rateProject} from "@controller/userController"
 import { checkForRole } from "@utils/authUtils";
 import { uploadMiddleware } from "@utils/fileUploadUtils";
 
@@ -12,6 +12,8 @@ router.post("/users",getUsers);
 router.post("/editprofile",uploadMiddleware('userimage','image',false),checkForRole(),editProfile);
 router.get("/profile/:id",viewProfile);
 router.post("/forgetpassword/:email",forgetPassword);
+router.post("/rateProfessionalUser", checkForRole('company'), rateProfessionalUser);
+router.post("/rateProject", checkForRole('professional'), rateProject);
 export default router;
 
 // checkForRole('any','free')

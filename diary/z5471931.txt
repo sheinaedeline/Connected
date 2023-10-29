@@ -25,3 +25,15 @@ Week 4
 In week 4, I created the initial backend code, then we had a meeting between the backend team to divide up our work. For the rest of the week I
 worked on the backend sections that are assigned to me which is the Token Authentication Logic, Login and Register API, and Paginate Users API. Additionaly
 I have also tested the file uploading functionality needed for the next sprint
+
+Week 5
+In week 5, I created a demo recording of the backend progress for the project client, Fixed some of the authentication API and also reworked on the logic of the file saving
+to just save the file as base64 string instead of using a different collection
+
+Week 6
+Started working on reworking the get projects api to combine multiple endpoints into just one endpoint with multiple filters functionality in order
+to make the get projects api multipurpose. Additionaly also implemented pagination into the get projects api so that the backend splits and returns the projects in pages
+
+Week 7
+Created the upload CV Api, Edit Profile API, and started working on the admin statistics api. Additionaly helped the frontend team in figuring out how to share database data
+between team members.

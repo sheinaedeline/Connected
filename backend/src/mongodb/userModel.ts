@@ -4,7 +4,7 @@ import type { QueryWithHelpers} from 'mongoose';
 import type {IUser, UserQueryHelpers, IUserMethods} from '@interfaces/mongoDBInterfaces';
 import { userObj } from '@mongodb/schemaObject';
 type UserModel = Model<IUser, {}, IUserMethods>;
-
+//, timestamps: { createdAt: 'created_at' } (Add/Delete this later depending if you want statistic of new user per year etc)
 export const userSchema = new Schema <IUser, UserModel, IUserMethods, {}>(userObj,{ collation: { locale: 'en_US', strength: 1 } });
 
 userSchema.method('comparePassword', function(password:string) {

@@ -12,8 +12,6 @@ import trading from "assets/Trading Background.png";
 import Footer from '/components/Footer.js';
 // import { useUserData } from "../../context/context";
 import axios from 'axios';
-import { useUserData } from "context/context";
-
 
 export default function CompanyHome() {
     const { state } = useUserData();

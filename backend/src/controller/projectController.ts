@@ -90,7 +90,7 @@ export async function createProject(req: Request, res: Response): Promise<Respon
 
 export async function getProjects(req: Request, res: Response): Promise<Response> {
     try {
-        const {tags, size, page, companyId, projectName, startsAt, endsAt, userStatus ,userId, status} = req.body;
+        const {tags, size, page, companyId, projectName, startsAt, endsAt, userStatus ,userId, status, sortBy} = req.body;
         let required_fields = [
 			'size',
             'page'
@@ -127,13 +127,24 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             }
         }
 
-        const myCustomLabels = {
-            totalDocs: 'amountOfProjects',
-            docs: 'projectList',
-            limit: 'size',
-            page: 'currentPage'
-        };
-        
+        let splittedSortBy:string[] = sortBy?sortBy.split(' '):[]
+        if(sortBy){
+            if(splittedSortBy.length !== 2){
+                throw new Error('The format of the sortBy field must be: "startDate|endDate asc|desc"')
+            }
+            let validSortKey = [
+                'startDate',
+                'endDate',
+            ]
+            if(!validSortKey.includes(splittedSortBy[0])){
+                throw new Error('Invalid Sort Key');
+            }
+            if(splittedSortBy[1] != 'asc' && splittedSortBy[1] != 'desc' ){
+                throw new Error('valid sorting value is either asc or desc');
+            }
+        }
+
+
         let lowerCasedTags:string[] = [];
         if (tags){
             if(Array.isArray(tags)){
@@ -156,10 +167,11 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             ...(status && {status: status.toLowerCase()}),
             ...((userStatus && userStatus === 'joined') && {approved_applicants:userId}),
             ...((userStatus && userStatus === 'pending') && {potential_applicants: userId}),
-            // potential_applicants: {$all: ['6535e5e72684b34926774d92']}
+            ...((!userStatus && userId) && {potential_applicants: userId, approved_applicants:userId}),
         }
 
-        console.log(query);
+
+
         let populate = [
             {
                 path: 'owner',
@@ -168,8 +180,21 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             }
         ]
 
+        let sort = {
+            ...(splittedSortBy[0] === 'startDate' && {start_date:splittedSortBy[1]}),
+            ...(splittedSortBy[0] === 'endDate' && {end_date:splittedSortBy[1]}),
+        }
+
+        const myCustomLabels = {
+            totalDocs: 'amountOfProjects',
+            docs: 'projectList',
+            limit: 'size',
+            page: 'currentPage'
+        };
+        
         const options = {
             page,
+            ...(Object.keys(sort).length > 0 && {sort}),
             limit: size,
             populate,
             projection: "-__v -hash_password",
@@ -181,6 +206,7 @@ export async function getProjects(req: Request, res: Response): Promise<Response
                 return count;
             }
         }
+  
         let projects = await ProjectPaginate.paginate(query, options);
         let {projectList, ...rest} = projects;
         let projectsList = Array.isArray(projectList)?projectList.map((e) => {
