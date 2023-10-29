@@ -31,23 +31,30 @@ export async function getStatistics(req: Request, res: Response): Promise<Respon
                 second:0,
                 millisecond:0,
             }
-        )
-
+        ).toJSDate();
+        
         const statisticsEndDate = DateTime.fromObject(
             {
-                year:Number(year)+1,
-                month: 1,
-                day: 1,
-                hour:0,
-                minute:0,
-                second:0,
-                millisecond:0,
+                year:Number(year),
+                month: 12,
+                day: 31,
+                hour:23,
+                minute:59,
+                second:59,
+                millisecond:59,
             }
-        )
+        ).toJSDate();
         
+        let amountOfProjectsPerYear = await Project.countDocuments({start_date:{$gte:statisticsStartDate,$lt:statisticsEndDate}})
+        let amountOfOngoingProjects = await Project.countDocuments({start_date:{$lte:statisticsEndDate}, status:"ongoing"});
+        let amountOfNewProjects = await Project.countDocuments({start_date:{$gte:statisticsStartDate, $lte:statisticsEndDate},status:"new"});
+        let amountOfCompletedProjects = await Project.countDocuments({end_date:{$gte:statisticsStartDate, $lte:statisticsEndDate},status:"new"});
+     
+
         let response = {
             professionalUser: amountOfProfessionalUser,
-            companyUser: amountOfCompanyUser
+            companyUser: amountOfCompanyUser,
+            projectsPerYear: amountOfProjectsPerYear
         }
 
         return response_success(res,{...response},'Successfuly fetched statistics')

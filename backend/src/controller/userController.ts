@@ -263,7 +263,11 @@ export async function editProfile(req: Request, res: Response): Promise<Response
         updateableFields.forEach((key) => {
             if(updatedUserObject[key]){
                 if(existingUser !== null && existingUser !== undefined){
-                    existingUser[key] = updatedUserObject[key]
+                    if(key === "tags"){
+                        existingUser[key] = lowerCasedTags
+                    } else {
+                        existingUser[key] = updatedUserObject[key];
+                    }
                 }
             }
         })
