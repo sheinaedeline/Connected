@@ -9,9 +9,11 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import { sampleCompany } from 'public/data.js';
 import Footer from '/components/Footer.js';
 import axios from 'axios';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function CreateNewJob() {
+    const router = useRouter();
+
     const [projectTitle, setProjectTitle] = useState("");
     const [tags, setTags] = useState("");
     const [description, setDesription] = useState("");
@@ -34,6 +36,40 @@ export default function CreateNewJob() {
 
     const handleSearch = () => {
         console.log(searchInput);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        // Extract data
+        const data = {
+            project_title: projectTitle,
+            tags: tags,
+            description: description,
+            start_date: startDate,
+            end_date: endDate,
+            No_professional: numProfessional,
+            expected_working_hours: hours,
+            skills: skills,
+            experiences: experiences,
+            online_offline: onlineOffline,
+            price_budget: price,
+            req_prof_criteria: requiredCriteria,
+        };
+        
+
+        console.log(data);
+
+        // Make an HTTP POST request to your API route
+        try {
+            const response = await axios.post('http://127.0.0.1:3000/project/create', data);
+            // Handle the response as needed (e.g., show a success message or redirect the user)
+            console.log('Create new job successful', response.data);
+            router.push('/company');
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('Create new job failed', error);
+        }
     };
 
     return (
@@ -117,30 +153,34 @@ export default function CreateNewJob() {
                 <form className="space-y-6" action="#" method="POST">
                     <div className="grid grid-cols-2 gap-4">
                         <div>
-                            <label htmlFor="name" className="block text-sm font-medium leading-6 text-gray-900">
-                                Project Name
+                            <label htmlFor="projectTitle" className="block text-sm font-medium leading-6 text-gray-900">
+                                Project Title
                             </label>
                             <div className="mt-2">
                                 <input
-                                    id="name"
-                                    name="name"
+                                    id="projectTitle"
+                                    name="projectTitle"
                                     type="text"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={projectTitle}
+                                    onChange={e => setProjectTitle(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
                         <div>
-                            <label htmlFor="industryType" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="tags" className="block text-sm font-medium leading-6 text-gray-900">
                                 Industry Type
                             </label>
                             <div className="mt-2">
                                 <input
-                                    id="industryType"
-                                    name="industryType"
+                                    id="tags"
+                                    name="tags"
                                     type="text"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={tags}
+                                    onChange={e => setTags(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -154,7 +194,9 @@ export default function CreateNewJob() {
                                     name="startDate"
                                     type="date"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={startDate}
+                                    onChange={e => setStartDate(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -168,22 +210,108 @@ export default function CreateNewJob() {
                                     name="endDate"
                                     type="date"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    value={endDate}
+                                    onChange={e => setEndDate(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="numProfessional" className="block text-sm font-medium leading-6 text-gray-900">
+                                Number of Professionals Needed
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="numProfessional"
+                                    name="numProfessional"
+                                    type="number"
+                                    required
+                                    value={numProfessional}
+                                    onChange={e => setNumProfessional(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="hours" className="block text-sm font-medium leading-6 text-gray-900">
+                                Expected Working Hours
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="hours"
+                                    name="hours"
+                                    type="number"
+                                    required
+                                    value={hours}
+                                    onChange={e => setHours(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
                         <div>
                             <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
-                                Price
+                                Price per hr
                             </label>
                             <div className="mt-2">
                                 <input
                                     id="price"
                                     name="price"
-                                    type="number"
+                                    type="text"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    placeholder="$50/hr"
+                                    value={price}
+                                    onChange={e => setPrice(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="skills" className="block text-sm font-medium leading-6 text-gray-900">
+                                Skills Criteria
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="skills"
+                                    name="skills"
+                                    type="text"
+                                    required
+                                    placeholder="React, JavaScript"
+                                    value={skills}
+                                    onChange={e => setSkills(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="experiences" className="block text-sm font-medium leading-6 text-gray-900">
+                                Preferred Experiences
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="experiences"
+                                    name="experiences"
+                                    type="text"
+                                    required
+                                    placeholder="Web development internship"
+                                    value={experiences}
+                                    onChange={e => setExperiences(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="onlineOffline" className="block text-sm font-medium leading-6 text-gray-900">
+                                Online or Offline Work
+                            </label>
+                            <div class="flex" value={onlineOffline} onChange={e => setOnlineOffline(e.target.value)}>
+                                <div class="flex items-center mr-4">
+                                    <input id="online-radio" type="radio" value="online" name="onlineOffline" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    <label for="online-radio" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Online</label>
+                                </div>
+                                <div class="flex items-center mr-4">
+                                    <input id="offline-radio" type="radio" value="offline" name="onlineOffline" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600" />
+                                    <label for="offline-radio" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Offline</label>
+                                </div>
                             </div>
                         </div>
                         <div>
@@ -196,7 +324,8 @@ export default function CreateNewJob() {
                                     name="image"
                                     type="file"
                                     required
-                                    className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -209,7 +338,7 @@ export default function CreateNewJob() {
                                     id="description"
                                     name="description"
                                     required
-                                    className="block w-full h-32 rounded-md border-0 mb-10 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    className="block w-full h-32 rounded-md border-0 mb-10 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -220,6 +349,7 @@ export default function CreateNewJob() {
                         <Link href="/company">
                             <button
                                 type="submit"
+                                onClick={handleSubmit}
                                 className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                             >
                                 Post Project

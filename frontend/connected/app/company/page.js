@@ -10,7 +10,7 @@ import { AiOutlinePlus, AiOutlineMail } from 'react-icons/ai';
 import { trendingProjects, trendingProfessionals } from '/public/data.js';
 import trading from "assets/Trading Background.png";
 import Footer from '/components/Footer.js';
-// import { useUserData } from "../../context/context";
+import { useUserData } from "../../context/context";
 import axios from 'axios';
 
 export default function CompanyHome() {
