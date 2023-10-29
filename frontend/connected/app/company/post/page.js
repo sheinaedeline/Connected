@@ -8,8 +8,22 @@ import { useState } from 'react';
 import { AiOutlinePlus } from 'react-icons/ai';
 import { sampleCompany } from 'public/data.js';
 import Footer from '/components/Footer.js';
+import axios from 'axios';
+import { useRouter } from "next/router";
 
-export default function CompanyProfile() {
+export default function CreateNewJob() {
+    const [projectTitle, setProjectTitle] = useState("");
+    const [tags, setTags] = useState("");
+    const [description, setDesription] = useState("");
+    const [startDate, setStartDate] = useState("");
+    const [endDate, setEndDate] = useState("");
+    const [numProfessional, setNumProfessional] = useState("");
+    const [hours, setHours] = useState("");
+    const [skills, setSkills] = useState("");
+    const [experiences, setExperiences] = useState("");
+    const [onlineOffline, setOnlineOffline] = useState("");
+    const [price, setPrice] = useState("");
+    const [requiredCriteria, setRequiredCriteria] = useState("");
     
     const [searchInput, setSearchInput] = useState("");
     
