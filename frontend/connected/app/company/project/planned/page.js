@@ -6,25 +6,18 @@ import logo from "assets/Logo Expanded.png";
 import profile from "assets/Profile Icon.png";
 import search from "assets/carbon_search.png";
 import { AiOutlinePlus, AiOutlineMail } from 'react-icons/ai';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Footer from '/components/Footer.js';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { trendingProjects, trendingProfessionals, sampleProject } from '/public/data.js';
 import { AiOutlineHeart, AiFillLinkedin } from 'react-icons/ai';
 import trading from "assets/Trading Background.png";
+import axios from 'axios';
+import { useUserData } from "context/context";
+
+const options = ['bizz', 'software3', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
 
 export default function page() {
-
-  const [searchInput, setSearchInput] = useState("");
-    
-  const handleChange = (e) => {
-      e.preventDefault();
-      setSearchInput(e.target.value);
-  };
-
-  const handleSearch = () => {
-      console.log(searchInput);
-  };
 
   const slideLeft = (id) => {
     var slider = document.getElementById(id);
@@ -34,6 +27,51 @@ export default function page() {
   const slideRight = (id) => {
     var slider = document.getElementById(id);
     slider.scrollLeft = slider.scrollLeft + 500;
+  };
+
+  const { state } = useUserData();
+  console.log('state is ', state);
+
+  const { accountId, userType } = state;
+  console.log('state is profile', state);
+
+  const [professionalList, setProfessionalList] = useState([]);
+
+  // GET View Profile
+  useEffect(() => {
+    const viewProfile = async () => {
+        const data = { 
+          userType:"professional",
+          size: 5,
+          page: 1
+        };
+
+        try {
+            const response = await axios.post(`http://127.0.0.1:3000/user/users/`, data);
+
+            // Dispatch
+            console.log('Get professional Successful', response.data);
+            setProfessionalList(response.data.content.usersList);
+            // Set variable states
+            
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('View Profile failed', error);
+        }
+    };
+
+    viewProfile();
+  }, [accountId]);
+
+  const [searchInput, setSearchInput] = useState("");
+  
+  const handleChange = (e) => {
+      e.preventDefault();
+      setSearchInput(e.target.value);
+  };
+
+  const handleSearch = () => {
+      console.log(searchInput);
   };
 
   return (
@@ -171,7 +209,7 @@ export default function page() {
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                      {trendingProfessionals.map((item) => (
+                    {professionalList.length > 0 && professionalList.map((item) => (
                         <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
@@ -210,7 +248,7 @@ export default function page() {
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                      {trendingProfessionals.map((item) => (
+                    {professionalList.length > 0 && professionalList.map((item) => (
                         <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image

@@ -21,4 +21,4 @@ I adjusted my pages to fit the overall theme of the project, matching vision on 
 
 
 Week 7:
-Starting to integrate between frontend and backend
+Starting to integrate between frontend and backend, doing the sprint 2, we also met up offline to do the project together outside of the lab for easier communications

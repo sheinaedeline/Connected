@@ -222,7 +222,8 @@ export default function Projects() {
                 <br></br>
                 <Filter setSelectedOptions={setSelectedOptions} />
                   <div className="grid grid-cols-4 gap-x-10">
-                  {filteredProjectList.length > 0  && filteredProjectList.filter(item => selectedOptions.length === 0 || selectedOptions.some(opt => item.tags.includes(opt))).map((item) => (                        <a key={item.id} href={item.href} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                  {filteredProjectList.length > 0  && filteredProjectList.filter(item => (item.status === 'new' || item.status === 'ongoing') && (selectedOptions.length === 0 || selectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (                  
+                        <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
                               src={item.imageSrc}
@@ -234,9 +235,9 @@ export default function Projects() {
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                            <p className="col-span-2 text-xs italic text-gray-600">{item.startDate} - {item.endDate}</p>
+                            <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
                             <p className="col-span-2 text-sm font-medium text-blue-900">{item.company} Company</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">${item.price}</p>
+                            <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}</p>
                             <p className="mt-1 text-sm text-right text-gray-600">{item.tags}</p>
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                           </div>
