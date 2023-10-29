@@ -23,7 +23,7 @@ export default function CompanyList() {
                   </h2>
                   <div className="grid grid-cols-4 gap-x-10">
                       {trendingCompanies.map((item) => (
-                        <a key={item.id} href="#" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                        <a key={item.id} href={item.href ? item.href : ""} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
                               src={item.imageSrc}

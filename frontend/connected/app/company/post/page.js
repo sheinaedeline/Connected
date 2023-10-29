@@ -44,14 +44,11 @@ export default function CreateNewJob() {
             price_budget: price,
             req_prof_criteria: requiredCriteria,
         };
-        
-
-        console.log("data is ", data);
 
         // Make an HTTP POST request to your API route
         try {
             // POST NOT WORKING AUTHENTICATION ERROR?
-            const response = await axios.post('http://127.0.0.1:3000/project/create', data, { headers: { 'Authorization': `Bearer Token ${state.jwtToken}` }});
+            const response = await axios.post('http://127.0.0.1:3000/project/create', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
             // Handle the response as needed (e.g., show a success message or redirect the user)
             console.log('Create new job successful', response.data);
             router.push('/company');

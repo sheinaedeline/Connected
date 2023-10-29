@@ -8,11 +8,13 @@ import { useState, useEffect } from "react";
 import { useUserData } from "context/context";
 import { useRouter } from 'next/navigation';
 import { AiOutlinePlus } from 'react-icons/ai';
+import axios from 'axios';
 
 export default function Header() {
   const { state, dispatch } = useUserData();
   const router = useRouter();
   const { accountId, userType } = state;
+  const [logoutState, setLogoutState] = useState(false);
   
   const [mounted, setMounted] = useState(false);
   const [searchInput, setSearchInput] = useState("");
@@ -48,11 +50,12 @@ export default function Header() {
 
   // Logo Home Button
   const handleProfileButton = () => {
-    if (userType === 'company') {
-      router.push('/company/profile');
-    } else if (userType === 'professional') {
-      router.push('/professional/profile');
-    }
+    // if (userType === 'company') {
+    //   router.push('/company/profile');
+    // } else if (userType === 'professional') {
+    //   router.push('/professional/profile');
+    // }
+    router.push('/view');
   };
 
   // Logout Button
@@ -66,6 +69,30 @@ export default function Header() {
     dispatch({ type: 'SET_USER_STATE', payload: initialState});
     router.push('/');
   };
+
+  // useEffect(() => {
+  //   const handleLogoutButton = async () => {
+  //     const initialState = {
+  //       accountId: null,
+  //       userType: null,
+  //       jwtToken: null,
+  //     };
+      
+  //     try {
+  //       const response = await axios.get('http://127.0.0.1:3000/user/logout');
+
+  //       // Dispatch
+  //       console.log('Logout Successful', response.data);
+  //       dispatch({ type: 'SET_USER_STATE', payload: initialState});
+  //       router.push('/');
+  //     } catch (error) {
+  //       // Handle any errors (e.g., display an error message)
+  //       console.error('Logout failed', error);
+  //     }
+  //   };
+
+  //   handleLogoutButton();
+  // }, [logoutState]);
 
   // When mounted on client, now we can show the UI
   useEffect(() => setMounted(true), []);

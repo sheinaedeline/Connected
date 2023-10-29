@@ -18,7 +18,7 @@ export default function RegistrationCompany() {
     const [address, setAddress] = useState("");
     const [ABN, setABN] = useState("");
     const [companyLink, setCompanyLink] = useState("");
-    const [desc, setDesc] = useState("");
+    const [description, setDescription] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [passwordMatch, setPasswordMatch] = useState(true);
@@ -59,6 +59,7 @@ export default function RegistrationCompany() {
             userName: username,
             email: email,
             password: password,
+            description: description,
             phoneNumber: phoneNumber,
             address: address,
             socialURL: companyLink,
@@ -224,8 +225,8 @@ export default function RegistrationCompany() {
                                     name="description"
                                     type="text"
                                     required
-                                    value={desc}
-                                    onChange={e => setDesc(e.target.value)}
+                                    value={description}
+                                    onChange={e => setDescription(e.target.value)}
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>

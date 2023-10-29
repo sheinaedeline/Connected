@@ -261,14 +261,21 @@ export const trendingCompanies = [{
     projects: 20,
   }, {
     id: 12,
-    company: "Brightbean",
-    industry: "Manufacturing",
-    imageSrc: "http://dummyimage.com/295x200.png/5fa2dd/ffffff",
-    imageAlt: "donec vitae",
-    description: "Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla.",
-    rating: 4.4,
-    projects: 109,
-  },
+    company: "Caesar Coutts",
+    rating: 3.6,
+    skills: 17,
+    industry: "Technology",
+    imageSrc: "http://dummyimage.com/293x206.png/ff4444/ffffff",
+    imageAlt: "nisi",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat.",
+    address: '7 Moon Palace, Canley, NSW 2010',
+    email: 'c.coutts@gmail.com',
+    username: 'caesar.coutts',
+    password: 'caesarCoutts7',
+    abn: '23489071326',
+    phoneNumber: '+61489032852',
+    href: '/view/653745c70a3bb0a682c9f192',
+  }
 ];
 
 export const trendingProfessionals = [{
@@ -381,22 +388,6 @@ export const trendingProfessionals = [{
     imageSrc: "http://dummyimage.com/276x202.png/dddddd/000000",
     imageAlt: "nisl venenatis",
     description: "Ut tellus. Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla."
-  }, {
-    id: 12,
-    firstName: "Caesar",
-    lastName: "Coutts",
-    rating: 3.6,
-    skills: 17,
-    industry: "Technology",
-    imageSrc: "http://dummyimage.com/293x206.png/ff4444/ffffff",
-    imageAlt: "nisi",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat.",
-    address: '7 Moon Palace, Canley, NSW 2010',
-    email: 'c.coutts@gmail.com',
-    username: 'caesar.coutts',
-    password: 'caesarCoutts7',
-    abn: '23489071326',
-    phoneNumber: '+61489032852'
   }
 ];
 
