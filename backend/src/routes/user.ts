@@ -18,6 +18,6 @@ export default router;
 
 // checkForRole('any','free')
 // checkForRole() //Same as checkForRole('any','required')
-// checkForRole('company')
+// checkForRole('co     mpany')
 // checkForRole('professional')
 // checkForRole('admin')

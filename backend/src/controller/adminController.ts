@@ -54,7 +54,7 @@ export async function getStatistics(req: Request, res: Response): Promise<Respon
         let response = {
             professionalUser: amountOfProfessionalUser,
             companyUser: amountOfCompanyUser,
-            projectsPerYear: amountOfCreatedProjects + amountOfProjectsTillSpecificYear,
+            projectsPerYear: amountOfProjectsTillSpecificYear - amountOfCreatedProjects,
             ongoingProjects: amountOfOngoingProjects,
             completedProjects: amountOfCompletedProjects
         }
