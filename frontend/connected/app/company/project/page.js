@@ -14,7 +14,7 @@ import trading from "assets/Trading Background.png";
 import axios from 'axios';
 import { useUserData } from "context/context";
 
-const options = ['bizz', 'software3', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
+const options = ['bizz', 'software3', 'web development', 'Option 4'];
 
 export default function page() {
 
@@ -35,7 +35,7 @@ export default function page() {
   useEffect(() => {
       const viewProfile = async () => {
           const data = { 
-              size: 2,
+              size: 5,
               page: 1
             };
 
@@ -180,13 +180,13 @@ export default function page() {
                                 onChange={() => handleCheckboxChange(option)}
                                 checked={selectedOptions.includes(option)}
                             />
-                            <label htmlFor={`option-${index}`}>{option}</label>
+                            <label htmlFor={`option-${index}`} className="pl-2">{option}</label>
                         </div>
                     ))}
-                    <h2>Selected Options</h2>
+                    {/* <h2>Selected Options</h2>
                     {selectedOptions.map((option, index) => (
                         <p key={index}>{option}</p>
-                    ))}
+                    ))} */}
                 </div>
             )}
         </div>
@@ -415,9 +415,10 @@ export default function page() {
                 </div>
                 <div className="grid grid-cols-2 gap-2 p-4">
                   <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                  <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
-                  <p className="col-span-2 text-sm font-medium text-blue-900">{item.company} Company</p>
-                  <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}</p>
+                  <p className="col-span-2 text-xs italic text-gray-600">{item.start_date}</p>
+                  <p className="col-span-2 text-xs italic text-gray-600">{item.end_date}</p>
+                  <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
+                  <p className="mt-1 text-sm font-medium text-gray-600">{item.price_budget}</p>
                   <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
                   <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                 </div>

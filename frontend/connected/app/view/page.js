@@ -77,11 +77,16 @@ export default function ViewProfile() {
 
         const getProjects = async () => {
             const queryData = {
-                companyId: accountId,
                 size: 5,
                 page: 1,
             };
 
+            if (userType === 'company') {
+                queryData['companyId'] = accountId;
+            } else if (userType === 'professional') {
+                queryData['userId'] = accountId;
+            }
+            
             try {
                 const response = await axios.post('http://127.0.0.1:3000/project/getProjects', queryData);
     
