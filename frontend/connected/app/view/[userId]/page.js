@@ -76,10 +76,15 @@ export default function ViewProfile({params}) {
 
         const getProjects = async () => {
             const queryData = {
-                companyId: accountId,
                 size: 5,
                 page: 1,
             };
+
+            if (fetchUserType === 'company') {
+                queryData['companyId'] = accountId;
+            } else if (fetchUserType === 'professional') {
+                queryData['userId'] = accountId;
+            }
 
             try {
                 const response = await axios.post('http://127.0.0.1:3000/project/getProjects', queryData);
@@ -191,36 +196,22 @@ export default function ViewProfile({params}) {
                 {fetchUserType === 'professional' ? 
                 (<div>
                     <h2 className="mt-8 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-                        Invite{' '}
-                        <Link href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
-                            {firstName} {lastName}
-                        </Link>
-                        {' '}to join a project
+                    Project List
                     </h2>
-                    <div className="relative flex items-center">
-                        <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderProjects')} size={40} />
-                        <div id='sliderProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                            {projectsList && projectsList.map((item) => (
-                                <Link key={item.id} href="" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                                    <div className="grid grid-cols-2 gap-2 p-4">
-                                        <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                                        <p className="col-span-2 text-xs italic text-gray-600">{item.start_date}</p>
-                                        <p className="col-span-2 text-xs italic text-gray-600">{item.end_date}</p>
-                                        <p className="col-span-2 text-sm font-medium text-blue-900">{item.tags.join(", ")}</p>
-                                        <p className="mt-1 text-sm font-medium text-gray-600">{item.No_professional} professionals -- {item.price_budget}</p>
-                                        <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
-                                        <button
-                                            type="submit"
-                                            onClick={() => handleHireButton(item.id)}
-                                            className="flex mt-4 col-span-2 h-[36px] justify-center items-center rounded-md bg-teal-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                                        >
-                                            Invite to {item.project_title}
-                                        </button>
-                                    </div>
-                                </Link>
-                            ))}
+                    <div className="flex flex-col w-full gap-6 mb-10">
+                        {projectsList && projectsList.map((item) => (
+                        <div key={item.id} className="group grid grid-cols-3 gap-2 p-4 rounded-md border-2 border-blue-900 w-full">
+                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
+                            <p className="text-md text-right text-blue-900">{item.owner.userName}</p>
+                            <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
+                            <p className="mt-1 text-sm text-right text-gray-600">{item.skills}</p>
+                            {/* <p className="text-sm text-gray-600">Rating {item.rating}/5</p> */}
+                            {/* <p className="col-span-2 font-medium text-sm italic text-blue-600">"{item.remark}"</p> */}
+                            <p className="mt-1 text-sm font-medium text-gray-600">{item.No_professional} Professionals</p>
+                            <p className="mt-1 text-sm font-medium text-gray-600">{item.price_budget}</p>
+                            <p className="mt-1 text-sm font-medium text-gray-600">{item.expected_working_hours} hours</p>
                         </div>
-                        <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderProjects')} size={40} />
+                        ))}
                     </div>
                 </div>)
                 :

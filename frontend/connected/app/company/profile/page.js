@@ -36,7 +36,6 @@ export default function CompanyProfile() {
         const editProfile = async () => {
             // New data
             const data = {
-                userId: accountId,
                 firstName: companyName,
                 userName: username,
                 email: email,
@@ -46,12 +45,12 @@ export default function CompanyProfile() {
                 address: address,
                 socialURL: companyLink,
                 abn: ABN,
-                tags: industryType,
+                tags: industryType.join(","),
                 userimage: userImage,
             };
 
             try {
-                const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data);
+                const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
     
                 // Dispatch
                 console.log('Edit Profile Successful', response.data);
