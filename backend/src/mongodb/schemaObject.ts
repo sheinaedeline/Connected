@@ -58,6 +58,9 @@ export const userObj = {
         trim: true
     },
     tags: [String],
+    averageUserRating: {
+        type: Number
+    },
     userImage: {
         type: String,
 

@@ -155,7 +155,7 @@ export async function editProfile(req: Request, res: Response): Promise<Response
     try {
         const {userId,firstName, lastName, userName, email, description, phoneNumber, address, dob, socialURL, abn, password, tags} = req.body;
         let userToUpdateId =  userId?userId:req.body['_id'];
-        let existingUser = await User.findById(userToUpdateId);
+        let existingUser: any = await User.findById(userToUpdateId);
         if( existingUser === null || existingUser === undefined){
             return response_not_found(res,'User not found');
         } 

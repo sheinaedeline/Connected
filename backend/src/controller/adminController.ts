@@ -21,6 +21,8 @@ export async function getStatistics(req: Request, res: Response): Promise<Respon
         let amountOfProfessionalUser = await User.countDocuments({userType:"professional"});
         let amountOfCompanyUser = await User.countDocuments({userType:"company"});
 
+
+
         const statisticsStartDate = DateTime.fromObject(
             {
                 year:Number(year),
@@ -45,7 +47,11 @@ export async function getStatistics(req: Request, res: Response): Promise<Respon
             }
         ).toJSDate();
         
+                
+        let amountOfProfessionalUserCreated = await User.countDocuments({userType:"professional", created_at: {$gte:statisticsStartDate, $lte:statisticsEndDate}});
+        let amountOfCompanyUserCreated = await User.countDocuments({userType:"company", created_at: {$gte:statisticsStartDate, $lte:statisticsEndDate}});
         let amountOfCreatedProjects = await Project.countDocuments({start_date:{$gte:statisticsStartDate, $lte:statisticsEndDate}});
+        let amountOfCreatedProjectsWithEndDateSameYear = await Project.countDocuments({start_date:{$gte:statisticsStartDate, $lte:statisticsEndDate},end_date:{$gte:statisticsStartDate,$lte:statisticsEndDate}});
         let amountOfProjectsTillSpecificYear = await Project.countDocuments({end_date:{$gte:statisticsStartDate,$lte:statisticsEndDate}});
         let amountOfOngoingProjects = await Project.countDocuments({end_date:{$gte:statisticsStartDate,$lte:statisticsEndDate}, status:"ongoing"});
         let amountOfCompletedProjects = await Project.countDocuments({end_date:{$gte:statisticsStartDate, $lte:statisticsEndDate},status:"completed"});
@@ -54,7 +60,7 @@ export async function getStatistics(req: Request, res: Response): Promise<Respon
         let response = {
             professionalUser: amountOfProfessionalUser,
             companyUser: amountOfCompanyUser,
-            projectsPerYear: amountOfCreatedProjects + amountOfProjectsTillSpecificYear,
+            projectsPerYear: amountOfProjectsTillSpecificYear + amountOfCreatedProjects - amountOfCreatedProjectsWithEndDateSameYear,
             ongoingProjects: amountOfOngoingProjects,
             completedProjects: amountOfCompletedProjects
         }
