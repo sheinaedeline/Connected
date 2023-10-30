@@ -6,7 +6,7 @@ import logo from "assets/Logo Expanded.png";
 import profile from "assets/Profile Icon.png";
 import search from "assets/carbon_search.png";
 import { AiOutlinePlus, AiOutlineMail } from 'react-icons/ai';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Footer from '/components/Footer.js';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { trendingProjects, trendingProfessionals, sampleProject } from '/public/data.js';
@@ -15,18 +15,9 @@ import trading from "assets/Trading Background.png";
 import axios from 'axios';
 import { useUserData } from "context/context";
 
+const options = ['bizz', 'software3', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
+
 export default function page() {
-
-  const [searchInput, setSearchInput] = useState("");
-    
-  const handleChange = (e) => {
-      e.preventDefault();
-      setSearchInput(e.target.value);
-  };
-
-  const handleSearch = () => {
-      console.log(searchInput);
-  };
 
   const slideLeft = (id) => {
     var slider = document.getElementById(id);
@@ -36,6 +27,51 @@ export default function page() {
   const slideRight = (id) => {
     var slider = document.getElementById(id);
     slider.scrollLeft = slider.scrollLeft + 500;
+  };
+
+  const { state } = useUserData();
+  console.log('state is ', state);
+
+  const { accountId, userType } = state;
+  console.log('state is profile', state);
+
+  const [professionalList, setProfessionalList] = useState([]);
+
+  // GET View Profile
+  useEffect(() => {
+    const viewProfile = async () => {
+        const data = { 
+          userType:"professional",
+          size: 5,
+          page: 1
+        };
+
+        try {
+            const response = await axios.post(`http://127.0.0.1:3000/user/users/`, data);
+
+            // Dispatch
+            console.log('Get professional Successful', response.data);
+            setProfessionalList(response.data.content.usersList);
+            // Set variable states
+            
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('View Profile failed', error);
+        }
+    };
+
+    viewProfile();
+  }, [accountId]);
+
+  const [searchInput, setSearchInput] = useState("");
+  
+  const handleChange = (e) => {
+      e.preventDefault();
+      setSearchInput(e.target.value);
+  };
+
+  const handleSearch = () => {
+      console.log(searchInput);
   };
 
   return (
@@ -124,54 +160,54 @@ export default function page() {
               {sampleProject.map((item) => (
                 <div key={item.id} className="group grid grid-cols-4 grid-rows-2">
                   <div className="aspect-h-1 aspect-w-1 overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                                src={item.imageSrc}
-                                alt={item.imageAlt}
-                                width={300}
-                                height={200}
-                                className="object-cover object-center group-hover:opacity-75"
-                            />
-                    </div>
-                        <div className="col-span-3 grid grid-cols-4 gap-2 p-4 mr-10">
-                            <p className="col-span-3 text-3xl font-bold text-gray-900">{item.projectName} {item.industryType}</p>
-                            <div className="flex flex-evenly gap-x-4 justify-start items-center">
-                                <AiOutlineHeart size={40}/>
-                                <AiFillLinkedin size={40}/>
-                                
-                            </div>
-                            <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">{item.industry}</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.startDate}</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.endDate}</p>
-                            <p className="col-span-4 text-xs text-gray-600">Price: {item.price}</p>
-                            <p className="text-xs text-gray-600">Company: {item.companyName}</p>
-                            <p className="col-span-3 text-left text-xs text-gray-600">{item.email}</p>
-                        </div>
-                        <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
-                            <p className="text-lg font-medium text-gray-900">Description</p>
-                            <p className="mt-4 text-left text-xs text-gray-600">{item.description}</p>
-                        </div>
-                        <br></br>
-                              <Link href="/company/project/current/edit" >
-                                <button
-                                    type="submit"
-                                    className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                                >
-                                    Edit Project
-                                </button>
-                              </Link> 
-                              <Link href="/company/project/old" >
-                                <button
-                                    type="submit"
-                                    className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                                >
-                                    Mark as finished
-                                </button>
-                              </Link> 
-                        <br></br>
-                        <br></br>                            
-                    </div>   
-                    ))}
-                </div>
+                          <Image
+                              src={item.imageSrc}
+                              alt={item.imageAlt}
+                              width={300}
+                              height={200}
+                              className="object-cover object-center group-hover:opacity-75"
+                          />
+                  </div>
+                      <div className="col-span-3 grid grid-cols-4 gap-2 p-4 mr-10">
+                          <p className="col-span-3 text-3xl font-bold text-gray-900">{item.projectName} {item.industryType}</p>
+                          <div className="flex flex-evenly gap-x-4 justify-start items-center">
+                              <AiOutlineHeart size={40}/>
+                              <AiFillLinkedin size={40}/>
+                              
+                          </div>
+                          <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">{item.industry}</p>
+                          <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.startDate}</p>
+                          <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.endDate}</p>
+                          <p className="col-span-4 text-xs text-gray-600">Price: {item.price}</p>
+                          <p className="text-xs text-gray-600">Company: {item.companyName}</p>
+                          <p className="col-span-3 text-left text-xs text-gray-600">{item.email}</p>
+                      </div>
+                      <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
+                          <p className="text-lg font-medium text-gray-900">Description</p>
+                          <p className="mt-4 text-left text-xs text-gray-600">{item.description}</p>
+                      </div>
+                      <br></br>
+                            <Link href="/company/project/current/edit" >
+                              <button
+                                  type="submit"
+                                  className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                              >
+                                  Edit Project
+                              </button>
+                            </Link> 
+                            <Link href="/company/project/old" >
+                              <button
+                                  type="submit"
+                                  className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                              >
+                                  Mark as finished
+                              </button>
+                            </Link> 
+                      <br></br>
+                      <br></br>                            
+                  </div>   
+                  ))}
+              </div>
 
                   <div>
                     <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
@@ -183,7 +219,7 @@ export default function page() {
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                      {trendingProfessionals.map((item) => (
+                    {professionalList.length > 0 && professionalList.map((item) => (
                         <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
@@ -222,7 +258,7 @@ export default function page() {
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                      {trendingProfessionals.map((item) => (
+                      {professionalList.length > 0 && professionalList.map((item) => (
                         <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
@@ -258,13 +294,6 @@ export default function page() {
                 </div>  
           </div>
         </div>
-
-        
-
-        {/* <div
-          style={{ backgroundImage: "url(/images/blur.png)" }}
-          className="absolute inset-0 w-full h-full bg-bottom bg-no-repeat bg-cover -z-1"
-        /> */}
         <Footer/>
       </section>
     </div>

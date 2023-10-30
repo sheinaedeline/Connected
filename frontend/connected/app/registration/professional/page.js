@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
 import { useState } from 'react';
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
 export default function RegistrationProfessional() {
     const router = useRouter();

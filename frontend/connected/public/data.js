@@ -261,14 +261,21 @@ export const trendingCompanies = [{
     projects: 20,
   }, {
     id: 12,
-    company: "Brightbean",
-    industry: "Manufacturing",
-    imageSrc: "http://dummyimage.com/295x200.png/5fa2dd/ffffff",
-    imageAlt: "donec vitae",
-    description: "Nulla mollis molestie lorem. Quisque ut erat. Curabitur gravida nisi at nibh. In hac habitasse platea dictumst. Aliquam augue quam, sollicitudin vitae, consectetuer eget, rutrum at, lorem. Integer tincidunt ante vel ipsum. Praesent blandit lacinia erat. Vestibulum sed magna at nunc commodo placerat. Praesent blandit. Nam nulla.",
-    rating: 4.4,
-    projects: 109,
-  },
+    company: "Caesar Coutts",
+    rating: 3.6,
+    skills: 17,
+    industry: "Technology",
+    imageSrc: "http://dummyimage.com/293x206.png/ff4444/ffffff",
+    imageAlt: "nisi",
+    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat.",
+    address: '7 Moon Palace, Canley, NSW 2010',
+    email: 'c.coutts@gmail.com',
+    username: 'caesar.coutts',
+    password: 'caesarCoutts7',
+    abn: '23489071326',
+    phoneNumber: '+61489032852',
+    href: '/view/653745c70a3bb0a682c9f192',
+  }
 ];
 
 export const trendingProfessionals = [{
@@ -381,22 +388,6 @@ export const trendingProfessionals = [{
     imageSrc: "http://dummyimage.com/276x202.png/dddddd/000000",
     imageAlt: "nisl venenatis",
     description: "Ut tellus. Nulla ut erat id mauris vulputate elementum. Nullam varius. Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla."
-  }, {
-    id: 12,
-    firstName: "Caesar",
-    lastName: "Coutts",
-    rating: 3.6,
-    skills: 17,
-    industry: "Technology",
-    imageSrc: "http://dummyimage.com/293x206.png/ff4444/ffffff",
-    imageAlt: "nisi",
-    description: "Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis. Morbi odio odio, elementum eu, interdum eu, tincidunt in, leo. Maecenas pulvinar lobortis est. Phasellus sit amet erat.",
-    address: '7 Moon Palace, Canley, NSW 2010',
-    email: 'c.coutts@gmail.com',
-    username: 'caesar.coutts',
-    password: 'caesarCoutts7',
-    abn: '23489071326',
-    phoneNumber: '+61489032852'
   }
 ];
 
@@ -415,7 +406,7 @@ export const sampleProfessional = [{
     username: 'patsy.ullrich',
     password: 'MockPassPatsy10',
     DOB: '2000-10-12',
-    phoneNumber: '+6112345678',
+    phoneNumber: '+61412345678',
     linkedIn: 'https://www.linkedin.com/in/nicholas-ed-03c8a61b7/',
     projectHistory: [
         {
@@ -512,5 +503,72 @@ export const sampleProject = [{
   ABN: '712398712',
   phoneNumber: '+6189032853',
   companyLink: 'https://www.linkedin.com/in/nicholas-ed-03c8a61b7/',
+  potential_applicants: [],
+  approved_applicants: []
+
+},
+];
+
+export const sampleProject2 = [{
+  id: 1,
+  project_title: "Makan",
+  tags: "bang",
+  start_date: "10 Aug 2023",
+  end_date: "1 Oct 2023",
+  price_budget: "10000",
+  owner: "Brainverse",
+  industry: "Technology",
+  imageSrc: "http://dummyimage.com/300x200.png/ff4444/ffffff",
+  imageAlt: "tortor",
+  description: "Cras mi pede, malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices. Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc. Donec quis orci eget orci vehicula condimentum. Curabitur in libero ut massa volutpat convallis.",
+  ABN: '712398712',
+  phoneNumber: '+6189032853',
+  companyLink: 'https://www.linkedin.com/in/nicholas-ed-03c8a61b7/',
+  potential_applicants: [
+    {
+      _id: {
+        $oid: "6528d5d9130060e6f0fdb778"
+      },
+      userType: "professional",
+      firstName: "vin",
+      lastName: "lin",
+      name: "vincent.lin",
+      email: "vincent.lin@gmail.com",
+      phoneNumber: "0404123414",
+      address: "123 Moon Rd",
+      dob: {
+        $date: "2000-10-20T00:00:00.000Z"
+      },
+      socialURL: "https://www.linkedin.com/in/nicholas-ed-03c8a61b7/",
+      hash_password: "$2b$10$xSfH33nzZpYShikimTHLC.E46qrh4UucardTBTpQgHXKqPSFkIjSy",
+      tags: [
+        "software"
+      ],
+      __v: 0
+  }],
+  approved_applicants: [
+    {
+      _id: {
+        $oid: "6528d62d130060e6f0fdb77e"
+      },
+      userType: "professional",
+      firstName: "jj",
+      lastName: "lin",
+      name: "vincent.lin",
+      email: "vincent.lin@gmail.com",
+      phoneNumber: "0404123414",
+      address: "123 Moon Rd",
+      dob: {
+        $date: "2000-10-20T00:00:00.000Z"
+      },
+      socialURL: "https://www.linkedin.com/in/nicholas-ed-03c8a61b7/",
+      hash_password: "$2b$10$xSfH33nzZpYShikimTHLC.E46qrh4UucardTBTpQgHXKqPSFkIjSy",
+      tags: [
+        "software"
+      ],
+      __v: 0
+  }
+  ]
+
 },
 ];

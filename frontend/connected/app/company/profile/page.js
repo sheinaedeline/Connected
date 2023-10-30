@@ -1,20 +1,69 @@
 'use client';
-import logo from "assets/Logo Expanded.png";
 import profile from "assets/Profile Icon.png";
-import search from "assets/carbon_search.png";
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { AiOutlinePlus } from 'react-icons/ai';
 import { sampleCompany } from 'public/data.js';
 import Footer from '/components/Footer.js';
+import Header from '/components/Header.js';
 import axios from 'axios';
 import { useUserData } from "context/context";
 
 export default function CompanyProfile() {
     const { state } = useUserData();
     const { accountId, userType } = state;
-    console.log('state is profile', state);
+    
+    const [companyName, setCompanyName] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [address, setAddress] = useState("");
+    const [ABN, setABN] = useState("");
+    const [companyLink, setCompanyLink] = useState("");
+    const [description, setDescription] = useState("");
+    const [password, setPassword] = useState("");
+    const [industryType, setIndustryType] = useState("");
+    const [userImage, setUserImage] = useState("");
+    const [updateButton, setUpdateButton] = useState(false);
+
+    // Update Button
+    const handleUpdateButton = () => {
+        setUpdateButton(!updateButton);
+    }
+
+    // POST Edit Profile
+    useEffect(() => {
+        const editProfile = async () => {
+            // New data
+            const data = {
+                firstName: companyName,
+                userName: username,
+                email: email,
+                password: password,
+                description: description,
+                phoneNumber: phoneNumber,
+                address: address,
+                socialURL: companyLink,
+                abn: ABN,
+                tags: industryType.join(","),
+                userimage: userImage,
+            };
+
+            try {
+                const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+    
+                // Dispatch
+                console.log('Edit Profile Successful', response.data);
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('Edit Profile failed', error);
+            }
+        };
+
+        editProfile();
+
+    }, [updateButton]);
 
     // GET View Profile
     useEffect(() => {
@@ -24,8 +73,20 @@ export default function CompanyProfile() {
     
                 // Dispatch
                 console.log('View Profile Successful', response.data);
-    
+                const userData = response.data.content.user;
+
                 // Set variable states
+                setCompanyName(userData.firstName);
+                setUsername(userData.userName);
+                setEmail(userData.email);
+                setPhoneNumber(userData.phoneNumber);
+                setAddress(userData.address);
+                setABN(userData.abn);
+                setCompanyLink(userData.socialURL);
+                setDescription(userData.description);
+                setPassword(userData.password);
+                setIndustryType(userData.tags);
+                setUserImage(userData.userImage);
                 
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
@@ -34,92 +95,11 @@ export default function CompanyProfile() {
         };
 
         viewProfile();
-    }, [accountId]);
-
-    const [searchInput, setSearchInput] = useState("");
-    
-    const handleChange = (e) => {
-        e.preventDefault();
-        setSearchInput(e.target.value);
-    };
-
-    const handleSearch = () => {
-        console.log(searchInput);
-    };
+    }, []);
 
     return (
         <div className="bg-white dark:bg-black">
-            <div className="flex justify-between">
-                <Link href="/company">
-                    <Image
-                        src={logo}
-                        width={150}
-                        alt="connected logo"
-                    />
-                </Link>
-                <div className="flex justify-evenly items-center gap-4">
-                    {/* Search Bar */}
-                    <form className="flex" role="search">
-                        <input
-                            id="searchBar"
-                            name="searchBar"
-                            type="text"
-                            placeholder="Search"
-                            value={searchInput}
-                            onChange={handleChange}
-                            className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                        >
-                        </input>
-                        <button
-                            type="submit"
-                            className="flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            onClick={handleSearch}
-                        >
-                            <Image
-                                src={search}
-                                width={26}
-                                alt="connected logo"
-                            />
-                        </button>
-                    </form>
-                    {/* Create new project */}
-                    <Link href="/company/post">
-                        <button
-                            type="submit"
-                            className="flex gap-1 justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            <AiOutlinePlus/> 
-                            <div>Create new project</div>
-                        </button>
-                    </Link>
-                    {/* My Projects */}
-                    <Link href="/company/project">
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            My Projects
-                        </button>
-                    </Link> 
-                    {/* Logout */}
-                    <Link href="/">
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            Logout
-                        </button>
-                    </Link> 
-                    {/* Profile Icon */}
-                    <Link href="/company/profile">
-                        <Image
-                            src={profile}
-                            width={38}
-                            alt="connected logo"
-                        />
-                    </Link>
-                </div>
-            </div>
+            <Header/>
 
             <div className="flex flex-col justify-center px-32">
                 {/* Page Title */}
@@ -130,45 +110,64 @@ export default function CompanyProfile() {
                 {/* Profile Picture */}
                 <div className="flex gap-4 items-center">
                     <Image
-                        src={profile}
+                        src={userImage ? userImage : profile}
                         width={100}
+                        height={100}
                         alt="connected logo"
                     />
                     {/* Upload Profile Picture Button */}
-                    <button
+                    {/* <button
                         type="submit"
+                        onC
                         className="h-8 items-center flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     >
                         Upload Profile Picture
-                    </button>
+                    </button> */}
+                    <div>
+                        <label htmlFor="companyName" className="block text-sm font-medium leading-6 text-gray-900">
+                            Upload Profile Picture
+                        </label>
+                        <div className="mt-2">
+                            <input
+                                id="companyName"
+                                name="companyName"
+                                type="file"
+                                value={userImage}
+                                onChange={e => setUserImage(e.target.value)}
+                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Account Credentials */}
                 <div className="mt-12 grid grid-cols-2 gap-4">
                     <div>
-                        <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
-                            First Name
+                        <label htmlFor="companyName" className="block text-sm font-medium leading-6 text-gray-900">
+                            Company Name
                         </label>
                         <div className="mt-2">
                             <input
-                                id="firstName"
-                                name="firstName"
+                                id="companyName"
+                                name="companyName"
                                 type="text"
-                                value={sampleCompany[0].firstName}
+                                value={companyName}
+                                onChange={e => setCompanyName(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
                     <div>
-                        <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">
-                            Last Name
+                        <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+                            Username
                         </label>
                         <div className="mt-2">
                             <input
-                                id="lastName"
-                                name="lastName"
+                                id="username"
+                                name="username"
                                 type="text"
-                                value={sampleCompany[0].lastName}
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -183,7 +182,8 @@ export default function CompanyProfile() {
                                 name="email"
                                 type="email"
                                 autoComplete="email"
-                                value={sampleCompany[0].email}
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -197,21 +197,8 @@ export default function CompanyProfile() {
                                 id="phoneNumber"
                                 name="phoneNumber"
                                 type="text"
-                                value={sampleCompany[0].phoneNumber}
-                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
-                            Username
-                        </label>
-                        <div className="mt-2">
-                            <input
-                                id="username"
-                                name="username"
-                                type="text"
-                                value={sampleCompany[0].username}
+                                value={phoneNumber}
+                                onChange={e => setPhoneNumber(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -225,40 +212,26 @@ export default function CompanyProfile() {
                                 id="password"
                                 name="password"
                                 type="password"
-                                value={sampleCompany[0].password}
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
-                </div>
-
-                {/* Change Password Button */}
-                <div className="flex justify-end m-4">
-                    <button
-                        type="submit"
-                        className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                    >
-                        Change Password
-                    </button>
+                    {/* Change Password Button */}
+                    <div className="flex m-4 pt-4">
+                        <button
+                            type="submit"
+                            className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                            Change Password
+                        </button>
+                    </div>
                 </div>
 
 
                 {/* Personal Details */}
                 <div className="mt-12 grid grid-cols-2 gap-4">
-                    <div className="col-span-2">
-                        <label htmlFor="companyName" className="block text-sm font-medium leading-6 text-gray-900">
-                            Company Name
-                        </label>
-                        <div className="mt-2">
-                            <input
-                                id="companyName"
-                                name="companyName"
-                                type="text"
-                                value={sampleCompany[0].companyName}
-                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
                     <div>
                         <label htmlFor="ABN" className="block text-sm font-medium leading-6 text-gray-900">
                             ABN
@@ -268,7 +241,8 @@ export default function CompanyProfile() {
                                 id="ABN"
                                 name="ABN"
                                 type="text"
-                                value={sampleCompany[0].ABN}
+                                value={ABN}
+                                onChange={e => setABN(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -282,7 +256,8 @@ export default function CompanyProfile() {
                                 id="industryType"
                                 name="industryType"
                                 type="text"
-                                value={sampleCompany[0].industry}
+                                value={industryType}
+                                onChange={e => setIndustryType(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -296,7 +271,8 @@ export default function CompanyProfile() {
                                 id="companyLink"
                                 name="companyLink"
                                 type="url"
-                                value={sampleCompany[0].companyLink}
+                                value={companyLink}
+                                onChange={e => setCompanyLink(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -310,7 +286,8 @@ export default function CompanyProfile() {
                                 id="address"
                                 name="address"
                                 type="text"
-                                value={sampleCompany[0].address}
+                                value={address}
+                                onChange={e => setAddress(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -323,10 +300,20 @@ export default function CompanyProfile() {
                             <textarea
                                 id="description"
                                 name="description"
-                                value={sampleCompany[0].description}
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
                                 className="block w-full h-32 rounded-md border-0 mb-10 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
+                    </div>
+                    <div className="col-span-2">
+                        <button
+                            type="submit"
+                            onClick={handleUpdateButton}
+                            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                            Update Profile Details
+                        </button>
                     </div>
                 </div>
             </div>

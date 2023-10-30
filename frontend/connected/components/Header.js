@@ -1,11 +1,98 @@
+'use client';
+import logo from "assets/Logo Expanded.png";
+import profile from "assets/Profile Icon.png";
+import search from "assets/carbon_search.png";
+import Image from 'next/image';
+import Link from 'next/link';
 import { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
-import Link from "next/link";
+import { useUserData } from "context/context";
+import { useRouter } from 'next/navigation';
+import { AiOutlinePlus } from 'react-icons/ai';
+import axios from 'axios';
 
 export default function Header() {
-  const [navbarOpen, setNavbarOpen] = useState(false);
+  const { state, dispatch } = useUserData();
+  const router = useRouter();
+  const { accountId, userType } = state;
+  const [logoutState, setLogoutState] = useState(false);
+  
   const [mounted, setMounted] = useState(false);
-  const { theme, setTheme } = useTheme();
+  const [searchInput, setSearchInput] = useState("");
+  
+  // Search Box
+  const handleChange = (e) => {
+      e.preventDefault();
+      setSearchInput(e.target.value);
+  };
+
+  // Search Button
+  const handleSearch = () => {
+      console.log(searchInput);
+  };
+
+  // Logo Home Button
+  const handleHomeButton = () => {
+    if (userType === 'company') {
+      router.push('/company');
+    } else if (userType === 'professional') {
+      router.push('/professional');
+    }
+  };
+
+  // My Projects Button
+  const handleProjectButton = () => {
+    if (userType === 'company') {
+      router.push('/company/project');
+    } else if (userType === 'professional') {
+      router.push('/projects');
+    }
+  };
+
+  // Logo Home Button
+  const handleProfileButton = () => {
+    // if (userType === 'company') {
+    //   router.push('/company/profile');
+    // } else if (userType === 'professional') {
+    //   router.push('/professional/profile');
+    // }
+    router.push('/view');
+  };
+
+  // Logout Button
+  const handleLogoutButton = () => {
+    const initialState = {
+      accountId: null,
+      userType: null,
+      jwtToken: null,
+    };
+
+    dispatch({ type: 'SET_USER_STATE', payload: initialState});
+    router.push('/');
+  };
+
+  // useEffect(() => {
+  //   const handleLogoutButton = async () => {
+  //     const initialState = {
+  //       accountId: null,
+  //       userType: null,
+  //       jwtToken: null,
+  //     };
+      
+  //     try {
+  //       const response = await axios.get('http://127.0.0.1:3000/user/logout');
+
+  //       // Dispatch
+  //       console.log('Logout Successful', response.data);
+  //       dispatch({ type: 'SET_USER_STATE', payload: initialState});
+  //       router.push('/');
+  //     } catch (error) {
+  //       // Handle any errors (e.g., display an error message)
+  //       console.error('Logout failed', error);
+  //     }
+  //   };
+
+  //   handleLogoutButton();
+  // }, [logoutState]);
 
   // When mounted on client, now we can show the UI
   useEffect(() => setMounted(true), []);
@@ -14,109 +101,75 @@ export default function Header() {
 
   return (
     <header className="w-full sticky-nav">
-      <div className="flex flex-col flex-wrap max-w-5xl p-2.5 mx-auto md:flex-row">
-        <div className="flex flex-row items-center justify-between p-2 md:p-1">
-          <Link href="/">
-            <a className="mb-4 text-2xl font-medium text-black transition duration-300 hover:text-gray-300 dark:text-gray-300 dark:hover:text-white md:mb-0">
-              PLUTONIUM
-            </a>
-          </Link>
-          <button
-            className="px-3 py-1 pb-4 ml-auto text-black outline-none dark:text-gray-300 md:hidden"
-            type="button"
-            aria-label="button"
-            onClick={() => setNavbarOpen(!navbarOpen)}
-          >
-            <svg
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-6 h-6"
-            >
-              <line x1="3" y1="6" y2="6" x2="21"></line>
-              <line x1="3" y1="12" y2="12" x2="21"></line>
-              <line x1="3" y1="18" y2="18" x2="21"></line>
-            </svg>
-          </button>
-        </div>
-        <div
-          className={
-            "md:flex flex-grow items-center" +
-            (navbarOpen ? " flex" : " hidden")
-          }
-        >
-          <div className="flex flex-wrap items-center justify-center pt-1 pl-2 ml-1 space-x-8 md:space-x-16 md:mx-auto md:pl-14">
-            <a
-              href="/#features"
-              className="text-black transition duration-300 dark:text-gray-300 hover:text-gray-300"
-            >
-              Features
-            </a>
-            <a
-              href="/#pricing"
-              className="text-black transition duration-300 dark:text-gray-300 hover:text-gray-300"
-            >
-              Pricing
-            </a>
-            <Link href="/404">
-              <a className="text-black transition duration-300 dark:text-gray-300 hover:text-gray-300">
-                Demo
-              </a>
-            </Link>
-          </div>
-          <button
-            aria-label="Toggle Dark Mode"
-            type="button"
-            className="w-10 h-10 p-3 ml-5 mr-0 bg-gray-200 rounded md:ml-0 md:mr-5 dark:bg-gray-800"
-            onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
-          >
-            {mounted && (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 24 24"
-                fill="currentColor"
-                stroke="currentColor"
-                className="w-4 h-4 text-gray-800 dark:text-gray-200"
-              >
-                {theme === "dark" ? (
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"
+      <div className="flex justify-between">
+        {/* Logo  */}
+        <Image
+            src={logo}
+            width={150}
+            onClick={handleHomeButton}
+            alt="connected logo"
+        />
+        <div className="flex justify-evenly items-center gap-4">
+            {/* Search Bar */}
+            <form className="flex" role="search">
+                <input
+                    id="searchBar"
+                    name="searchBar"
+                    type="text"
+                    placeholder="Search"
+                    value={searchInput}
+                    onChange={handleChange}
+                    className="block w-[150px] rounded-l-lg border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                >
+                </input>
+                <button
+                    type="submit"
+                    className="w-[40px] flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                    onClick={handleSearch}
+                >
+                  <Image
+                      src={search}
+                      width={26}
+                      alt="connected logo"
                   />
-                ) : (
-                  <svg className="svg-icon" viewBox="0 0 20 20">
-                    <path
-                      fill="none"
-                      d="M10.544 8.717l1.166-.855 1.166.855-.467-1.399 1.012-.778h-1.244l-.467-1.243-.466 1.244H10l1.011.778-.467 1.398zm5.442.855l-.467 1.244h-1.244l1.011.777-.467 1.4 1.167-.855 1.165.855-.466-1.4 1.011-.777h-1.244l-.466-1.244zm-8.979-3.02c0-2.259.795-4.33 2.117-5.955A9.418 9.418 0 00.594 9.98c0 5.207 4.211 9.426 9.406 9.426 2.94 0 5.972-1.354 7.696-3.472-.289.026-.987.044-1.283.044-5.194.001-9.406-4.219-9.406-9.426M10 18.55c-4.715 0-8.551-3.845-8.551-8.57 0-3.783 2.407-6.999 5.842-8.131a10.32 10.32 0 00-1.139 4.703c0 5.368 4.125 9.788 9.365 10.245A9.733 9.733 0 0110 18.55m9.406-16.246h-1.71l-.642-1.71-.642 1.71h-1.71l1.39 1.069-.642 1.924 1.604-1.176 1.604 1.176-.642-1.924 1.39-1.069z"
-                    />
-                  </svg>
-                )}
-              </svg>
+                </button>
+            </form>
+            {/* Create new project */}
+            {userType === 'company' && (
+              <div>
+              <Link href="/company/post">
+                  <button
+                      type="submit"
+                      className="flex gap-1 justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                  >
+                      <AiOutlinePlus/> 
+                      <div>Create new project</div>
+                  </button>
+              </Link> 
+              </div>
             )}
-          </button>
-          <a
-            href="#"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="invisible dark:hover:border-gray-500 hover:shadow-md transition duration-300 mr-4 text-black border px-3 py-1.5 rounded dark:text-gray-300 md:visible"
-          >
-            Sign in
-          </a>
-          <a
-            href="#"
-            rel="noopener noreferrer"
-            target="_blank"
-            className="invisible md:visible px-3 py-1.5 transition-colors hover:bg-gray-800 dark:hover:bg-gray-200 text-white dark:text-black bg-black dark:bg-white rounded"
-          >
-            Sign up
-          </a>
+            {/* My Projects */}
+            <button
+                onClick={handleProjectButton}
+                className="flex w-[120px] justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            >
+                My Projects
+            </button>
+            {/* Logout */}
+            <button
+                type="submit"
+                onClick={handleLogoutButton}
+                className="flex w-[80px] justify-center rounded-md ring-1 ring-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-blue-900 shadow-sm hover:bg-blue-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+            >
+                Logout
+            </button>
+            {/* Profile Icon */}
+              <Image
+                  src={profile}
+                  width={38}
+                  onClick={handleProfileButton}
+                  alt="connected logo"
+              />
         </div>
       </div>
     </header>

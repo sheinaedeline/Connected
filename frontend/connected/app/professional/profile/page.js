@@ -1,26 +1,30 @@
 'use client';
-import logo from "assets/Logo Expanded.png";
-import profile from "assets/Profile Icon.png";
-import search from "assets/carbon_search.png";
 import Image from 'next/image';
-import Link from 'next/link';
-import { useState } from 'react';
+import profile from "assets/Profile Icon.png";
+import { useState, useEffect } from 'react';
 import { sampleProfessional } from '/public/data.js';
 import Footer from '/components/Footer.js';
+import Header from '/components/Header.js';
 import axios from 'axios';
+import { useUserData } from "context/context";
 
 export default function ProfessionalProfile() {
-
-    const [searchInput, setSearchInput] = useState("");
+    const { state } = useUserData();
+    const { accountId, userType } = state;
     
-    const handleChange = (e) => {
-        e.preventDefault();
-        setSearchInput(e.target.value);
-    };
-
-    const handleSearch = () => {
-        console.log(searchInput);
-    };
+    const [firstName, setFirstName] = useState("");
+    const [lastName, setLastName] = useState("");
+    const [username, setUsername] = useState("");
+    const [email, setEmail] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
+    const [address, setAddress] = useState("");
+    const [DOB, setDOB] = useState("");
+    const [linkedIn, setLinkedIn] = useState("");
+    const [description, setDescription] = useState("");
+    const [password, setPassword] = useState("");
+    const [industryType, setIndustryType] = useState("");
+    const [userImage, setUserImage] = useState("");
+    const [updateButton, setUpdateButton] = useState(false);
 
     const handleFileUpload = async (event) => {
         const file = event.target.files[0];
@@ -40,71 +44,85 @@ export default function ProfessionalProfile() {
             alert('Upload failed'); // Popup on failure
         }
     };
+
+    // Update Button
+    const handleUpdateButton = () => {
+        setUpdateButton(!updateButton);
+    }
+
+    // POST Edit Profile
+    useEffect(() => {
+        const editProfile = async () => {
+            // New data
+            const data = {
+                userId: accountId,
+                firstName: firstName,
+                lastName: lastName,
+                userName: username,
+                email: email,
+                password: password,
+                description: description,
+                phoneNumber: phoneNumber,
+                address: address,
+                socialURL: linkedIn,
+                dob: DOB,
+                tags: industryType,
+                userimage: userImage,
+            };
+
+            try {
+                const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data);
+    
+                // Dispatch
+                console.log('Edit Profile Successful', response.data);
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('Edit Profile failed', error);
+            }
+        };
+
+        editProfile();
+
+    }, [updateButton]);
+
+    // GET View Profile
+    useEffect(() => {
+        const viewProfile = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:3000/user/profile/${accountId}`);
+    
+                // Dispatch
+                console.log('View Profile Successful', response.data);
+                const userData = response.data.content.user;
+
+                // Set variable states
+                setFirstName(userData.firstName);
+                setLastName(userData.lastName);
+                setUsername(userData.userName);
+                setEmail(userData.email);
+                setPhoneNumber(userData.phoneNumber);
+                setAddress(userData.address);
+                setDOB(userData.DOB);
+                setLinkedIn(userData.socialURL);
+                setDescription(userData.description);
+                setPassword(userData.password);
+                setIndustryType(userData.tags);
+                setUserImage(userData.userImage);
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View Profile failed', error);
+            }
+        };
+
+        viewProfile();
+    }, []);
     
 
     return (
         <div className="bg-white dark:bg-black">
-            <div className="flex justify-between">
-                <Link href="/professional">
-                    <Image
-                        src={logo}
-                        width={150}
-                        alt="connected logo"
-                    />
-                </Link>
-                <div className="flex justify-evenly items-center gap-4">
-                    {/* Search Bar */}
-                    <form className="flex" role="search">
-                        <input
-                            id="searchBar"
-                            name="searchBar"
-                            type="text"
-                            placeholder="Search"
-                            value={searchInput}
-                            onChange={handleChange}
-                            className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                        >
-                        </input>
-                        <button
-                            type="submit"
-                            className="flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                            onClick={handleSearch}
-                        >
-                            <Image
-                                src={search}
-                                width={26}
-                                alt="connected logo"
-                            />
-                        </button>
-                    </form>
-                    {/* My Projects */}
-                    <Link href="/projects">
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            My Projects
-                        </button>
-                    </Link> 
-                    {/* Logout */}
-                    <Link href="/">
-                        <button
-                            type="submit"
-                            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                        >
-                            Logout
-                        </button>
-                    </Link> 
-                    {/* Profile Icon */}
-                    <Link href="/professional/profile">
-                        <Image
-                            src={profile}
-                            width={38}
-                            alt="connected logo"
-                        />
-                    </Link>
-                </div>
-            </div>
+            <Header/>
 
             <div className="flex flex-col justify-center px-32">
                 {/* Page Title */}
@@ -113,19 +131,51 @@ export default function ProfessionalProfile() {
                 </h2>
 
                 {/* Profile Picture */}
-                <div className="flex gap-4 items-center">
+                <div className="flex gap-8 items-center">
                     <Image
-                        src={profile}
+                        src={userImage ? userImage : profile}
                         width={100}
+                        height={100}
                         alt="connected logo"
                     />
                     {/* Upload Profile Picture Button */}
-                    <button
+                    {/* <button
                         type="submit"
                         className="h-8 items-center flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     >
                         Upload Profile Picture
-                    </button>
+                    </button> */}
+                    <div>
+                        <label htmlFor="companyName" className="block text-sm font-medium leading-6 text-gray-900">
+                            Upload Profile Picture
+                        </label>
+                        <div className="mt-2">
+                            <input
+                                id="companyName"
+                                name="companyName"
+                                type="file"
+                                value={userImage}
+                                onChange={e => setUserImage(e.target.value)}
+                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <label htmlFor="upload-cv" className="block text-sm font-medium leading-6 text-gray-900">
+                            Upload CV
+                        </label>
+                        <div className="mt-2">
+                            <input
+                                id="upload-cv"
+                                name="upload-cv"
+                                type="file"
+                                accept=".pdf"
+                                onChange={handleFileUpload}
+                                // style={{ display: 'none' }}
+                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                            />
+                        </div>
+                    </div>
                 </div>
 
                 {/* Account Credentials */}
@@ -139,7 +189,8 @@ export default function ProfessionalProfile() {
                                 id="firstName"
                                 name="firstName"
                                 type="text"
-                                value={sampleProfessional[0].firstName}
+                                value={firstName}
+                                onChange={e => setFirstName(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -153,7 +204,8 @@ export default function ProfessionalProfile() {
                                 id="lastName"
                                 name="lastName"
                                 type="text"
-                                value={sampleProfessional[0].lastName}
+                                value={lastName}
+                                onChange={e => setLastName(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -168,7 +220,8 @@ export default function ProfessionalProfile() {
                                 name="email"
                                 type="email"
                                 autoComplete="email"
-                                value={sampleProfessional[0].email}
+                                value={email}
+                                onChange={e => setEmail(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -182,7 +235,8 @@ export default function ProfessionalProfile() {
                                 id="phoneNumber"
                                 name="phoneNumber"
                                 type="text"
-                                value={sampleProfessional[0].phoneNumber}
+                                value={phoneNumber}
+                                onChange={e => setPhoneNumber(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -196,7 +250,8 @@ export default function ProfessionalProfile() {
                                 id="username"
                                 name="username"
                                 type="text"
-                                value={sampleProfessional[0].username}
+                                value={username}
+                                onChange={e => setUsername(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -210,7 +265,8 @@ export default function ProfessionalProfile() {
                                 id="password"
                                 name="password"
                                 type="password"
-                                value={sampleProfessional[0].password}
+                                value={password}
+                                onChange={e => setPassword(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -239,7 +295,8 @@ export default function ProfessionalProfile() {
                                 id="DOB"
                                 name="DOB"
                                 type="date"
-                                value={sampleProfessional[0].DOB}
+                                value={DOB}
+                                onChange={e => setDOB(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -253,7 +310,8 @@ export default function ProfessionalProfile() {
                                 id="industryType"
                                 name="industryType"
                                 type="text"
-                                value={sampleProfessional[0].industry}
+                                value={industryType}
+                                onChange={e => setIndustryType(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -267,7 +325,8 @@ export default function ProfessionalProfile() {
                                 id="linkedIn"
                                 name="linkedIn"
                                 type="url"
-                                value={sampleProfessional[0].linkedIn}
+                                value={linkedIn}
+                                onChange={e => setLinkedIn(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -281,7 +340,8 @@ export default function ProfessionalProfile() {
                                 id="address"
                                 name="address"
                                 type="text"
-                                value={sampleProfessional[0].address}
+                                value={address}
+                                onChange={e => setAddress(e.target.value)}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
@@ -294,32 +354,25 @@ export default function ProfessionalProfile() {
                             <textarea
                                 id="description"
                                 name="description"
-                                value={sampleProfessional[0].description}
+                                value={description}
+                                onChange={e => setDescription(e.target.value)}
                                 className="block w-full h-32 rounded-md border-0 mb-10 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
-                        <div className="flex justify-end m-4">
-                            <label
-                                htmlFor="upload-cv"
-                                className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 cursor-pointer"
+                        <div className="col-span-2">
+                            <button
+                                type="submit"
+                                onClick={handleUpdateButton}
+                                className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                             >
-                                Upload CV
-                            </label>
-                            <input
-                                id="upload-cv"
-                                name="upload-cv"
-                                type="file"
-                                accept=".pdf"
-                                onChange={handleFileUpload}
-                                style={{ display: 'none' }}
-                            />
+                                Update Profile Details
+                            </button>
                         </div>
                     </div>
                 </div>
-                <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                {/* <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                     My Tags
-                </h2>
-
+                </h2> */}
             </div>
             <Footer/>
         </div>
