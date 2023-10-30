@@ -15,6 +15,7 @@ export interface IUser {
     socialURL: string,
     hash_password: string,
     industryType: string,
+    averageUserRating?: number,
     tags: Array<string>,
     userImage: string,
     userFile: string
