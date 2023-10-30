@@ -498,9 +498,18 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
         }
         // Check if user has requested to join the project
         const potentialApplicants = project.potential_applicants.map((applicant) => applicant.toString());
-        if (!potentialApplicants.includes(userId)) {
-            return response_bad_request(res, "User has not requested to join this project.");
+        if(action === "approve" || action === "reject") {
+            if (!potentialApplicants.includes(userId)) {
+                return response_bad_request(res, "User has not requested to join this project.");
+            }
         }
+        const approvedApplicants = project.approved_applicants.map((applicant) => applicant.toString());
+        if(action === "remove") {
+            if (!approvedApplicants.includes(userId)) {
+                return response_bad_request(res, "User has not been approved to be in the project");
+            }
+        }
+
         
         //set up email
         const transporter = nodemailer.createTransport({
@@ -535,7 +544,16 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
                 subject: `Rejection to Join Project - ${project.project_title}`,
                 text: `You have been rejected to join the project '${project.project_title}' as a professional.`,
             };
-        } else {
+        } else if (action === "remove") {
+            project.approved_applicants = project.approved_applicants.filter((requestId) => requestId.toString() !== userId);
+            mailOptions = {
+                from: 'okaybuddy646@gmail.com',
+                to: professional.email,
+                subject: `Removed From Project - ${project.project_title}`,
+                text: `You have been removed from the project '${project.project_title}'`,
+            };
+        }  
+        else {
             return response_bad_request(res, "Invalid action. Use 'approve' or 'reject'.");
         }
         // Send the email
@@ -547,7 +565,7 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
             }
         });
         const updatedProject = await project.save();
-        const message = action === "approve" ? "Professional approved successfully" : "Professional rejected successfully";
+        const message = action === "approve" ? "Professional approved successfully" : action === "remove"?"Professional removed succesfully":"Professional rejected successfully";
         return response_success(res, updatedProject, message);
     } catch (error: any) {
         if (error instanceof Error) {
