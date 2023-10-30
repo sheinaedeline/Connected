@@ -1,0 +1,1 @@
+{"indexes":[{"v":{"$numberInt":"2"},"key":{"_id":{"$numberInt":"1"}},"name":"_id_"},{"v":{"$numberInt":"2"},"key":{"jwtTokenCreationDate":{"$numberInt":"1"}},"name":"jwtTokenCreationDate_1","background":true,"expireAfterSeconds":{"$numberInt":"86300"}}],"uuid":"7cf45b6790da4e86800e203d92e46418","collectionName":"tokens","type":"collection"}
