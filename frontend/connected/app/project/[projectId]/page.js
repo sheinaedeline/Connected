@@ -47,7 +47,7 @@ export default function ViewProfile({params}) {
     const [approved_applicants, setApproved_applicants] = useState([]);
 
 
-    // GET View Profile
+    // GET View Project
     useEffect(() => {
         const viewProject = async () => {
             try {
@@ -56,26 +56,26 @@ export default function ViewProfile({params}) {
     
                 // Dispatch
                 console.log('View Project Successful', response.data);
-                const userData = response.data.content;
+                const projectData = response.data.content;
 
                 // Set variable states
-                set_id(userData._id.$oid);
-                setOwner(userData.owner.$oid);
-                setProject_title(userData.project_title);
-                setTags(userData.tags);
-                setDescription(userData.description);
-                setStart_date(userData.start_date.$date);
-                setEnd_date(userData.end_date.$date);
-                setNo_professional(userData.No_professional);
-                setExpected_working_hours(userData.expected_working_hours);
-                setSkills(userData.skills);
-                setExperiences(userData.experiences);
-                setOnline_offline(userData.online_offline);
-                setPrice_budget(userData.price_budget);
-                setReq_prof_criteria(userData.req_prof_criteria);
-                setStatus(userData.status);
-                setPotential_applicants(userData.potential_applicants);
-                setApproved_applicants(userData.approved_applicants);
+                set_id(projectData._id.$oid);
+                setOwner(projectData.owner.$oid);
+                setProject_title(projectData.project_title);
+                setTags(projectData.tags);
+                setDescription(projectData.description);
+                setStart_date(projectData.start_date.$date);
+                setEnd_date(projectData.end_date.$date);
+                setNo_professional(projectData.No_professional);
+                setExpected_working_hours(projectData.expected_working_hours);
+                setSkills(projectData.skills);
+                setExperiences(projectData.experiences);
+                setOnline_offline(projectData.online_offline);
+                setPrice_budget(projectData.price_budget);
+                setReq_prof_criteria(projectData.req_prof_criteria);
+                setStatus(projectData.status);
+                setPotential_applicants(projectData.potential_applicants);
+                setApproved_applicants(projectData.approved_applicants);
                 
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
@@ -87,17 +87,7 @@ export default function ViewProfile({params}) {
 
     }, []);
 
-    // Hire Professional Button
-    const handleHireButton = () => {
-        setHireButton(true);
-        router.push(`/invite/${userId}`);
-    };
-
-    // Hire Professional Button
-    const handleRequestButton = (itemId) => {
-        setProjectId(itemId);
-        setRequestButton(true);
-    };
+    
 
     // PUT Request Join Project
     useEffect(() => {
@@ -164,6 +154,121 @@ export default function ViewProfile({params}) {
         slider.scrollLeft = slider.scrollLeft + 500;
     };
 
+    function Rating() {
+        const [rating, setRating] = useState(0);
+        const [comment, setComment] = useState('');
+        const [submitted, setSubmitted] = useState(false);
+    
+        const handleStarClick = (starIndex) => {
+            if (!submitted) {
+                setRating(starIndex);
+            }
+        };
+    
+        const handleCommentChange = (event) => {
+            if (!submitted) {
+                setComment(event.target.value);
+            }
+        };
+    
+        const handleSubmit = () => {
+            // Handle the submission of the rating and comment here
+            console.log(`Rating: ${rating}, Comment: ${comment}`);
+            setSubmitted(true);
+        };
+    
+        return (
+            <div>
+                <p>Rating:</p>
+                {[1, 2, 3, 4, 5].map((starIndex) => (
+                    <span 
+                        key={starIndex} 
+                        onClick={() => handleStarClick(starIndex)}
+                        style={{ cursor: submitted ? 'default' : 'pointer', color: starIndex <= rating ? 'gold' : 'gray' }}
+                    >
+                        ★
+                    </span>
+                ))}
+                <br></br>
+                <textarea 
+                    value={comment}
+                    onChange={handleCommentChange}
+                    disabled={submitted}
+                    className="rounded-md border-2 border-blue-900"
+                />
+                <button 
+                    onClick={handleSubmit} 
+                    disabled={submitted}  
+                    className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${submitted ? 'bg-gray-500 cursor-default' : 'bg-blue-900 hover:bg-blue-500'}`}
+                >
+                    Submit
+                </button>
+            </div>
+        );
+    }
+
+    function ProjectRating() {
+        const [rating, setRating] = useState(0);
+        const [comment, setComment] = useState('');
+        const [submitted, setSubmitted] = useState(false);
+    
+        const handleStarClick = (starIndex) => {
+            if (!submitted) {
+                setRating(starIndex);
+            }
+        };
+    
+        const handleCommentChange = (event) => {
+            if (!submitted) {
+                setComment(event.target.value);
+            }
+        };
+    
+        const handleSubmit = async () => {
+            // Handle the submission of the rating and comment here
+            console.log(`Rating: ${rating}, Comment: ${comment}`);
+            try {
+                const response = await axios.put(`http://127.0.0.1:3000/project/653b55906f170de1334a03ba/rate`, { rating, comment });
+                console.log('Project rating successful', response.data);
+            } catch (error) {
+                console.error('Project rating failed', error);
+            }
+            setSubmitted(true);
+        };
+    
+        return (
+            <div>
+                <p>Project Rating:</p>
+                {[1, 2, 3, 4, 5].map((starIndex) => (
+                    <span 
+                        key={starIndex} 
+                        onClick={() => handleStarClick(starIndex)}
+                        style={{ cursor: submitted ? 'default' : 'pointer', color: starIndex <= rating ? 'gold' : 'gray' }}
+                    >
+                        ★
+                    </span>
+                ))}
+                <br></br>
+                <textarea 
+                    value={comment}
+                    onChange={handleCommentChange}
+                    disabled={submitted}
+                    className="rounded-md border-2 border-blue-900"
+                />
+                <button 
+                    onClick={handleSubmit} 
+                    disabled={submitted}  
+                    className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${submitted ? 'bg-gray-500 cursor-default' : 'bg-blue-900 hover:bg-blue-500'}`}
+                >
+                    Submit Project Rating
+                </button>
+            </div>
+        );
+    }
+    
+
+
+
 
     return (
         <div className="bg-white dark:bg-black">
@@ -203,6 +308,155 @@ export default function ViewProfile({params}) {
 
                 
             </div>
+            {owner === accountId && (status === 'new' || status === 'ongoing') && (
+            <div>
+                <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                Onboard{' '}
+                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                    Professionals
+                </a>
+                </h2>
+                <div className="relative flex items-center">
+                <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                    {approved_applicants.length > 0 && approved_applicants.map((item) => (
+                    // rest of your code
+                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                            <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                                <Image
+                                src={item.imageSrc}
+                                alt={item.imageAlt}
+                                width={300}
+                                height={200}
+                                className="object-cover object-center group-hover:opacity-75"
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 p-4">
+                                <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
+                                <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
+                                <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
+                                <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
+                                <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
+                                <button
+                                    className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    onClick={() => {
+                                        params.userId = item.id;
+                                        setRemoveButton(!removeButton);
+                                    }}
+                                >
+                                    Remove
+                                </button>
+                          </div>
+                        </a>
+                    ))}
+                </div>
+                <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                </div>
+            </div>
+            )}
+
+            {owner === accountId && (status === 'new' || status === 'ongoing') && (
+            <div>
+                <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                Applied{' '}
+                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                    Professionals
+                </a>
+                </h2>
+                <div className="relative flex items-center">
+                <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                    {potential_applicants.length > 0 && potential_applicants.map((item) => (
+                    // rest of your code
+                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                            <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                                <Image
+                                src={item.imageSrc}
+                                alt={item.imageAlt}
+                                width={300}
+                                height={200}
+                                className="object-cover object-center group-hover:opacity-75"
+                                />
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 p-4">
+                                <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
+                                <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
+                                <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
+                                <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
+                                <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
+                                <button
+                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                onClick={() => {
+                                    params.userId = item.id;
+                                    setApproveButton(!approveButton);
+                                }}
+                            >
+                                Accept
+                            </button>
+                            <button
+                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                onClick={() => {
+                                    params.userId = item.id;
+                                    setRejectButton(!rejectButton);
+                                }}
+                            >
+                                Reject
+                            </button>
+                          </div>
+                        </a>
+                    ))}
+                </div>
+                <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                </div>
+            </div>
+            )}
+            {owner === accountId && (status === 'completed') && (
+                <div>
+                <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                    Past{' '}
+                    <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                      Professionals
+                    </a>
+                </h2>
+                <div className="relative flex items-center">
+                  <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                  <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                  {approved_applicants.length > 0 && approved_applicants.map((item) => (
+                      <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[450px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                        <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                            <Image
+                                src={item.imageSrc}
+                                alt={item.imageAlt}
+                                width={300}
+                                height={200}
+                                className="object-cover object-center group-hover:opacity-75"
+                            />
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 p-4">
+                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
+                            <Rating />
+                        </div>
+                    </a>
+                    ))}
+                  </div>
+                  <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                </div>
+              </div> 
+            )}
+            {userType === 'Professional' && status === 'completed' && (
+                <div>
+                    <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                        Rate Project
+                    </h2>
+                    <div className="relative flex items-center">
+                        <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                        <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                            <ProjectRating/>
+                        </div>
+                        <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                    </div>
+                </div> 
+            )}
             <Footer/>
         </div>
     )
