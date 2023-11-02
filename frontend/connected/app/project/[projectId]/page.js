@@ -154,9 +154,8 @@ export default function ViewProfile({params}) {
         slider.scrollLeft = slider.scrollLeft + 500;
     };
 
-    function Rating() {
+    function Rating({ projectId, userId }) {
         const [rating, setRating] = useState(0);
-        const [comment, setComment] = useState('');
         const [submitted, setSubmitted] = useState(false);
     
         const handleStarClick = (starIndex) => {
@@ -165,15 +164,29 @@ export default function ViewProfile({params}) {
             }
         };
     
-        const handleCommentChange = (event) => {
-            if (!submitted) {
-                setComment(event.target.value);
+        const rateProfessional = async () => {
+            const data = { 
+                projectId: projectId,
+                userId: userId,
+                ratings: rating
+            };
+    
+            try {
+                const response = await axios.post(`http://127.0.0.1:3000/user/rateProfessionalUser`, data);
+    
+                // Dispatch
+                console.log('rate Successful', response.data);
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('rate failed', error);
             }
         };
     
         const handleSubmit = () => {
-            // Handle the submission of the rating and comment here
-            console.log(`Rating: ${rating}, Comment: ${comment}`);
+            // Handle the submission of the rating here
+            console.log(`Rating: ${rating}`);
+            rateProfessional();
             setSubmitted(true);
         };
     
@@ -190,12 +203,6 @@ export default function ViewProfile({params}) {
                     </span>
                 ))}
                 <br></br>
-                <textarea 
-                    value={comment}
-                    onChange={handleCommentChange}
-                    disabled={submitted}
-                    className="rounded-md border-2 border-blue-900"
-                />
                 <button 
                     onClick={handleSubmit} 
                     disabled={submitted}  
@@ -206,10 +213,11 @@ export default function ViewProfile({params}) {
             </div>
         );
     }
+    
 
-    function ProjectRating() {
+    function ProjectRating({ projectId }) {
         const [rating, setRating] = useState(0);
-        const [comment, setComment] = useState('');
+        const [review, setReview] = useState('');
         const [submitted, setSubmitted] = useState(false);
     
         const handleStarClick = (starIndex) => {
@@ -218,21 +226,35 @@ export default function ViewProfile({params}) {
             }
         };
     
-        const handleCommentChange = (event) => {
+        const handleReviewChange = (event) => {
             if (!submitted) {
-                setComment(event.target.value);
+                setReview(event.target.value);
             }
         };
     
-        const handleSubmit = async () => {
-            // Handle the submission of the rating and comment here
-            console.log(`Rating: ${rating}, Comment: ${comment}`);
+        const rateProject = async () => {
+            const data = { 
+                projectId: projectId,
+                ratings: rating,
+                reviews: review
+            };
+    
             try {
-                const response = await axios.put(`http://127.0.0.1:3000/project/653b55906f170de1334a03ba/rate`, { rating, comment });
-                console.log('Project rating successful', response.data);
+                const response = await axios.post(`http://127.0.0.1:3000/user/rateProject`, data);
+    
+                // Dispatch
+                console.log('rate Successful', response.data);
+                
             } catch (error) {
-                console.error('Project rating failed', error);
+                // Handle any errors (e.g., display an error message)
+                console.error('rate failed', error);
             }
+        };
+    
+        const handleSubmit = () => {
+            // Handle the submission of the rating and comment here
+            console.log(`Rating: ${rating}, Review: ${review}`);
+            rateProject();
             setSubmitted(true);
         };
     
@@ -250,8 +272,8 @@ export default function ViewProfile({params}) {
                 ))}
                 <br></br>
                 <textarea 
-                    value={comment}
-                    onChange={handleCommentChange}
+                    value={review}
+                    onChange={handleReviewChange}
                     disabled={submitted}
                     className="rounded-md border-2 border-blue-900"
                 />
@@ -264,10 +286,9 @@ export default function ViewProfile({params}) {
                 </button>
             </div>
         );
-    }
+    }    
+
     
-
-
 
 
     return (
