@@ -36,7 +36,7 @@ Week 4
 	- View Project Details API
 
 Week 5
-- Finished demo on monday for retrospective A
+- Finished demo/report on monday for retrospective A
 - Starting on Sprint 2
 - My task for Sprint 2:
 	- Updating Project Status API
@@ -44,9 +44,24 @@ Week 5
 	- Approve/Reject Professionals API
 	- View Approved Professionals API
 	- Invite Professionals API
-- make a recording for client demo
+- made a recording for client demo
 
 Week 6
 - Finished Sprint 2 development
 - Tested the APIs in postman
 - Fixed the code based on feedback from retrospective A
+
+Week 7
+- distributed workload for backend team
+- Starting on Sprint 3
+- My task for Sprint 3:
+	- User Forget Password API
+	- Application Confirmation Email API
+	- Application Accepted/Rejected Email API
+
+Week 8
+- Finished demo/report on monday for retrospective B
+- made a recording for client demo
+- Finished Sprint 3 development
+- Tested APIs in postman
+- Getting feedbacks from both backend and frontend team
