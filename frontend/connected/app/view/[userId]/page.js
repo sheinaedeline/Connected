@@ -117,6 +117,7 @@ export default function ViewProfile({params}) {
     // PUT Request Join Project
     useEffect(() => {
         const requestJoin = async () => {
+            console.log(projectId);
             try {
                 const response = await axios.put(`http://127.0.0.1:3000/project/${projectId}/join`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
     
@@ -202,7 +203,7 @@ export default function ViewProfile({params}) {
                         {projectsList && projectsList.map((item) => (
                         <div key={item.id} className="group grid grid-cols-3 gap-2 p-4 rounded-md border-2 border-blue-900 w-full">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                            <p className="text-md text-right text-blue-900">{item.owner.userName}</p>
+                            {/* <p className="text-md text-right text-blue-900">{item.owner.userName}</p> */}
                             <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
                             <p className="mt-1 text-sm text-right text-gray-600">{item.skills}</p>
                             {/* <p className="text-sm text-gray-600">Rating {item.rating}/5</p> */}

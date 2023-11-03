@@ -36,6 +36,8 @@ export default function page() {
   console.log('state is profile', state);
 
   const [professionalList, setProfessionalList] = useState([]);
+  const [removeList, setRemoveList] = useState([]);
+  
 
   // GET View Profile
   useEffect(() => {
@@ -52,6 +54,7 @@ export default function page() {
             // Dispatch
             console.log('Get professional Successful', response.data);
             setProfessionalList(response.data.content.usersList);
+            setRemoveList(response.data.content.usersList.slice(0,2));
             // Set variable states
             
         } catch (error) {
@@ -72,6 +75,10 @@ export default function page() {
 
   const handleSearch = () => {
       console.log(searchInput);
+  };
+
+  const handleAcceptButton = () => {
+    setRemoveList(professionalList);
   };
 
   return (
@@ -219,8 +226,8 @@ export default function page() {
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                    {professionalList.length > 0 && professionalList.map((item) => (
-                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                    {removeList.length > 0 && removeList.map((item) => (
+                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
                               src={item.imageSrc}
@@ -259,7 +266,7 @@ export default function page() {
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                       {professionalList.length > 0 && professionalList.map((item) => (
-                        <a key={item.id} href="/view" className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
                               src={item.imageSrc}
@@ -277,6 +284,7 @@ export default function page() {
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                             <button
                                 className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                onClick={handleAcceptButton}
                               >
                                 Accept
                               </button>

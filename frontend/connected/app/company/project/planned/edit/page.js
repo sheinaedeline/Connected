@@ -66,16 +66,16 @@ export default function page() {
           console.log(projectList[0])
         }
 
-      }, [projectList]);
+    }, [projectList]);
 
-      const handleInputChange = (e) => {
+    const handleInputChange = (e) => {
         setProject({
-          ...project,
-          [e.target.name]: e.target.value,
+            ...project,
+            [e.target.name]: e.target.value,
         });
-      };
+    };
     
-      const handleSubmit = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         try {
           const response = await axios.put('http://127.0.0.1:3000/project/652cf219f25295494af04c68/edit', project);
@@ -83,7 +83,7 @@ export default function page() {
         } catch (error) {
           console.error(error);
         }
-      };  
+    };  
 
   return (
     <div className="bg-white dark:bg-black">

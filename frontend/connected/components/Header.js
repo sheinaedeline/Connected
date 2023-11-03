@@ -135,7 +135,7 @@ export default function Header() {
                 </button>
             </form>
             {/* Create new project */}
-            {userType === 'company' && (
+            {userType !== 'professional' && (
               <div>
               <Link href="/company/post">
                   <button
