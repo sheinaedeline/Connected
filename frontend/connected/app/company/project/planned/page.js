@@ -29,8 +29,8 @@ export default function page() {
     slider.scrollLeft = slider.scrollLeft + 500;
   };
 
-  const { state } = useUserData();
-  console.log('state is ', state);
+  // const { state } = useUserData();
+    const state = JSON.parse(localStorage.getItem("loggedUser"));
 
   const { accountId, userType } = state;
   console.log('state is profile', state);

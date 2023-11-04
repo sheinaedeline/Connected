@@ -11,7 +11,7 @@ export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const { dispatch } = useUserData();
+    // const { dispatch } = useUserData();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -34,8 +34,9 @@ export default function Login() {
                 jwtToken: response.data.content.jwtToken,
             };
 
-            console.log (payloadData);
-            dispatch({ type: 'SET_USER_STATE', payload: payloadData});
+            // Set the userId in local storage
+            localStorage.setItem("loggedUser", JSON.stringify(payloadData));
+            // dispatch({ type: 'SET_USER_STATE', payload: payloadData});
 
             // Home redirect
             if (response.data.content.userType === 'company') {

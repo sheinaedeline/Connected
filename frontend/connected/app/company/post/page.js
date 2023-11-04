@@ -9,7 +9,8 @@ import { useUserData } from "context/context";
 
 export default function CreateNewJob() {
     const router = useRouter();
-    const { state } = useUserData();
+    // const { state } = useUserData();
+    const state = JSON.parse(localStorage.getItem("loggedUser"));
     console.log(state);
 
     // Project Information States
