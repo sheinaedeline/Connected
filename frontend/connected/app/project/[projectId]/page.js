@@ -12,10 +12,12 @@ import axios from 'axios';
 import { useUserData } from "context/context";
 import { useRouter } from 'next/navigation';
 
-export default function ViewProfile({params}) {
+
+export default function ViewProjectID({params}) {
     const router = useRouter();
     // const { state } = useUserData();
-    const state = JSON.parse(localStorage.getItem("loggedUser"));
+    const getState = localStorage.getItem("loggedUser");
+    const state = JSON.parse(getState);
     const { accountId, userType } = state;
     const [userId, setUserId] = useState(params.userId);
     // const [hireButton, setHireButton] = useState(false);
@@ -26,6 +28,7 @@ export default function ViewProfile({params}) {
     const [removeButton, setRemoveButton] = useState(false);
 
     const [projectId, setProjectId] = useState("");
+    const [professionalId, setProfessionalId] = useState("");
     
     const [fetchUserType, setFetchUserType] = useState("");
     const [projectsList, setProjectsList] = useState([]);
@@ -52,16 +55,16 @@ export default function ViewProfile({params}) {
     useEffect(() => {
         const viewProject = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:3000/project/653b55906f170de1334a03ba`);
-                // const response = await axios.get(`http://127.0.0.1:3000/project/${projectId}`);
+                // const response = await axios.get(`http://127.0.0.1:3000/project/653b55906f170de1334a03ba`);
+                const response = await axios.get(`http://127.0.0.1:3000/project/${params.projectId}`);
     
                 // Dispatch
                 console.log('View Project Successful', response.data);
                 const projectData = response.data.content;
 
                 // Set variable states
-                set_id(projectData._id.$oid);
-                setOwner(projectData.owner.$oid);
+                set_id(projectData._id);
+                setOwner(projectData.owner);
                 setProject_title(projectData.project_title);
                 setTags(projectData.tags);
                 setDescription(projectData.description);
@@ -95,7 +98,7 @@ export default function ViewProfile({params}) {
         const rejectProfessional = async () => {
             console.log(projectId);
             try {
-                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/reject/${params.userId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/reject/${professionalId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
     
                 // Dispatch
                 console.log('reject', response.data);
@@ -111,10 +114,11 @@ export default function ViewProfile({params}) {
 
     useEffect(() => {
         const approveProfessional = async () => {
-            console.log(projectId);
+            console.log(projectId, professionalId);
             try {
-                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/approve/${params.userId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
-    
+                // const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/approve/${professionalId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/approve/${potential_applicants[0]}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                
                 // Dispatch
                 console.log('Approve', response.data);
                 alert('Approved');
@@ -131,7 +135,7 @@ export default function ViewProfile({params}) {
         const removeProfessional = async () => {
             console.log(projectId);
             try {
-                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/remove/${params.userId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/remove/${professionalId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
     
                 // Dispatch
                 console.log('remove', response.data);
@@ -362,7 +366,7 @@ export default function ViewProfile({params}) {
                                 <button
                                     className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                                     onClick={() => {
-                                        params.userId = item.id;
+                                        setProfessionalId(item.id);
                                         setRemoveButton(!removeButton);
                                     }}
                                 >
@@ -409,7 +413,7 @@ export default function ViewProfile({params}) {
                                 <button
                                 className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                                 onClick={() => {
-                                    params.userId = item.id;
+                                    setProfessionalId(item.id);
                                     setApproveButton(!approveButton);
                                 }}
                             >
@@ -418,7 +422,7 @@ export default function ViewProfile({params}) {
                             <button
                                 className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                                 onClick={() => {
-                                    params.userId = item.id;
+                                    setProfessionalId(item.id);
                                     setRejectButton(!rejectButton);
                                 }}
                             >

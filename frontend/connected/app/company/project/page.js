@@ -41,6 +41,7 @@ export default function page() {
 
           try {
               const response = await axios.post(`http://127.0.0.1:3000/project/getProjects`, data);
+              console.log(accountId);
   
               // Dispatch
               console.log('View Project Successful', response.data);
@@ -454,7 +455,7 @@ export default function page() {
         <div className="relative flex items-center">
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
             <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-            {filteredProjectList.length > 0  && filteredProjectList.filter(item => item.status === 'new' && item.owner.$oid === accountId && (selectedOptions.length === 0 || selectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (
+            {filteredProjectList.length > 0  && filteredProjectList.filter(item => item.status === 'new' && item.owner._id === accountId && (selectedOptions.length === 0 || selectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (
               <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                 <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                   <Image
@@ -516,7 +517,7 @@ export default function page() {
         <div className="relative flex items-center">
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
             <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-            {filteredSecondaryProjectList.length > 0  && filteredSecondaryProjectList.filter(item => item.status === 'ongoing' && item.owner.$oid === accountId && (secondarySelectedOptions.length === 0 || secondarySelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (              
+            {filteredSecondaryProjectList.length > 0  && filteredSecondaryProjectList.filter(item => item.status === 'ongoing' && (secondarySelectedOptions.length === 0 || secondarySelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (              
             <a key={item.id} href='/company/project/current' className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">   
                 <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                   <Image
@@ -578,7 +579,7 @@ export default function page() {
         <div className="relative flex items-center">
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
             <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-            {filteredThirdProjectList.length > 0  && filteredThirdProjectList.filter(item => item.status === 'completed' && item.owner.$oid === accountId && (thirdSelectedOptions.length === 0 || thirdSelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (                
+            {filteredThirdProjectList.length > 0  && filteredThirdProjectList.filter(item => item.status === 'completed' && item.owner._id === accountId && (thirdSelectedOptions.length === 0 || thirdSelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (                
                 <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                   <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                     <Image
