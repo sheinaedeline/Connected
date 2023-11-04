@@ -12,7 +12,8 @@ import { useRouter } from "next/navigation";
 
 
 export default function ViewProfile() {
-    const { state } = useUserData();
+    // const { state } = useUserData();
+    const state = JSON.parse(localStorage.getItem("loggedUser"));
     const { accountId, userType } = state;
     const router = useRouter();
     

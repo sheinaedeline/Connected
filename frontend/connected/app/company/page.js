@@ -10,7 +10,8 @@ import axios from 'axios';
 import Link from 'next/link';
 
 export default function CompanyHome() {
-    const { state } = useUserData();
+    // const { state } = useUserData();
+    const state = JSON.parse(localStorage.getItem("loggedUser"));
     const { accountId, userType } = state;
 
     const [professionalList, setProfessionalList] = useState([]);

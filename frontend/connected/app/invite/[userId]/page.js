@@ -10,7 +10,8 @@ import { useRouter } from 'next/navigation';
 
 export default function InviteProfessional({params}) {
     const router = useRouter();
-    const { state } = useUserData();
+    // const { state } = useUserData();
+    const state = JSON.parse(localStorage.getItem("loggedUser"));
     const { accountId, userType } = state;
     const [userId, setUserId] = useState(params.userId);
     
