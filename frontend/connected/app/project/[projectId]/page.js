@@ -59,8 +59,8 @@ export default function ViewProfile({params}) {
                 const projectData = response.data.content;
 
                 // Set variable states
-                set_id(projectData._id.$oid);
-                setOwner(projectData.owner.$oid);
+                set_id(projectData._id);
+                setOwner(projectData.owner);
                 setProject_title(projectData.project_title);
                 setTags(projectData.tags);
                 setDescription(projectData.description);
