@@ -98,6 +98,12 @@ export default function CompanyProfile() {
         viewProfile();
     }, []);
 
+    function handleImageUpload(event) {
+        const file = event.target.files[0];
+        const imageUrl = URL.createObjectURL(file);
+        setUserImage(imageUrl);
+    }
+
     return (
         <div className="bg-white dark:bg-black">
             <Header/>
@@ -116,14 +122,6 @@ export default function CompanyProfile() {
                         height={100}
                         alt="connected logo"
                     />
-                    {/* Upload Profile Picture Button */}
-                    {/* <button
-                        type="submit"
-                        onC
-                        className="h-8 items-center flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                    >
-                        Upload Profile Picture
-                    </button> */}
                     <div>
                         <label htmlFor="companyName" className="block text-sm font-medium leading-6 text-gray-900">
                             Upload Profile Picture
@@ -133,13 +131,17 @@ export default function CompanyProfile() {
                                 id="companyName"
                                 name="companyName"
                                 type="file"
-                                value={userImage}
-                                onChange={e => setUserImage(e.target.value)}
+                                onChange={e => {
+                                    const file = e.target.files[0];
+                                    const imageUrl = URL.createObjectURL(file);
+                                    setUserImage(imageUrl);
+                                }}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
                 </div>
+
 
                 {/* Account Credentials */}
                 <div className="mt-12 grid grid-cols-2 gap-4">
@@ -233,80 +235,6 @@ export default function CompanyProfile() {
 
                 {/* Personal Details */}
                 <div className="mt-12 grid grid-cols-2 gap-4">
-                    <div>
-                        <label htmlFor="ABN" className="block text-sm font-medium leading-6 text-gray-900">
-                            ABN
-                        </label>
-                        <div className="mt-2">
-                            <input
-                                id="ABN"
-                                name="ABN"
-                                type="text"
-                                value={ABN}
-                                onChange={e => setABN(e.target.value)}
-                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-                    <div>
-                        <label htmlFor="industryType" className="block text-sm font-medium leading-6 text-gray-900">
-                            Industry Type
-                        </label>
-                        <div className="mt-2">
-                            <input
-                                id="industryType"
-                                name="industryType"
-                                type="text"
-                                value={industryType}
-                                onChange={e => setIndustryType(e.target.value)}
-                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-                    <div className="col-span-2">
-                        <label htmlFor="companyLink" className="block text-sm font-medium leading-6 text-gray-900">
-                            Company Website
-                        </label>
-                        <div className="mt-2">
-                            <input
-                                id="companyLink"
-                                name="companyLink"
-                                type="url"
-                                value={companyLink}
-                                onChange={e => setCompanyLink(e.target.value)}
-                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-                    <div className="col-span-2">
-                        <label htmlFor="address" className="block text-sm font-medium leading-6 text-gray-900">
-                            Company Address
-                        </label>
-                        <div className="mt-2">
-                            <input
-                                id="address"
-                                name="address"
-                                type="text"
-                                value={address}
-                                onChange={e => setAddress(e.target.value)}
-                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-                    <div className="col-span-2">
-                        <label htmlFor="description" className="block text-sm font-medium leading-6 text-gray-900">
-                            Brief Description
-                        </label>
-                        <div className="mt-2">
-                            <textarea
-                                id="description"
-                                name="description"
-                                value={description}
-                                onChange={e => setDescription(e.target.value)}
-                                className="block w-full h-32 rounded-md border-0 mb-10 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
                     <div className="col-span-2">
                         <button
                             type="submit"
