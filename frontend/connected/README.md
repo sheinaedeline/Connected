@@ -25,6 +25,8 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 1. react-icons
 2. tailwind-scrollbar-hide
 3. axios
+4. react-chartjs-2 chart.js
+
 
 ```bash
 npm install axios tailwind-scrollbar-hide react-icons --save
