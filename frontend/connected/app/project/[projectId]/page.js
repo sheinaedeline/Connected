@@ -318,6 +318,19 @@ export default function ViewProjectID({params}) {
             setDeleteProject(false);
         }
     }, [deleteProject]);
+
+    const changeStatus = async () => {
+        try {
+            const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/updateStatus`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+            console.log(response.data);
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+        changeStatus();
+    }, []);
     
 
 
@@ -350,20 +363,20 @@ export default function ViewProjectID({params}) {
                                 <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Status: {status}</p>
                                 </div>
                                 {owner === accountId && status === 'new' && (
-                                <div>
-                                    <button
-                                    className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                    >Start Project</button>
-
-                                </div>)}
+                                <button
+                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    onClick={startProject}
+                                >
+                                    Start Project
+                                </button>)}
 
                                 {owner === accountId && status === 'ongoing' && (
-                                <div>
-                                    <button
+                                <button
                                     className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                    >Complete Project</button>
-
-                                </div>)}
+                                    onClick={startProject}
+                                >
+                                    Finish Project
+                                </button>)}
                                 {owner === accountId || userType === 'admin' && (
                                 <div>
                                     <button
