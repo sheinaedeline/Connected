@@ -519,20 +519,22 @@ export async function rateProfessionalUser(req: Request, res: Response): Promise
         if (existingRating) {
             // If the rating already exists, update it.
             existingRating.ratings = ratings;
-            const updatedRating = await existingRating.save();
-            return response_success(res, updatedRating, "Your rating has been updated successfully!");
+            await existingRating.save();
+        } else { // user does not have a rating
+            let newRating = new Rating({
+                userId,
+                projectId,
+                ratings,
+                ratingType: "Professional",
+            });
+            await newRating.save();
         }
-        
-        // user does not have a rating
-        let newRating = new Rating({
-            userId,
-            projectId,
-            ratings,
-            ratingType: "Professional",
-        });
-        const savedRating = await newRating.save();
-        return response_success(res, savedRating, "You have successfully rated this professional user!")
-
+        // Calculate the average rating of the user
+        const allRatings = await Rating.find({ userId, ratingType: "Professional" });
+        const averageRating = allRatings.reduce((acc, { ratings }) => acc + ratings, 0) / allRatings.length;
+        // Update the user's average rating
+        await User.findByIdAndUpdate(userId, { averageUserRating: averageRating });
+        return response_success(res, { averageRating }, "The professional user's average rating has been updated successfully!");
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
@@ -544,27 +546,40 @@ export async function rateProfessionalUser(req: Request, res: Response): Promise
 
 export async function rateProject(req: Request, res: Response): Promise<Response> {
     try {
-        const {projectId, userId, ratings, reviews} = req.body;
+        const { projectId, userId, ratings, review } = req.body;
         const project = await Project.findById(projectId);
         const existingRating = await Rating.findOne({ projectId, userId, ratingType: "Company" });
-
         if (!project) {
             return response_not_found(res, "Project not found");
-        } if (project.status != "completed") {
-            return response_forbidden(res, "Project not completed, cannot rate it yet!")
-        } if (existingRating) {
+        } 
+        if (project.status != "completed") {
+            return response_forbidden(res, "Project not completed, cannot rate it yet!");
+        } 
+        // If the rating already exists, update it
+        if (existingRating) {
             existingRating.ratings = ratings;
-            const updatedRating = await existingRating.save();
-            return response_success(res, updatedRating, "Your rating has been updated successfully!");
+            existingRating.review = review;
+            await existingRating.save();
+        } else {
+            // Create a new rating
+            let newRating = new Rating({
+                userId,
+                projectId,
+                ratings,
+                review,
+                ratingType: "Company",
+            });
+            await newRating.save();
         }
-        let newRating = new Rating({
-            projectId,
-            ratings,
-            ratingType: "Company",
-            reviews
-        });
-        const savedRating = await newRating.save();
-        return response_success(res, savedRating, "You have successfully rated this project!")
+        // Calculate the average rating of the project
+        const allRatings = await Rating.find({ projectId, ratingType: "Company" });
+        const averageRating = allRatings.reduce((acc, { ratings }) => acc + ratings, 0) / allRatings.length;
+
+        // Update the project's average rating
+        await Project.findByIdAndUpdate(projectId, { averageProjectRating: averageRating });
+
+        // Send success response
+        return response_success(res, { averageRating }, "The project's average rating has been updated successfully!");
 
     } catch (error: any) {
         if (error instanceof Error) {
@@ -608,26 +623,3 @@ export async function getMultipleUserDetail(req: Request, res: Response): Promis
         return response_internal_server_error(res, error.message);
     }   
 }
-// export async function getProfessionalRating(req: Request, res: Response): Promise<Response> {
-//     try {
-//         const {userId} = req.body
-//         const user = await User.findById(userId);
-//         const allRatings = await Rating.find({ userId, ratingType: "Professional" });
-
-//         if (!user) {
-//             return response_not_found(res, "User not found");
-//         } if (!allRatings) {
-//             return response_not_found(res, "Ratings not found");
-//         }
-//         const averageRating = allRatings.reduce((acc, rating) => acc + rating.ratings, 0) / allRatings.length;
-//         user.averageRating = averageRating
-//         await user.save()
-
-
-//     } catch (error: any) {
-//         if (error instanceof Error) {
-//             return response_bad_request(res, error.message);
-//         }
-//         return response_internal_server_error(res, error.message);
-//     }
-// }
