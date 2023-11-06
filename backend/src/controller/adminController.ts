@@ -53,7 +53,7 @@ export async function getStatistics(req: Request, res: Response): Promise<Respon
         let amountOfCreatedProjects = await Project.countDocuments({start_date:{$gte:statisticsStartDate, $lte:statisticsEndDate}});
         let amountOfCreatedProjectsWithEndDateSameYear = await Project.countDocuments({start_date:{$gte:statisticsStartDate, $lte:statisticsEndDate},end_date:{$gte:statisticsStartDate,$lte:statisticsEndDate}});
         let amountOfProjectsTillSpecificYear = await Project.countDocuments({end_date:{$gte:statisticsStartDate,$lte:statisticsEndDate}});
-        let amountOfOngoingProjects = await Project.countDocuments({end_date:{$gte:statisticsStartDate,$lte:statisticsEndDate}, status:"ongoing"});
+        let amountOfOngoingProjects = await Project.countDocuments({start_date:{$gte:statisticsStartDate,$lte:statisticsEndDate}, status:"ongoing"});
         let amountOfCompletedProjects = await Project.countDocuments({end_date:{$gte:statisticsStartDate, $lte:statisticsEndDate},status:"completed"});
      
 
