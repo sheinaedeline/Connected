@@ -574,6 +574,40 @@ export async function rateProject(req: Request, res: Response): Promise<Response
     } 
 }
 
+
+export async function getMultipleUserDetail(req: Request, res: Response): Promise<Response> {
+    try {
+        const {userIds} = req.body;
+        if(Array.isArray(userIds)){
+            for (const item of userIds){
+                if(typeof item != 'string'){
+                    throw new Error('Value inside userIds array must be a string')
+                }
+            }
+        }else{
+            throw new Error('userIds field must be an array')
+        }
+
+        let userDetailsArr:any[] = [];
+        for(let ids of userIds) {
+            let userDetail = await User.findById(ids).select('firstName lastName userName').lean();
+            let modifiedUserObj = {};
+            if(userDetail){
+                let {_id, ...rest} = userDetail
+                modifiedUserObj = {...rest, id: _id.toString()}
+            }
+            userDetailsArr.push(modifiedUserObj);
+        }
+   
+        return response_success(res, {userDetailsArr}, "You have successfully rated this professional user!")
+
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }   
+}
 // export async function getProfessionalRating(req: Request, res: Response): Promise<Response> {
 //     try {
 //         const {userId} = req.body

@@ -62,7 +62,8 @@ export async function getStatistics(req: Request, res: Response): Promise<Respon
             companyUser: amountOfCompanyUser,
             projectsPerYear: amountOfProjectsTillSpecificYear + amountOfCreatedProjects - amountOfCreatedProjectsWithEndDateSameYear,
             ongoingProjects: amountOfOngoingProjects,
-            completedProjects: amountOfCompletedProjects
+            completedProjects: amountOfCompletedProjects,
+            newProjectsPerYear: amountOfCreatedProjects
         }
 
         return response_success(res,{...response},'Successfuly fetched statistics')
