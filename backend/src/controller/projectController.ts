@@ -6,6 +6,7 @@ import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid
 export type {IUser} from '@interfaces/mongoDBInterfaces'
 import ProjectPaginate from '@mongodb/projectPaginateModel';
 import Project from '@mongodb/projectModel';
+import Rating from '@mongodb/ratingModel';
 import { IProject } from '@interfaces/mongoDBInterfaces';
 import { DateTime } from "luxon";
 import projectPaginateModel from '@mongodb/projectPaginateModel';
@@ -403,6 +404,7 @@ export async function deleteProject(req: Request, res: Response): Promise<Respon
         }
 
         await Project.findByIdAndDelete(projectId);
+        await Rating.findByIdAndDelete(projectId)
         return response_success(res, "Project deleted successfully!");
     } catch (error: any) {
         if (error instanceof Error) {
