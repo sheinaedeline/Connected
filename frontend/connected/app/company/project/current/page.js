@@ -15,7 +15,7 @@ import trading from "assets/Trading Background.png";
 import axios from 'axios';
 import { useUserData } from "context/context";
 
-const options = ['bizz', 'software3', 'Option 3', 'Option 4', 'Option 5', 'Option 6', 'Option 7', 'Option 8'];
+const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', 'beverages', 'retail', 'services'];
 
 export default function page() {
 
@@ -29,7 +29,8 @@ export default function page() {
     slider.scrollLeft = slider.scrollLeft + 500;
   };
 
-  const { state } = useUserData();
+  // const { state } = useUserData();
+    const state = JSON.parse(localStorage.getItem("loggedUser"));
   console.log('state is ', state);
 
   const { accountId, userType } = state;

@@ -14,7 +14,8 @@ import { useRouter } from 'next/navigation';
 
 export default function ViewProfile({params}) {
     const router = useRouter();
-    const { state } = useUserData();
+    // const { state } = useUserData();
+    const state = JSON.parse(localStorage.getItem("loggedUser"));
     const { accountId, userType } = state;
     const [userId, setUserId] = useState(params.userId);
     const [hireButton, setHireButton] = useState(false);
@@ -117,7 +118,7 @@ export default function ViewProfile({params}) {
     // PUT Request Join Project
     useEffect(() => {
         const requestJoin = async () => {
-            console.log(projectId);
+            console.log("project id bro", projectId);
             try {
                 const response = await axios.put(`http://127.0.0.1:3000/project/${projectId}/join`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
     

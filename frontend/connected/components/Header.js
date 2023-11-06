@@ -11,7 +11,9 @@ import { AiOutlinePlus } from 'react-icons/ai';
 import axios from 'axios';
 
 export default function Header() {
-  const { state, dispatch } = useUserData();
+  // const { state, dispatch } = useUserData();
+  // const { state } = useUserData();
+    const state = JSON.parse(localStorage.getItem("loggedUser"));
   const router = useRouter();
   const { accountId, userType } = state;
   const [logoutState, setLogoutState] = useState(false);
@@ -66,7 +68,8 @@ export default function Header() {
       jwtToken: null,
     };
 
-    dispatch({ type: 'SET_USER_STATE', payload: initialState});
+    // dispatch({ type: 'SET_USER_STATE', payload: initialState});
+    localStorage.removeItem("loggedUser");
     router.push('/');
   };
 

@@ -13,7 +13,7 @@ import axios from 'axios';
 import { useUserData } from "context/context";
 
 
-const options = ['bizz', 'software3', 'web development', 'Option 4'];
+const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', 'beverages', 'retail', 'services'];
 
 
 export default function Projects() {

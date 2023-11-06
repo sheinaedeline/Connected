@@ -166,3 +166,82 @@ Setting up Backend on Mac:
 4. Run the backend using npm run dev
 5. Stop mongo services when stopping backend too
 - brew services stop mongodb-community@7.0
+
+
+#######################################
+WK06 
+Flexi week so there was no tutorial but we kept on updating the team's progress through Messenger.
+
+Frontend:
+Satrio:
+View project: 28, 26
+Complete & rating: 29
+Filter 22, 31, 33
+Upload CV: 41
+
+
+Sheina:
+Edit profile: 17
+View profile: 42, 27
+Req project 25, 35
+
+
+#######################################
+TUT07 09/10/2023 1-3pm
+Update the tutor on the team's progress and also kept working on our individual tasks.
+
+Meeting 27/10/2023 3-6.30pm Offline
+We met up to work on the project as well as making sure the integration of frontend and backend is working seamlessly. Nicholas showed me and Satrio
+on importing and exporting the database content.
+
+
+#######################################
+TUT08 30/10/2023 1-3pm
+Sprint 2 Demo 
+Before the demo, we did have a run down on what we will be demonstrating to the tutor and made sure that all the stories in sprint 2 is covered.
+Demo was more organised than the previous one but there was 2 minor errors with the double API requests and also professional applying to join a project.
+
+Demo run down:
+1. Login as company
+2. View Profile
+3. Edit Profile
+4. Create new job post
+5. Hire professional
+6. Go to my projects
+7. Filter projects
+8. View project
+9. Accept prof
+10. Complete ongoing proj
+11. Logout
+12. Login as professional
+13. Upload cv at profile
+14. Filter projects
+15. Apply project
+
+Retrospective B Meeting
+We just discuss what went wrong, what went well, what we will try right after we finished the demo.
+
+
+Meeting 3/11/2023 3-4.30pm
+The team met online on Microsoft teams to discuss about the current progress of the backend and frontend, clarification on sprint 3 user stories,
+and a final check on the Retrospective B Report before I submit it on Moodle. 
+
+We have decided that the Admin will have functionality like:
+- Statistics on Num of Company Users, Num of Professional Users, Num of Projects/Year, Num of Ongoing Projects for a chosen year, Num of Completed Projects for a chosen year
+- Able to delete and edit projects and users details.
+
+Satrio and I are planning to meet to work on through the Frontend, such as fixing minor issues, clearing up the code and making things pretty, before
+working more on sprint 3.
+
+Frontend:
+Satrio:
+
+Sheina:
+Change password: 18
+Prof completed proj: 40
+
+Forget password: 15
+Rating: 30, 39
+Inv pop: 36
+Prof notif: 37
+Admin page: 43,44

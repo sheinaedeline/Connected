@@ -9,7 +9,8 @@ import axios from 'axios';
 import { useUserData } from "context/context";
 
 export default function ProfessionalProfile() {
-    const { state } = useUserData();
+    // const { state } = useUserData();
+    const state = JSON.parse(localStorage.getItem("loggedUser"));
     const { accountId, userType } = state;
     
     const [firstName, setFirstName] = useState("");
