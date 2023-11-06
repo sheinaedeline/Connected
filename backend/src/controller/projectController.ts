@@ -342,7 +342,7 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
         const projectId = req.params.id;
         const userId = req.body["_id"];
         const updatedDetails = req.body;
-        const project = await Project.findById(projectId);
+        const project:any = await Project.findById(projectId);
 
         // Define which fields can be edited
         const editableFields: (keyof IProject)[] = [

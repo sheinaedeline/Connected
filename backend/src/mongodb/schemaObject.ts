@@ -128,5 +128,8 @@ export const projectObj = {
     },
     approved_applicants: {
         type: [Schema.Types.ObjectId],
+    },
+    averageProjectRating: {
+        type: Number
     }
 }

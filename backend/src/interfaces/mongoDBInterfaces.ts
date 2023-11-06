@@ -50,5 +50,6 @@ export interface IProject {
     status: string;
     potential_applicants: Array<Schema.Types.ObjectId>;
     approved_applicants: Array<Schema.Types.ObjectId>;
+    averageProjectRaating?: number;
 
 }
