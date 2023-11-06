@@ -131,5 +131,8 @@ export const projectObj = {
     },
     averageProjectRating: {
         type: Number
+    },
+    invited_applicants: {
+        type: [Schema.Types.ObjectId],
     }
 }

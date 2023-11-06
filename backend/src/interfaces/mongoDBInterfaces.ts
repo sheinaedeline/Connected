@@ -51,5 +51,5 @@ export interface IProject {
     potential_applicants: Array<Schema.Types.ObjectId>;
     approved_applicants: Array<Schema.Types.ObjectId>;
     averageProjectRaating?: number;
-
+    invited_applicants: Array<Schema.Types.ObjectId>;
 }

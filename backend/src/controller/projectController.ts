@@ -614,6 +614,17 @@ export async function inviteProfessional(req: Request, res: Response): Promise<R
         if (project.owner.toString() !== ownerId.toString()) {
             return response_unauthorized(res, "Only the project owner can send invitations.");
         }
+        
+        // update invited applicants
+        const professional = await User.findOne({ email: professionalEmail });
+        if (!professional) {
+            return response_not_found(res, "Professional with the given email not found.");
+        }
+
+        // Update invited applicants
+        const professionalId = new mongoose.Types.ObjectId(professional._id);
+        project.invited_applicants.push(professionalId);
+        const updatedProject = await project.save();
 
         //Nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -644,7 +655,7 @@ export async function inviteProfessional(req: Request, res: Response): Promise<R
                 return response_success(res, "Invitation email sent successfully");
             }
         });
-        return response_success(res, "Succesfully send email");
+        return response_success(res, updatedProject, "Succesfully send email");
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
