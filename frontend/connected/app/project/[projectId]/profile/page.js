@@ -9,7 +9,7 @@ import Header from '/components/Header.js';
 import axios from 'axios';
 import { useUserData } from "context/context";
 
-export default function CompanyProfile() {
+export default function projectProfile() {
     // const { state } = useUserData();
     const state = JSON.parse(localStorage.getItem("loggedUser"));
     const { accountId, userType } = state;
