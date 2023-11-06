@@ -11,7 +11,6 @@ import Header from '/components/Header.js';
 import axios from 'axios';
 import { useUserData } from "context/context";
 import { useRouter } from 'next/navigation';
-import { useHistory } from 'react-router-dom';
 
 
 export default function ViewProjectID({params}) {
@@ -56,7 +55,6 @@ export default function ViewProjectID({params}) {
     useEffect(() => {
         const viewProject = async () => {
             try {
-                // const response = await axios.get(`http://127.0.0.1:3000/project/653b55906f170de1334a03ba`);
                 const response = await axios.get(`http://127.0.0.1:3000/project/${params.projectId}`);
     
                 // Dispatch
@@ -296,8 +294,6 @@ export default function ViewProjectID({params}) {
 
     const [deleteProject, setDeleteProject] = useState(false);
 
-    const history = useHistory();
-
     useEffect(() => {
         if (deleteProject) {
             const deleteProjectRequest = async () => {
@@ -305,9 +301,9 @@ export default function ViewProjectID({params}) {
                     const response = await axios.delete(`http://127.0.0.1:3000/project/${params.projectId}/delete`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
                     console.log('Delete project successful', response.data);
                     if (owner === accountId) {
-                        history.push('/company/project');
+                        router.push('/company/project');
                     } else if (userType === 'admin') {
-                        history.push('/admin');
+                        router.push('/admin');
                     }
                 } catch (error) {
                     console.error('Delete project failed', error);
@@ -319,9 +315,13 @@ export default function ViewProjectID({params}) {
         }
     }, [deleteProject]);
 
-    const changeStatus = async () => {
+    const changeStatus = async (newStatus) => {
         try {
-            const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/updateStatus`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+            const response = await axios.put(
+                `http://127.0.0.1:3000/project/${params.projectId}/updateStatus`,
+                { newStatus },
+                { headers: { 'Authorization': `Bearer ${state.jwtToken}` }}
+            );
             console.log(response.data);
         } catch (error) {
             console.error(error);
@@ -329,7 +329,7 @@ export default function ViewProjectID({params}) {
     };
 
     useEffect(() => {
-        changeStatus();
+        // call changeStatus here if needed
     }, []);
     
 
@@ -361,22 +361,23 @@ export default function ViewProjectID({params}) {
                                 <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Experiences: {experiences}</p>
                                 <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Required Professional Criteria: {req_prof_criteria}</p>
                                 <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Status: {status}</p>
-                                </div>
                                 {owner === accountId && status === 'new' && (
-                                <button
-                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                    onClick={startProject}
-                                >
-                                    Start Project
-                                </button>)}
+                                    <button
+                                        className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                        onClick={() => changeStatus('ongoing')}
+                                    >
+                                        Start Project
+                                    </button>
+                                )}
 
                                 {owner === accountId && status === 'ongoing' && (
-                                <button
-                                    className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                    onClick={startProject}
-                                >
-                                    Finish Project
-                                </button>)}
+                                    <button
+                                        className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                        onClick={() => changeStatus('completed')}
+                                    >
+                                        Finish Project
+                                    </button>
+                                )}
                                 {owner === accountId || userType === 'admin' && (
                                 <div>
                                     <button
@@ -386,6 +387,8 @@ export default function ViewProjectID({params}) {
                                         Delete Project
                                     </button>
                                 </div>)}
+                                </div>
+                                
                             </div>
                             <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
                                 <p className="text-lg font-medium text-gray-900">Description</p>
