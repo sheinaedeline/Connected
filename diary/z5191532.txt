@@ -47,12 +47,44 @@ Week 5:
 •	Started integrating frontend with the backend using APIs
 
 Week 6:
-•	Since it's flexibility week so we had no labs and we did not meet as a team in-person
+•   Since it's flexibility week so we had no labs and we did not meet as a team in-person
 •   Fixed previous sprint (sprint 1) issues
 •   Finished my backend API functions in speint(2)
 
 Week 7:
 •   Reviewd sprint2 backend functions as a team and tested it.
+•   Started working on sprint 3 issues.
+•   My task for sprint 3:
+As a user, I want to be able to change my password, so that I can protect my account.
+As a company user, I want to be able to rate the professional users who contributed to the project, so that they can receive recognition for completing the project.
+As a professional user, I want to rate my experience working on the project once it is completed, so that I can provide feedback and insight on the company for other users.
+
+Week 8:
+•   Demo B happened on Monday, demo rundown:
+1. Login as company
+2. View Profile
+3. Edit Profile
+4. Create new job post
+5. Hire professional
+6. Go to my projects
+7. Filter projects
+8. View project
+9. Accept prof
+10. Complete ongoing proj
+11. Logout
+12. Login as professional
+13. Upload cv at profile
+14. Filter projects
+15. Apply project
+•   Reflected on sprint 2 what went well and what did not go well and documented that in the report.
+•   Finished my sprint 3 issues
+•   Communicated with frontend to add a API feature where when view profiles, diplay the average rating for user and project.
+
+Week 9:
+•   Did backend pair programming during tutorial to save testing time.
+•   Checked with team members on progress
+
+
 
 
 
