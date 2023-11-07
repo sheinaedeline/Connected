@@ -53,3 +53,12 @@ export interface IProject {
     averageProjectRaating?: number;
     invited_applicants: Array<Schema.Types.ObjectId>;
 }
+
+
+export interface IRating {
+    userId: Schema.Types.ObjectId;
+    projectId: Schema.Types.ObjectId;
+    ratings: number,
+    ratingType: string;
+    review: string;
+}
