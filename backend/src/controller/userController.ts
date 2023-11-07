@@ -12,6 +12,7 @@ import nodemailer from 'nodemailer';
 import { IUser } from './projectController';
 import Project from '@mongodb/projectModel';
 import Rating from '@mongodb/ratingModel';
+import RatingPaginate from '@mongodb/ratingPaginateModel';
 
 
 export async function register(req: Request, res: Response): Promise<Response> {
@@ -622,4 +623,90 @@ export async function getMultipleUserDetail(req: Request, res: Response): Promis
         }
         return response_internal_server_error(res, error.message);
     }   
+}
+
+// send email to invite professionals
+export async function getReviews(req: Request, res: Response): Promise<Response> {
+    try {
+        const { size, page } = req.body;
+        const userId = req.params.id;
+        let required_fields = [
+			'size',
+            'page'
+		];
+
+		for (const fields of required_fields) {
+			let valid = check_req_field(req.body[fields])
+            if(!valid){
+                throw new Error(`${fields} cannot be empty`)
+            }
+		}
+
+        if(typeof page != "number" || typeof size != "number"){
+            throw new Error("page and size must be a number")
+        }
+
+        if(page <=0 || size <= 0){
+            throw new Error("page and size number must be greater than 0");
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return response_not_found(res, "User not found");
+        }
+        if (user.userType != "professional") {
+            return response_forbidden(res, "Can only get reviews for professional users, if you want to find reviews for a company, find it by their projects");
+        } 
+
+        const myCustomLabels = {
+            totalDocs: 'amountOfReviews',
+            docs: 'reviewArray',
+            limit: 'size',
+            page: 'currentPage'
+        };
+        
+        
+        let populate = [
+            {
+                path: 'userId',
+                select: 'firstName userName lastName',
+                model:'User',
+            }
+        ]
+
+        let query = {
+            userId,
+            ratingType: "Professional"
+        }
+
+        const options = {
+            page,
+            sort: { firstName: 'asc', lastName: 'asc' },
+            limit: size,
+            populate,
+            projection: "-__v",
+            lean: true,
+            leanWithId: true,
+            customLabels: myCustomLabels,
+            useCustomCountFn: async () => {
+                let count = await Rating.countDocuments(query);
+                return count;
+            }
+        }
+  
+        let ratings = await RatingPaginate.paginate(query, options);
+        let {reviewArray, ...rest} = ratings;
+        let reviewsList = Array.isArray(reviewArray)?reviewArray.map((e) => {
+            let {_id, ...otherFields} = e;
+            return {
+                ...otherFields
+            }
+        }):[]
+        return response_success(res,{reviewsList, ...rest},"Request Success")
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }
 }

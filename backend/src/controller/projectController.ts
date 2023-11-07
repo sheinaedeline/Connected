@@ -1,6 +1,6 @@
 //Bootstrap Code
 import type { Request, Response } from 'express';
-import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
+import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found, response_forbidden } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
 import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime, idToObjectId } from '@utils/utils';
 export type {IUser} from '@interfaces/mongoDBInterfaces'
@@ -9,7 +9,7 @@ import Project from '@mongodb/projectModel';
 import Rating from '@mongodb/ratingModel';
 import { IProject } from '@interfaces/mongoDBInterfaces';
 import { DateTime } from "luxon";
-import projectPaginateModel from '@mongodb/projectPaginateModel';
+import RatingPaginate from '@mongodb/ratingPaginateModel';
 import { Schema, Types } from 'mongoose';
 import nodemailer from 'nodemailer';
 
@@ -188,7 +188,7 @@ export async function getProjects(req: Request, res: Response): Promise<Response
 
         const myCustomLabels = {
             totalDocs: 'amountOfProjects',
-            docs: 'projectList',
+            docs: 'projectArray',
             limit: 'size',
             page: 'currentPage'
         };
@@ -198,7 +198,7 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             ...(Object.keys(sort).length > 0 && {sort}),
             limit: size,
             populate,
-            projection: "-__v -hash_password",
+            projection: "-__v",
             lean: true,
             leanWithId: true,
             customLabels: myCustomLabels,
@@ -209,8 +209,8 @@ export async function getProjects(req: Request, res: Response): Promise<Response
         }
   
         let projects = await ProjectPaginate.paginate(query, options);
-        let {projectList, ...rest} = projects;
-        let projectsList = Array.isArray(projectList)?projectList.map((e) => {
+        let {projectArray, ...rest} = projects;
+        let projectsList = Array.isArray(projectArray)?projectArray.map((e) => {
             let {_id, ...otherFields} = e;
             return {
                 ...otherFields
@@ -658,6 +658,91 @@ export async function inviteProfessional(req: Request, res: Response): Promise<R
             }
         });
         return response_success(res, updatedProject, "Succesfully send email");
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }
+}
+
+export async function getReviews(req: Request, res: Response): Promise<Response> {
+    try {
+        const { size, page } = req.body;
+        const projectId = req.params.id;
+        let required_fields = [
+			'size',
+            'page'
+		];
+
+		for (const fields of required_fields) {
+			let valid = check_req_field(req.body[fields])
+            if(!valid){
+                throw new Error(`${fields} cannot be empty`)
+            }
+		}
+
+        if(typeof page != "number" || typeof size != "number"){
+            throw new Error("page and size must be a number")
+        }
+
+        if(page <=0 || size <= 0){
+            throw new Error("page and size number must be greater than 0");
+        }
+
+        const project = await Project.findById(projectId);
+        if (!project) {
+            return response_not_found(res, "Project not found");
+        }
+        if (project.status != "completed") {
+            return response_forbidden(res, "Project not completed, cannot get reviews for it yet!");
+        } 
+
+        const myCustomLabels = {
+            totalDocs: 'amountOfReviews',
+            docs: 'reviewArray',
+            limit: 'size',
+            page: 'currentPage'
+        };
+        
+        
+        let populate = [
+            {
+                path: 'userId',
+                select: 'firstName userName lastName',
+                model:'User',
+            }
+        ]
+
+        let query = {
+            projectId,
+            ratingType: "Company"
+        }
+
+        const options = {
+            page,
+            sort: { firstName: 'asc', lastName: 'asc' },
+            limit: size,
+            populate,
+            projection: "-__v",
+            lean: true,
+            leanWithId: true,
+            customLabels: myCustomLabels,
+            useCustomCountFn: async () => {
+                let count = await Rating.countDocuments(query);
+                return count;
+            }
+        }
+  
+        let ratings = await RatingPaginate.paginate(query, options);
+        let {reviewArray, ...rest} = ratings;
+        let reviewsList = Array.isArray(reviewArray)?reviewArray.map((e) => {
+            let {_id, ...otherFields} = e;
+            return {
+                ...otherFields
+            }
+        }):[]
+        return response_success(res,{reviewsList, ...rest},"Request Success")
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
