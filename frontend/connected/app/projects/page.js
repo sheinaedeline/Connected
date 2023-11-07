@@ -1,16 +1,10 @@
 'use client';
-import logo from "assets/Logo Expanded.png";
-import profile from "assets/Profile Icon.png";
 import search from "assets/carbon_search.png";
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { trendingProjects } from '/public/data.js';
-import trading from "assets/Trading Background.png";
 import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
 import axios from 'axios';
-import { useUserData } from "context/context";
 
 
 const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', 'beverages', 'retail', 'services'];
@@ -19,6 +13,27 @@ const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', '
 export default function Projects() {
     const [projectList, setProjectList] = useState([]);
     const [selectedOptions, setSelectedOptions] = useState([]);
+    const [searchInput, setSearchInput] = useState("");
+    const [filteredProjectList, setFilteredProjectList] = useState([]);
+    const handleChange = (e) => {
+        e.preventDefault();
+        setSearchInput(e.target.value);
+    };
+
+    const handleSearch = (event) => {
+        event.preventDefault(); // Prevent page refresh
+    
+        if (searchInput.trim() === '') {
+            // If search bar is empty, show all projects
+            setFilteredProjectList(projectList);
+        } else {
+            // Filter projects based on search input
+            const filteredProjects = projectList.filter(item => item.project_title.toLowerCase().includes(searchInput.toLowerCase()));
+    
+            // Update filtered project list with filtered projects
+            setFilteredProjectList(filteredProjects);
+        }
+    };
 
     // GET View Profile
     useEffect(() => {
@@ -50,29 +65,6 @@ export default function Projects() {
     useEffect(() => {
         setFilteredProjectList(projectList);
     }, [projectList]);
-
-    const [searchInput, setSearchInput] = useState("");
-    const [filteredProjectList, setFilteredProjectList] = useState([]);
-    
-    const handleChange = (e) => {
-        e.preventDefault();
-        setSearchInput(e.target.value);
-    };
-
-    const handleSearch = (event) => {
-        event.preventDefault(); // Prevent page refresh
-    
-        if (searchInput.trim() === '') {
-            // If search bar is empty, show all projects
-            setFilteredProjectList(projectList);
-        } else {
-            // Filter projects based on search input
-            const filteredProjects = projectList.filter(item => item.project_title.toLowerCase().includes(searchInput.toLowerCase()));
-    
-            // Update filtered project list with filtered projects
-            setFilteredProjectList(filteredProjects);
-        }
-    };
 
     function Filter() {
         const [showFilter, setShowFilter] = useState(false);

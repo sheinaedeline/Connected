@@ -53,8 +53,28 @@ export default function ViewProjectID({params}) {
         slider.scrollLeft = slider.scrollLeft + 500;
     };
 
+    const goEdit = (projectId) => {
+        router.push(`/projects/${projectId}`);
+    };
 
-    // GET View Project
+    const changeStatus = async (newStatus) => {
+        try {
+            const response = await axios.put(
+                `http://127.0.0.1:3000/project/${params.projectId}/updateStatus`,
+                { newStatus },
+                { headers: { 'Authorization': `Bearer ${state.jwtToken}` }}
+            );
+            console.log(response.data);
+            window.location.reload()
+        } catch (error) {
+            console.error(error);
+        }
+    };
+
+    useEffect(() => {
+    }, []);
+
+
     useEffect(() => {
         const viewProject = async () => {
             try {
@@ -147,6 +167,112 @@ export default function ViewProjectID({params}) {
             removeProfessional();
         }
     }, [professionalId]);
+
+    useEffect(() => {
+        if (deleteProject) {
+            const deleteProjectRequest = async () => {
+                try {
+                    const response = await axios.delete(`http://127.0.0.1:3000/project/${params.projectId}/delete`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                    console.log('Delete project successful', response.data);
+                    if (owner === accountId) {
+                        router.push('/company/project');
+                    } else if (userType === 'admin') {
+                        router.push('/admin');
+                    }
+                } catch (error) {
+                    console.error('Delete project failed', error);
+                }
+            };
+
+            deleteProjectRequest();
+            setDeleteProject(false);
+        }
+    }, [deleteProject]);
+
+    useEffect(() => {
+        const getApproved = async () => {
+            const data = { 
+                userIds: approved_applicants
+            };
+            console.log(approved_applicants)
+
+            try {
+                const response = await axios.post(`http://127.0.0.1:3000/user/multipleuserdetails`, data);
+                // Dispatch
+
+                setApprovedList(response.data.content.userDetailsArr);
+                
+                // Set variable states
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View detail failed', error);
+            }
+    
+        };
+
+        getApproved();
+    }, [approved_applicants]);
+
+    useEffect(() => {
+        const getPotential = async () => {
+            const data = { 
+                userIds: potential_applicants
+            };
+            console.log(potential_applicants)
+
+            try {
+                const response = await axios.post(`http://127.0.0.1:3000/user/multipleuserdetails`, data);
+
+                // Dispatch
+                setPotentialList(response.data.content.userDetailsArr);
+                // Set variable states
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View detail failed', error);
+            }
+    
+        };
+
+        getPotential();
+    }, [potential_applicants]);
+
+    useEffect(() => {
+        const getInvited = async () => {
+            const data = { 
+                userIds: invited_applicants
+            };
+            console.log(invited_applicants)
+
+            try {
+                const response = await axios.post(`http://127.0.0.1:3000/user/multipleuserdetails`, data);
+
+                // Dispatch
+                setInvitedList(response.data.content.userDetailsArr);
+                // Set variable states
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View detail failed', error);
+            }
+    
+        };
+
+        getInvited();
+    }, [invited_applicants]);
+
+    useEffect(() => {
+        setApprovedList(approvedList);
+    }, [approvedList]);
+
+    useEffect(() => {
+        setInvitedList(invitedList);
+    }, [invitedList]);
+
+    useEffect(() => {
+        setPotentialList(potentialList);
+    }, [potentialList]);
 
     function Rating({ projectId, userId }) {
         const [rating, setRating] = useState(0);
@@ -285,144 +411,10 @@ export default function ViewProjectID({params}) {
         );
     }    
 
-    
-
-    useEffect(() => {
-        if (deleteProject) {
-            const deleteProjectRequest = async () => {
-                try {
-                    const response = await axios.delete(`http://127.0.0.1:3000/project/${params.projectId}/delete`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
-                    console.log('Delete project successful', response.data);
-                    if (owner === accountId) {
-                        router.push('/company/project');
-                    } else if (userType === 'admin') {
-                        router.push('/admin');
-                    }
-                } catch (error) {
-                    console.error('Delete project failed', error);
-                }
-            };
-
-            deleteProjectRequest();
-            setDeleteProject(false);
-        }
-    }, [deleteProject]);
-
-    const changeStatus = async (newStatus) => {
-        try {
-            const response = await axios.put(
-                `http://127.0.0.1:3000/project/${params.projectId}/updateStatus`,
-                { newStatus },
-                { headers: { 'Authorization': `Bearer ${state.jwtToken}` }}
-            );
-            console.log(response.data);
-            window.location.reload()
-        } catch (error) {
-            console.error(error);
-        }
-    };
-
-    useEffect(() => {
-        // call changeStatus here if needed
-    }, []);
-
-
-    const goEdit = (projectId) => {
-        router.push(`/projects/${projectId}`);
-    };
-
-    
-
-    useEffect(() => {
-        const getApproved = async () => {
-            const data = { 
-                userIds: approved_applicants
-            };
-            console.log(approved_applicants)
-
-            try {
-                const response = await axios.post(`http://127.0.0.1:3000/user/multipleuserdetails`, data);
-                // Dispatch
-
-                setApprovedList(response.data.content.userDetailsArr);
-                
-                // Set variable states
-                
-            } catch (error) {
-                // Handle any errors (e.g., display an error message)
-                console.error('View detail failed', error);
-            }
-    
-        };
-
-        getApproved();
-    }, [approved_applicants]);
-
-    useEffect(() => {
-        const getPotential = async () => {
-            const data = { 
-                userIds: potential_applicants
-            };
-            console.log(potential_applicants)
-
-            try {
-                const response = await axios.post(`http://127.0.0.1:3000/user/multipleuserdetails`, data);
-
-                // Dispatch
-                setPotentialList(response.data.content.userDetailsArr);
-                // Set variable states
-                
-            } catch (error) {
-                // Handle any errors (e.g., display an error message)
-                console.error('View detail failed', error);
-            }
-    
-        };
-
-        getPotential();
-    }, [potential_applicants]);
-
-    useEffect(() => {
-        const getInvited = async () => {
-            const data = { 
-                userIds: invited_applicants
-            };
-            console.log(invited_applicants)
-
-            try {
-                const response = await axios.post(`http://127.0.0.1:3000/user/multipleuserdetails`, data);
-
-                // Dispatch
-                setInvitedList(response.data.content.userDetailsArr);
-                // Set variable states
-                
-            } catch (error) {
-                // Handle any errors (e.g., display an error message)
-                console.error('View detail failed', error);
-            }
-    
-        };
-
-        getInvited();
-    }, [invited_applicants]);
-
-    useEffect(() => {
-        setApprovedList(approvedList);
-    }, [approvedList]);
-
-    useEffect(() => {
-        setInvitedList(invitedList);
-    }, [invitedList]);
-
-    useEffect(() => {
-        setPotentialList(potentialList);
-    }, [potentialList]);
-
-
     return (
         <div className="bg-white dark:bg-black">
             <Header/>
-
+                {/* project details */}
                 <div className="flex flex-col justify-center px-32 mt-4 gap-y-8">
                     <div className="flex flex-col rounded-md border-2 border-blue-900 w-full">
                         <div className="group grid grid-cols-4 grid-rows-2">
@@ -541,6 +533,50 @@ export default function ViewProjectID({params}) {
                 <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                 <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                     {potentialList.length > 0 && potentialList.map((item) => (
+                    // rest of your code
+                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[200px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                            <div className="grid grid-cols-2 gap-2 p-4">
+                                <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
+                                <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
+                                <button
+                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                onClick={() => {
+                                    setProfessionalId(item.id);
+                                    setApproveButton(!approveButton);
+                                }}
+                            >
+                                Accept
+                            </button>
+                            <button
+                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                onClick={() => {
+                                    setProfessionalId(item.id);
+                                    setRejectButton(!rejectButton);
+                                }}
+                            >
+                                Reject
+                            </button>
+                          </div>
+                        </a>
+                    ))}
+                </div>
+                <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                </div>
+            </div>
+            )}
+
+            {owner === accountId && (status === 'new' || status === 'ongoing') && (
+            <div>
+                <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                Invited{' '}
+                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                    Professionals
+                </a>
+                </h2>
+                <div className="relative flex items-center">
+                <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                    {invitedList.length > 0 && invitedList.map((item) => (
                     // rest of your code
                         <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[200px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                             <div className="grid grid-cols-2 gap-2 p-4">
