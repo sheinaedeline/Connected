@@ -26,6 +26,9 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 2. tailwind-scrollbar-hide
 3. axios
 4. react-chartjs-2 chart.js
+5. npm install browser-image-compression
+6. npm install body-parser
+
 
 
 ```bash

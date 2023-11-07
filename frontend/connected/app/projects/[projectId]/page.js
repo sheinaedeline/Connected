@@ -1,6 +1,4 @@
 'use client';
-import profile from "assets/Profile Icon.png";
-import Image from 'next/image';
 import { useState, useEffect } from 'react';
 import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
