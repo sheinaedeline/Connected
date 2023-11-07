@@ -1,37 +1,25 @@
 'use client';
 import Image from 'next/image';
-import Link from 'next/link';
-import profile from "assets/Profile Icon.png";
 import { useState, useEffect } from 'react';
-import { sampleProfessional } from '/public/data.js';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
 import { AiOutlineHeart, AiFillLinkedin } from 'react-icons/ai';
 import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
 import axios from 'axios';
-import { useUserData } from "context/context";
 import { useRouter } from 'next/navigation';
 
 
 export default function ViewProjectID({params}) {
+
     const router = useRouter();
-    // const { state } = useUserData();
     const getState = localStorage.getItem("loggedUser");
     const state = JSON.parse(getState);
     const { accountId, userType } = state;
-    const [userId, setUserId] = useState(params.userId);
-    // const [hireButton, setHireButton] = useState(false);
-    // const [requestButton, setRequestButton] = useState(false);
-
     const [rejectButton, setRejectButton] = useState(false);
     const [approveButton, setApproveButton] = useState(false);
     const [removeButton, setRemoveButton] = useState(false);
-
     const [projectId, setProjectId] = useState("");
     const [professionalId, setProfessionalId] = useState("");
-    
-    const [fetchUserType, setFetchUserType] = useState("");
-    const [projectsList, setProjectsList] = useState([]);
     const [_id, set_id] = useState("");
     const [owner, setOwner] = useState("");
     const [project_title, setProject_title] = useState("");
@@ -49,6 +37,21 @@ export default function ViewProjectID({params}) {
     const [status, setStatus] = useState("");
     const [potential_applicants, setPotential_applicants] = useState([]);
     const [approved_applicants, setApproved_applicants] = useState([]);
+    const [invited_applicants, setInvited_applicants] = useState([]);
+    const [deleteProject, setDeleteProject] = useState(false);
+    const [approvedList, setApprovedList] = useState([]);
+    const [potentialList, setPotentialList] = useState([]);
+    const [invitedList, setInvitedList] = useState([]);
+
+    const slideLeft = (id) => {
+        var slider = document.getElementById(id);
+        slider.scrollLeft = slider.scrollLeft - 500;
+    };
+
+    const slideRight = (id) => {
+        var slider = document.getElementById(id);
+        slider.scrollLeft = slider.scrollLeft + 500;
+    };
 
 
     // GET View Project
@@ -67,8 +70,8 @@ export default function ViewProjectID({params}) {
                 setProject_title(projectData.project_title);
                 setTags(projectData.tags);
                 setDescription(projectData.description);
-                setStart_date(projectData.start_date.$date);
-                setEnd_date(projectData.end_date.$date);
+                setStart_date(projectData.start_date);
+                setEnd_date(projectData.end_date);
                 setNo_professional(projectData.No_professional);
                 setExpected_working_hours(projectData.expected_working_hours);
                 setSkills(projectData.skills);
@@ -79,6 +82,7 @@ export default function ViewProjectID({params}) {
                 setStatus(projectData.status);
                 setPotential_applicants(projectData.potential_applicants);
                 setApproved_applicants(projectData.approved_applicants);
+                setInvited_applicants(projectData.invited_applicants);
                 
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
@@ -91,13 +95,11 @@ export default function ViewProjectID({params}) {
     }, []);
 
     
-
-    // PUT Request Join Project
     useEffect(() => {
         const rejectProfessional = async () => {
             console.log(projectId);
             try {
-                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/reject/${professionalId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/reject/${professionalId}`, {}, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
     
                 // Dispatch
                 console.log('reject', response.data);
@@ -115,8 +117,7 @@ export default function ViewProjectID({params}) {
         const approveProfessional = async () => {
             console.log(projectId, professionalId);
             try {
-                // const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/approve/${professionalId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
-                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/approve/${potential_applicants[0]}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/approve/${professionalId}`, {}, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
                 
                 // Dispatch
                 console.log('Approve', response.data);
@@ -132,31 +133,20 @@ export default function ViewProjectID({params}) {
 
     useEffect(() => {
         const removeProfessional = async () => {
-            console.log(projectId);
             try {
-                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/remove/${professionalId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/remove/${professionalId}`, {}, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
     
-                // Dispatch
                 console.log('remove', response.data);
                 alert('Removed');
             } catch (error) {
-                // Handle any errors (e.g., display an error message)
                 console.error('Request To remove failed', error);
             }
         };
-
-        removeProfessional();
-    }, [removeButton]);
-
-    const slideLeft = (id) => {
-        var slider = document.getElementById(id);
-        slider.scrollLeft = slider.scrollLeft - 500;
-    };
-
-    const slideRight = (id) => {
-        var slider = document.getElementById(id);
-        slider.scrollLeft = slider.scrollLeft + 500;
-    };
+    
+        if (professionalId) {
+            removeProfessional();
+        }
+    }, [professionalId]);
 
     function Rating({ projectId, userId }) {
         const [rating, setRating] = useState(0);
@@ -176,7 +166,7 @@ export default function ViewProjectID({params}) {
             };
     
             try {
-                const response = await axios.post(`http://127.0.0.1:3000/user/rateProfessionalUser`, data);
+                const response = await axios.post(`http://127.0.0.1:3000/user/rateProfessionalUser`, data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
     
                 // Dispatch
                 console.log('rate Successful', response.data);
@@ -244,7 +234,7 @@ export default function ViewProjectID({params}) {
             };
     
             try {
-                const response = await axios.post(`http://127.0.0.1:3000/user/rateProject`, data);
+                const response = await axios.post(`http://127.0.0.1:3000/user/rateProject`, data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
     
                 // Dispatch
                 console.log('rate Successful', response.data);
@@ -263,7 +253,7 @@ export default function ViewProjectID({params}) {
         };
     
         return (
-            <div>
+            <div style={{ border: '1px solid black', padding: '10px', width: '300px' }}>
                 <p>Project Rating:</p>
                 {[1, 2, 3, 4, 5].map((starIndex) => (
                     <span 
@@ -280,19 +270,22 @@ export default function ViewProjectID({params}) {
                     onChange={handleReviewChange}
                     disabled={submitted}
                     className="rounded-md border-2 border-blue-900"
+                    style={{ width: '100%', resize: 'none' }}
                 />
                 <button 
                     onClick={handleSubmit} 
                     disabled={submitted}  
                     className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${submitted ? 'bg-gray-500 cursor-default' : 'bg-blue-900 hover:bg-blue-500'}`}
+                    style={{ width: '100%' }}
                 >
                     Submit Project Rating
                 </button>
             </div>
+
         );
     }    
 
-    const [deleteProject, setDeleteProject] = useState(false);
+    
 
     useEffect(() => {
         if (deleteProject) {
@@ -323,6 +316,7 @@ export default function ViewProjectID({params}) {
                 { headers: { 'Authorization': `Bearer ${state.jwtToken}` }}
             );
             console.log(response.data);
+            window.location.reload()
         } catch (error) {
             console.error(error);
         }
@@ -331,7 +325,98 @@ export default function ViewProjectID({params}) {
     useEffect(() => {
         // call changeStatus here if needed
     }, []);
+
+
+    const goEdit = (projectId) => {
+        router.push(`/projects/${projectId}`);
+    };
+
     
+
+    useEffect(() => {
+        const getApproved = async () => {
+            const data = { 
+                userIds: approved_applicants
+            };
+            console.log(approved_applicants)
+
+            try {
+                const response = await axios.post(`http://127.0.0.1:3000/user/multipleuserdetails`, data);
+                // Dispatch
+
+                setApprovedList(response.data.content.userDetailsArr);
+                
+                // Set variable states
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View detail failed', error);
+            }
+    
+        };
+
+        getApproved();
+    }, [approved_applicants]);
+
+    useEffect(() => {
+        const getPotential = async () => {
+            const data = { 
+                userIds: potential_applicants
+            };
+            console.log(potential_applicants)
+
+            try {
+                const response = await axios.post(`http://127.0.0.1:3000/user/multipleuserdetails`, data);
+
+                // Dispatch
+                setPotentialList(response.data.content.userDetailsArr);
+                // Set variable states
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View detail failed', error);
+            }
+    
+        };
+
+        getPotential();
+    }, [potential_applicants]);
+
+    useEffect(() => {
+        const getInvited = async () => {
+            const data = { 
+                userIds: invited_applicants
+            };
+            console.log(invited_applicants)
+
+            try {
+                const response = await axios.post(`http://127.0.0.1:3000/user/multipleuserdetails`, data);
+
+                // Dispatch
+                setInvitedList(response.data.content.userDetailsArr);
+                // Set variable states
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View detail failed', error);
+            }
+    
+        };
+
+        getInvited();
+    }, [invited_applicants]);
+
+    useEffect(() => {
+        setApprovedList(approvedList);
+    }, [approvedList]);
+
+    useEffect(() => {
+        setInvitedList(invitedList);
+    }, [invitedList]);
+
+    useEffect(() => {
+        setPotentialList(potentialList);
+    }, [potentialList]);
 
 
     return (
@@ -355,8 +440,12 @@ export default function ViewProjectID({params}) {
                                 <p className="mt-1 text-sm text-right font-medium text-gray-600">Expected Working Hours {expected_working_hours}</p>
                                 <p className="col-span-4 text-xs text-gray-600">{online_offline}</p>
                                 <p className="text-xs text-gray-600">{price_budget}</p>
-                                <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">Start Date: {start_date}</p>
-                                <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">End Date: {end_date}</p>
+                                <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">
+                                Start Date: {new Date(start_date).toLocaleDateString()}
+                                </p>
+                                <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">
+                                End Date: {new Date(end_date).toLocaleDateString()}
+                                </p>
                                 <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Tags: {tags.join(", ")}</p>
                                 <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Experiences: {experiences}</p>
                                 <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Required Professional Criteria: {req_prof_criteria}</p>
@@ -378,7 +467,7 @@ export default function ViewProjectID({params}) {
                                         Finish Project
                                     </button>
                                 )}
-                                {owner === accountId || userType === 'admin' && (
+                                {(owner === accountId || userType === 'admin') && (
                                 <div>
                                     <button
                                         className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
@@ -394,6 +483,14 @@ export default function ViewProjectID({params}) {
                                 <p className="text-lg font-medium text-gray-900">Description</p>
                                 <p className="mt-4 text-left text-xs text-gray-600">{description}</p>
                             </div>
+                            {(owner === accountId || userType === 'admin') && (
+                                <div>
+                                    <button
+                                    className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    onClick={() => goEdit(params.projectId)}>
+                                    Edit Project
+                                    </button>
+                                </div>)}
                     </div>
                 </div>
                 
@@ -409,24 +506,11 @@ export default function ViewProjectID({params}) {
                 <div className="relative flex items-center">
                 <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                 <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                    {approved_applicants.length > 0 && approved_applicants.map((item) => (
+                    {approvedList.length > 0 && approvedList.map((item) => (
                     // rest of your code
-                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                            <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                                <Image
-                                src={item.imageSrc}
-                                alt={item.imageAlt}
-                                width={300}
-                                height={200}
-                                className="object-cover object-center group-hover:opacity-75"
-                                />
-                            </div>
+                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[200px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                             <div className="grid grid-cols-2 gap-2 p-4">
                                 <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
-                                <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
-                                <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                                <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
-                                <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                                 <button
                                     className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                                     onClick={() => {
@@ -456,24 +540,12 @@ export default function ViewProjectID({params}) {
                 <div className="relative flex items-center">
                 <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                 <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                    {potential_applicants.length > 0 && potential_applicants.map((item) => (
+                    {potentialList.length > 0 && potentialList.map((item) => (
                     // rest of your code
-                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                            <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                                <Image
-                                src={item.imageSrc}
-                                alt={item.imageAlt}
-                                width={300}
-                                height={200}
-                                className="object-cover object-center group-hover:opacity-75"
-                                />
-                            </div>
+                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[200px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                             <div className="grid grid-cols-2 gap-2 p-4">
                                 <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
                                 <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
-                                <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                                <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
-                                <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                                 <button
                                 className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
                                 onClick={() => {
@@ -511,20 +583,11 @@ export default function ViewProjectID({params}) {
                 <div className="relative flex items-center">
                   <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                   <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                  {approved_applicants.length > 0 && approved_applicants.map((item) => (
+                  {approvedList.length > 0 && approvedList.map((item) => (
                       <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[450px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                        <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                                src={item.imageSrc}
-                                alt={item.imageAlt}
-                                width={300}
-                                height={200}
-                                className="object-cover object-center group-hover:opacity-75"
-                            />
-                        </div>
                         <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
-                            <Rating />
+                            <Rating projectId={params.projectId} userId={item.id} />
                         </div>
                     </a>
                     ))}
@@ -533,19 +596,16 @@ export default function ViewProjectID({params}) {
                 </div>
               </div> 
             )}
-            {userType === 'Professional' && status === 'completed' && (
+            { (status === 'completed' && approved_applicants.includes(accountId)) && (
                 <div>
-                    <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                    <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900" style={{ textAlign: 'center' }}>
                         Rate Project
                     </h2>
-                    <div className="relative flex items-center">
-                        <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
-                        <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-                            <ProjectRating/>
-                        </div>
-                        <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
-                    </div>
-                </div> 
+                    <div style={{ display: 'flex', justifyContent: 'center' }}>
+                        <ProjectRating projectId={params.projectId} />
+                    </div> 
+                </div>
+            
             )}
             <Footer/>
         </div>

@@ -1,5 +1,4 @@
 'use client';
-import Head from "next/head";
 import Link from "next/link";
 import Image from "next/image";
 import logo from "assets/Logo Expanded.png";
@@ -9,10 +8,7 @@ import { AiOutlinePlus, AiOutlineMail } from 'react-icons/ai';
 import { useState, useEffect } from 'react';
 import Footer from '/components/Footer.js';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
-import { trendingProjects, trendingProfessionals } from '/public/data.js';
-import trading from "assets/Trading Background.png";
 import axios from 'axios';
-import { useUserData } from "context/context";
 
 const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', 'beverages', 'retail', 'services'];
 
@@ -30,43 +26,32 @@ export default function page() {
 
   const [projectList, setProjectList] = useState([]);
   const [selectedOptions, setSelectedOptions] = useState([]);
-
-  
-  useEffect(() => {
-      const viewProfile = async () => {
-          const data = { 
-              size: 100,
-              page: 1
-            };
-
-          try {
-              const response = await axios.post(`http://127.0.0.1:3000/project/getProjects`, data);
-              console.log(accountId);
-  
-              // Dispatch
-              console.log('View Project Successful', response.data);
-              setProjectList(response.data.content.projectsList);
-              setSecondaryProjectList(response.data.content.projectsList);
-              setThirdProjectList(response.data.content.projectsList);
-              // Set variable states
-              
-          } catch (error) {
-              // Handle any errors (e.g., display an error message)
-              console.error('View Profile failed', error);
-          }
-     
-      };
-
-      viewProfile();
-  }, []);
-
-  useEffect(() => {
-      setFilteredProjectList(projectList);
-  }, [projectList]);
-
   const [searchInput, setSearchInput] = useState("");
   const [filteredProjectList, setFilteredProjectList] = useState([]);
-  
+  const [secondaryProjectList, setSecondaryProjectList] = useState([]);
+  const [filteredSecondaryProjectList, setFilteredSecondaryProjectList] = useState([]);
+  const [secondarySearchInput, setSecondarySearchInput] = useState('');
+  const [secondarySelectedOptions, setSecondarySelectedOptions] = useState([]);
+  const [thirdProjectList, setThirdProjectList] = useState([]);
+  const [filteredThirdProjectList, setFilteredThirdProjectList] = useState([]);
+  const [thirdSearchInput, setThirdSearchInput] = useState('');
+  const [thirdSelectedOptions, setThirdSelectedOptions] = useState([]);
+  const state = JSON.parse(localStorage.getItem("loggedUser"));
+  const { accountId, userType } = state;
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [username, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
+  const [address, setAddress] = useState("");
+  const [DOB, setDOB] = useState("");
+  const [linkedIn, setLinkedIn] = useState("");
+  const [description, setDescription] = useState("");
+  const [password, setPassword] = useState("");
+  const [industryType, setIndustryType] = useState("");
+  const [userImage, setUserImage] = useState("");
+  const [fetchUserType, setFetchUserType] = useState("");  
+
   const handleChange = (e) => {
       e.preventDefault();
       setSearchInput(e.target.value);
@@ -86,64 +71,117 @@ export default function page() {
           setFilteredProjectList(filteredProjects);
       }
   };
-  
-  // current
-  const [secondaryProjectList, setSecondaryProjectList] = useState([]);
-  const [filteredSecondaryProjectList, setFilteredSecondaryProjectList] = useState([]);
-  const [secondarySearchInput, setSecondarySearchInput] = useState('');
-  const [secondarySelectedOptions, setSecondarySelectedOptions] = useState([]);
 
-  useEffect(() => {
-    setFilteredSecondaryProjectList(secondaryProjectList);
-  }, [secondaryProjectList]);
-  
-  const handleSecondaryChange = (event) => {
-      setSecondarySearchInput(event.target.value);
-  };
+    const handleSecondaryChange = (event) => {
+        setSecondarySearchInput(event.target.value);
+    };
 
-  const handleSecondarySearch = (event) => {
-    event.preventDefault(); // Prevent page refresh
+    const handleSecondarySearch = (event) => {
+        event.preventDefault(); // Prevent page refresh
 
-    if (secondarySearchInput.trim() === '') {
-        // If search bar is empty, show all projects
+        if (secondarySearchInput.trim() === '') {
+            // If search bar is empty, show all projects
+            setFilteredSecondaryProjectList(secondaryProjectList);
+        } else {
+            // Filter projects based on search input
+            const filteredProjects = secondaryProjectList.filter(item => item.project_title.toLowerCase().includes(secondarySearchInput.toLowerCase()));
+
+            // Update filtered project list with filtered projects
+            setFilteredSecondaryProjectList(filteredProjects);
+        }
+    };
+
+    const handleThirdChange = (event) => {
+        setThirdSearchInput(event.target.value);
+    };
+
+    const handleThirdSearch = (event) => {
+        event.preventDefault(); // Prevent page refresh
+
+        if (thirdSearchInput.trim() === '') {
+            // If search bar is empty, show all projects
+            setFilteredThirdProjectList(thirdProjectList);
+        } else {
+            // Filter projects based on search input
+            const filteredProjects = thirdProjectList.filter(item => item.project_title.toLowerCase().includes(thirdSearchInput.toLowerCase()));
+
+            // Update filtered project list with filtered projects
+            setFilteredThirdProjectList(filteredProjects);
+        }
+    };
+
+    useEffect(() => {
+        const getProject = async () => {
+            const data = { 
+                size: 100,
+                page: 1
+            };
+
+            try {
+                const response = await axios.post(`http://127.0.0.1:3000/project/getProjects`, data);
+                console.log(accountId);
+
+                // Dispatch
+                console.log('View Project Successful', response.data);
+                setProjectList(response.data.content.projectsList);
+                setSecondaryProjectList(response.data.content.projectsList);
+                setThirdProjectList(response.data.content.projectsList);
+                // Set variable states
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View Profile failed', error);
+            }
+    
+        };
+
+        getProject();
+    }, []);
+
+    useEffect(() => {
+        setFilteredProjectList(projectList);
+    }, [projectList]);
+
+    useEffect(() => {
         setFilteredSecondaryProjectList(secondaryProjectList);
-    } else {
-        // Filter projects based on search input
-        const filteredProjects = secondaryProjectList.filter(item => item.project_title.toLowerCase().includes(secondarySearchInput.toLowerCase()));
+    }, [secondaryProjectList]);
 
-        // Update filtered project list with filtered projects
-        setFilteredSecondaryProjectList(filteredProjects);
-    }
-  };
-
-  // old
-  const [thirdProjectList, setThirdProjectList] = useState([]);
-  const [filteredThirdProjectList, setFilteredThirdProjectList] = useState([]);
-  const [thirdSearchInput, setThirdSearchInput] = useState('');
-  const [thirdSelectedOptions, setThirdSelectedOptions] = useState([]);
-
-  useEffect(() => {
-    setFilteredThirdProjectList(thirdProjectList);
-  }, [thirdProjectList]);
-
-  const handleThirdChange = (event) => {
-    setThirdSearchInput(event.target.value);
-  };
-
-  const handleThirdSearch = (event) => {
-    event.preventDefault(); // Prevent page refresh
-
-    if (thirdSearchInput.trim() === '') {
-        // If search bar is empty, show all projects
+    useEffect(() => {
         setFilteredThirdProjectList(thirdProjectList);
-    } else {
-        // Filter projects based on search input
-        const filteredProjects = thirdProjectList.filter(item => item.project_title.toLowerCase().includes(thirdSearchInput.toLowerCase()));
+    }, [thirdProjectList]);
 
-        // Update filtered project list with filtered projects
-        setFilteredThirdProjectList(filteredProjects);
-    }
-};
+    useEffect(() => {
+        const viewProfile = async () => {
+            try {
+                const response = await axios.get(`http://127.0.0.1:3000/user/profile/${accountId}`);
+
+                // Dispatch
+                console.log('View Profile Successful', response.data);
+                const userData = response.data.content.user;
+
+                // Set variable states
+                setFirstName(userData.firstName);
+                setLastName(userData.lastName);
+                setUsername(userData.userName);
+                setEmail(userData.email);
+                setPhoneNumber(userData.phoneNumber);
+                setAddress(userData.address);
+                setDOB(userData.DOB);
+                setLinkedIn(userData.socialURL);
+                setDescription(userData.description);
+                setPassword(userData.password);
+                setIndustryType(userData.tags);
+                setUserImage(userData.userImage);
+                setFetchUserType(userData.userType);
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('View Profile failed', error);
+            }
+        };
+
+        viewProfile();
+    }, []);
 
 
   function Filter() {
@@ -233,10 +271,10 @@ export default function page() {
                             <label htmlFor={`secondary-option-${index}`}>{option}</label>
                         </div>
                     ))}
-                    <h2>Selected Options</h2>
+                    {/* <h2>Selected Options</h2>
                     {secondarySelectedOptions.map((option, index) => (
                         <p key={index}>{option}</p>
-                    ))}
+                    ))} */}
                 </div>
             )}
         </div>
@@ -282,68 +320,15 @@ export default function page() {
                             <label htmlFor={`third-option-${index}`}>{option}</label>
                         </div>
                     ))}
-                    <h2>Selected Options</h2>
+                    {/* <h2>Selected Options</h2>
                     {thirdSelectedOptions.map((option, index) => (
                         <p key={index}>{option}</p>
-                    ))}
+                    ))} */}
                 </div>
             )}
         </div>
     );
   }
-
-    // const { state } = useUserData();
-    const state = JSON.parse(localStorage.getItem("loggedUser"));
-    const { accountId, userType } = state;
-
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const [username, setUsername] = useState("");
-    const [email, setEmail] = useState("");
-    const [phoneNumber, setPhoneNumber] = useState("");
-    const [address, setAddress] = useState("");
-    const [DOB, setDOB] = useState("");
-    const [linkedIn, setLinkedIn] = useState("");
-    const [description, setDescription] = useState("");
-    const [password, setPassword] = useState("");
-    const [industryType, setIndustryType] = useState("");
-    const [userImage, setUserImage] = useState("");
-    const [fetchUserType, setFetchUserType] = useState("");
-
-  // GET View Profile
-  useEffect(() => {
-    const viewProfile = async () => {
-        try {
-            const response = await axios.get(`http://127.0.0.1:3000/user/profile/${accountId}`);
-
-            // Dispatch
-            console.log('View Profile Successful', response.data);
-            const userData = response.data.content.user;
-
-            // Set variable states
-            setFirstName(userData.firstName);
-            setLastName(userData.lastName);
-            setUsername(userData.userName);
-            setEmail(userData.email);
-            setPhoneNumber(userData.phoneNumber);
-            setAddress(userData.address);
-            setDOB(userData.DOB);
-            setLinkedIn(userData.socialURL);
-            setDescription(userData.description);
-            setPassword(userData.password);
-            setIndustryType(userData.tags);
-            setUserImage(userData.userImage);
-            setFetchUserType(userData.userType);
-            
-        } catch (error) {
-            // Handle any errors (e.g., display an error message)
-            console.error('View Profile failed', error);
-        }
-    };
-
-    viewProfile();
-}, []);
-        
 
   return (
     <div className="bg-white dark:bg-black">
@@ -423,7 +408,7 @@ export default function page() {
         <div className="px-4 pt-10 mx-auto max-w-7xl md:pt-16">
           <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                   Planned{' '}
-              <a href="/company/project/planned" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+              <a href="" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
                   Projects
               </a>
           </h2>
@@ -467,13 +452,16 @@ export default function page() {
                   />
                 </div>
                 <div className="grid grid-cols-2 gap-2 p-4">
-                  <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                  <p className="col-span-2 text-xs italic text-gray-600">{item.start_date}</p>
-                  <p className="col-span-2 text-xs italic text-gray-600">{item.end_date}</p>
-                  <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
-                  <p className="mt-1 text-sm font-medium text-gray-600">{item.price_budget}</p>
-                  <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
-                  <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
+                    <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">
+                    Start Date: {new Date(item.start_date).toLocaleDateString()}
+                    </p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">
+                    End Date: {new Date(item.end_date).toLocaleDateString()}
+                    </p>
+                    <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
+                    <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                 </div>
               </a>
             ))}
@@ -483,7 +471,7 @@ export default function page() {
 
         <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
           Ongoing {' '}
-          <a href="/company/project/current" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+          <a href="" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
               Projects
           </a>
         </h2>
@@ -518,26 +506,29 @@ export default function page() {
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
             <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
             {filteredSecondaryProjectList.length > 0  && filteredSecondaryProjectList.filter(item => item.status === 'ongoing' && (secondarySelectedOptions.length === 0 || secondarySelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (              
-            <a key={item.id} href='/company/project/current' className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">   
+            <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                 <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                  <Image
+                <Image
                     src={item.imageSrc}
                     alt={item.imageAlt}
                     width={300}
                     height={200}
                     className="object-cover object-center group-hover:opacity-75"
-                  />
+                />
                 </div>
                 <div className="grid grid-cols-2 gap-2 p-4">
                     <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                    <p className="col-span-2 text-xs italic text-gray-600">{item.start_date}</p>
-                    <p className="col-span-2 text-xs italic text-gray-600">{item.end_date}</p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">
+                    Start Date: {new Date(item.start_date).toLocaleDateString()}
+                    </p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">
+                    End Date: {new Date(item.end_date).toLocaleDateString()}
+                    </p>
                     <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
-                    <p className="mt-1 text-sm font-medium text-gray-600">{item.price_budget}</p>
-                    <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
+                    <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
                     <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                 </div>
-              </a>
+          </a>
             ))}
           </div>
           <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProjects')} size={40} />
@@ -545,7 +536,7 @@ export default function page() {
 
         <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
               Past {' '}
-          <a href="/company/project/old" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+          <a href="" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
               Projects
           </a>
         </h2>
@@ -581,25 +572,28 @@ export default function page() {
             <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
             {filteredThirdProjectList.length > 0  && filteredThirdProjectList.filter(item => item.status === 'completed' && item.owner._id === accountId && (thirdSelectedOptions.length === 0 || thirdSelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (                
                 <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                  <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                    <Image
-                      src={item.imageSrc}
-                      alt={item.imageAlt}
-                      width={300}
-                      height={200}
-                      className="object-cover object-center group-hover:opacity-75"
-                    />
-                  </div>
-                  <div className="grid grid-cols-2 gap-2 p-4">
-                  <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                    <p className="col-span-2 text-xs italic text-gray-600">{item.start_date}</p>
-                    <p className="col-span-2 text-xs italic text-gray-600">{item.end_date}</p>
+                <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                  <Image
+                    src={item.imageSrc}
+                    alt={item.imageAlt}
+                    width={300}
+                    height={200}
+                    className="object-cover object-center group-hover:opacity-75"
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-2 p-4">
+                    <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">
+                    Start Date: {new Date(item.start_date).toLocaleDateString()}
+                    </p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">
+                    End Date: {new Date(item.end_date).toLocaleDateString()}
+                    </p>
                     <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
-                    <p className="mt-1 text-sm font-medium text-gray-600">{item.price_budget}</p>
-                    <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
+                    <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
                     <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
-                  </div>
-                </a>
+                </div>
+              </a>
               ))}
             </div>
             <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProjects')} size={40} />
