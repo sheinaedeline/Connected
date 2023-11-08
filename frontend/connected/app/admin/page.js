@@ -184,6 +184,8 @@ export default function Projects() {
         color: statusColors[status],
         border: borderColor[status]
     }));
+
+    console.log(chartData3);
     
 
 

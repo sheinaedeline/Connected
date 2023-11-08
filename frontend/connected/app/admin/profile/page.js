@@ -9,6 +9,8 @@ import Header from '/components/Header.js';
 import axios from 'axios';
 import { useUserData } from "context/context";
 
+
+
 export default function CompanyProfile() {
     // const { state } = useUserData();
     const state = JSON.parse(localStorage.getItem("loggedUser"));
@@ -26,6 +28,7 @@ export default function CompanyProfile() {
     const [industryType, setIndustryType] = useState("");
     const [userImage, setUserImage] = useState("");
     const [updateButton, setUpdateButton] = useState(false);
+    
 
     // Update Button
     const handleUpdateButton = () => {
@@ -46,7 +49,6 @@ export default function CompanyProfile() {
                 address: address,
                 socialURL: companyLink,
                 abn: ABN,
-                tags: industryType.join(","),
                 userimage: userImage,
             };
 
@@ -100,9 +102,15 @@ export default function CompanyProfile() {
 
     function handleImageUpload(event) {
         const file = event.target.files[0];
-        const imageUrl = URL.createObjectURL(file);
-        setUserImage(imageUrl);
+        const reader = new FileReader();
+    
+        reader.onloadend = () => {
+            setUserImage(reader.result);
+        };
+    
+        reader.readAsDataURL(file);
     }
+    
 
     return (
         <div className="bg-white dark:bg-black">
@@ -127,15 +135,11 @@ export default function CompanyProfile() {
                             Upload Profile Picture
                         </label>
                         <div className="mt-2">
-                            <input
+                        <input
                                 id="companyName"
                                 name="companyName"
                                 type="file"
-                                onChange={e => {
-                                    const file = e.target.files[0];
-                                    const imageUrl = URL.createObjectURL(file);
-                                    setUserImage(imageUrl);
-                                }}
+                                onChange={handleImageUpload}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>
