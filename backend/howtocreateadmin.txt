@@ -1,0 +1,21 @@
+Admin for the system must be created directly by the database adminstrator in the MongoDB database inside the users collection inside the webApp database.
+
+To create a new admin:
+1. use the admin.mjs script which can be found in backend/adminScript to generate the string of the admin account password
+    - To run the script just run: node {location of the admin.mjs script} {password}. 
+    So for example if my command line is currently inside the adminScript folder and i want to get the hash string of 'newPassword' I
+     will run: node admin.mjs newPassword
+    - If the script run succesfully you shall see a string printed in the console. Make sure to copy that string as that string will be used  
+    as the password 
+
+2. Then just add a new user with the type admin directly into the user collection. Example of the user json/object can be seen below: 
+{
+  "userType": "admin",
+  "firstName": "new user",
+  "userName": "professional",
+  "description": "Profesisonal Decription",
+  "email": "professional5@gmail.com",
+  "hash_password": "Put the hash string we got from the admin.mjs script here",
+}
+
+Feel free to modify the firstName, userName, description, and email (Remember the email as it is used to login as an admin)

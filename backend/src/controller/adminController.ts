@@ -3,7 +3,8 @@ import { DateTime } from "luxon";
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
 import Project from '@mongodb/projectModel';
-import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime, idToObjectId } from '@utils/utils';
+import Rating from 'mongodb/ratingModel'
+import { recalculateProfessionalRating, recalculateProjectRating } from '@utils/utils';
 
 
 export async function getStatistics(req: Request, res: Response): Promise<Response> {
@@ -67,6 +68,61 @@ export async function getStatistics(req: Request, res: Response): Promise<Respon
         }
 
         return response_success(res,{...response},'Successfuly fetched statistics')
+
+    } catch (error:any) {
+        if(error instanceof Error){
+            return response_bad_request(res,error.message)
+        } 
+        return response_internal_server_error(res, error.message)
+    }
+}
+
+export async function deleteUser(req: Request, res: Response): Promise<Response> {
+    try {
+        const userId = req.params.id;
+
+        let user = await User.findById(userId);
+        if( user === null || user === undefined){
+            return response_not_found(res,'User not found');
+        } 
+
+        if (user.userType == 'professional') {
+            let projectsAssociatedToUser = await Project.find({ $or: [{potential_applicants: userId}, {approved_applicants:userId}, {invited_applicants: userId}]})
+            for (let i = 0 ; i < projectsAssociatedToUser.length; i++){
+                let projectId = projectsAssociatedToUser[i]._id.toString();
+                await Project.findByIdAndUpdate(projectId, {$pull: {potential_applicants: userId, approved_applicants:userId, invited_applicants: userId}});
+            }
+            let ratingsAssociatedToUser = await Rating.find({userId});
+            for (let i = 0; i < ratingsAssociatedToUser.length; i++ ){
+                let rating = ratingsAssociatedToUser[i];
+                if(rating.ratingType == 'Company') {
+                    await Rating.findByIdAndDelete(rating._id.toString());
+                    await recalculateProjectRating(rating.projectId.toString());
+                } else {
+                    await Rating.findByIdAndDelete(rating._id.toString());
+                }
+            }
+        }
+        else if (user.userType == 'company') {
+            let projectsAssociatedToCompany = await Project.find({owner: userId});
+            for (let i = 0; i < projectsAssociatedToCompany.length; i++ ){
+                let projectId = projectsAssociatedToCompany[i]._id.toString();
+                let ratingsAssociatedTotheProject = await Rating.find({projectId});
+                for(let x = 0 ; x < ratingsAssociatedTotheProject.length; x ++){
+                    let rating = ratingsAssociatedTotheProject[x];
+                    if(rating.ratingType == 'Professional') {
+                        await Rating.findByIdAndDelete(rating._id.toString());
+                        await recalculateProfessionalRating(rating.userId.toString());
+                    } else {
+                        await Rating.findByIdAndDelete(rating._id.toString());
+                    }
+                }
+                await Project.findByIdAndDelete(projectId);
+            }
+        }
+        await User.findByIdAndDelete(userId);
+
+        return response_success(res,{},'Successfuly Deleted User')
 
     } catch (error:any) {
         if(error instanceof Error){

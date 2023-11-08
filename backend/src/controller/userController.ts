@@ -3,7 +3,7 @@ import { response_bad_request, response_success, response_internal_server_error,
 import User from '@mongodb/userModel';
 import UserPaginate from '@mongodb/userPaginateModel';
 import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
-import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime, idToObjectId } from '@utils/utils';
+import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, recalculateProjectRating, recalculateProfessionalRating} from '@utils/utils';
 import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
 import { Buffer } from 'buffer';
@@ -530,11 +530,8 @@ export async function rateProfessionalUser(req: Request, res: Response): Promise
             });
             await newRating.save();
         }
-        // Calculate the average rating of the user
-        const allRatings = await Rating.find({ userId, ratingType: "Professional" });
-        const averageRating = allRatings.reduce((acc, { ratings }) => acc + ratings, 0) / allRatings.length;
-        // Update the user's average rating
-        await User.findByIdAndUpdate(userId, { averageUserRating: averageRating });
+        // Recalculate the average rating of the professional user
+        let averageRating = await recalculateProfessionalRating(userId);
         return response_success(res, { averageRating }, "The professional user's average rating has been updated successfully!");
     } catch (error: any) {
         if (error instanceof Error) {
@@ -572,13 +569,8 @@ export async function rateProject(req: Request, res: Response): Promise<Response
             });
             await newRating.save();
         }
-        // Calculate the average rating of the project
-        const allRatings = await Rating.find({ projectId, ratingType: "Company" });
-        const averageRating = allRatings.reduce((acc, { ratings }) => acc + ratings, 0) / allRatings.length;
-
-        // Update the project's average rating
-        await Project.findByIdAndUpdate(projectId, { averageProjectRating: averageRating });
-
+        // Recalculate the average rating of the project
+        let averageRating = await recalculateProjectRating(projectId);
         // Send success response
         return response_success(res, { averageRating }, "The project's average rating has been updated successfully!");
 
