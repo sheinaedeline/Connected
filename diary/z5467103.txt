@@ -9,16 +9,27 @@ Decided on our project preference for the project raffle;roject 18, project 16, 
 Week 3: 
 Discussed and refined the user flow with fellow members, made the proposal and i did my part which was the user flow, I also joined the meeting where we did a final review and revamp the storyboards while also scheduling up the sprints for our project. Also did some brainstorming on how the design and theme of the UI and made up the company name
 
+
 Week 4:
 Me and the scrum master got the UI part, so i started doing that, we decided that we'll use react js with next.js as our framework, i was still new to this so i only made barebone pages to prepare for the week 5 lab. i was doing around 8 pages with routing. I did project details page, the landing page, the page for old, current, and planned project for companies
+doing scrum number: 21, 1, 11
 
 Week 5:
 
 Demo time!. We did well on the demo, my pages was integrated well with the other and it showed swimmingly. Mine and sheina pages can move seamlessly. We did all of our target for our sprint 1. After the demo we made the after demo report and i helped with what went right part.
 
 Week 6:
-I adjusted my pages to fit the overall theme of the project, matching vision on how of my pages would intertwine with the backend, and the logic on how it';; work
+I adjusted my pages to fit the overall theme of the project, matching vision on how of my pages would intertwine with the backend, and the logic on how it'll work
+doing scrum number: 22, 27, 28
 
 
 Week 7:
 Starting to integrate between frontend and backend, doing the sprint 2, we also met up offline to do the project together outside of the lab for easier communications
+doing scrum number: 31, 26, 29  
+
+Week 8: 
+Demo time 2 electric bogaloo!. We did well on the demo, just some mishaps at the end, we tested before the demo, but somehow during the demo it broke. my pages was doing well so it still A okay. Mine and sheina pages can move seamlessly. We did all of our target for our sprint 2. After the demo we made the after demo report and i helped with what went right part.
+
+Week 9:
+Final push, basically doing my part of the sprint and making design changes at the end to make it more beautiful.
+doing scrum number: 43

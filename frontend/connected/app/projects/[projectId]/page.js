@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 export default function projectProfile({params}) {
     const state = JSON.parse(localStorage.getItem("loggedUser"));
@@ -24,10 +25,13 @@ export default function projectProfile({params}) {
     const [approved_applicants, setApproved_applicants] = useState([]);
     const [projectImage, setProjectImage] = useState("");
     const [updateButton, setUpdateButton] = useState(false);
+    const router = useRouter();
 
     // Update Button
-    const handleUpdateButton = () => {
+    const handleUpdateButton = async () => {
         setUpdateButton(!updateButton);
+        // After updating the project details, redirect to the project page
+        router.push(`/project/${params.projectId}`);
     }
 
     // POST Edit Project
