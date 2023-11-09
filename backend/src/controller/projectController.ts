@@ -2,7 +2,7 @@
 import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found, response_forbidden } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
-import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime, idToObjectId } from '@utils/utils';
+import { check_req_field, sql_date_string_checker, recalculateProfessionalRating } from '@utils/utils';
 export type {IUser} from '@interfaces/mongoDBInterfaces'
 import ProjectPaginate from '@mongodb/projectPaginateModel';
 import Project from '@mongodb/projectModel';
@@ -168,7 +168,8 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             ...(status && {status: status.toLowerCase()}),
             ...((userStatus && userStatus === 'joined') && {approved_applicants:userId}),
             ...((userStatus && userStatus === 'pending') && {potential_applicants: userId}),
-            ...((!userStatus && userId) && {potential_applicants: userId, approved_applicants:userId}),
+            ...((userStatus && userStatus === 'invited') && {invited_applicants: userId}),
+            ...((!userStatus && userId) && { $or: [{potential_applicants: userId}, {approved_applicants:userId}, {invited_applicants: userId}]}),
         }
 
 
@@ -365,10 +366,13 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
         if (project === null) {
             return response_bad_request(res, "Project not found.");
         }
-        // Check if the user making the request is the owner of the project
-        if (project.owner.toString() !== userId) {
-            return response_bad_request(res, "Only the project owner can edit the details of this project.");
-        }
+        // Check if the user making the request is the owner of the project if the user is not an admin
+
+        if(req.body['role'] !== 'admin'){
+            if (project.owner.toString() !== userId) {
+                return response_bad_request(res, "Only the project owner and the website admin can edit the details of this project.");
+            }
+        } 
         // Update the fields
         editableFields.forEach(field => {
             if (req.body[field]) {
@@ -398,13 +402,24 @@ export async function deleteProject(req: Request, res: Response): Promise<Respon
         if (!project) {
             return response_bad_request(res, "Project not found.");
         }
-        // Check if the user making the request is the owner of the project
-        if (project.owner.toString() !== userId) {
-            return response_bad_request(res, "Only the project owner can delete this project.");
+    
+         // Check if the user making the request is the owner of the project if the user is not an admin
+        if(req.body['role'] !== 'admin'){
+            if (project.owner.toString() !== userId) {
+                return response_bad_request(res, "Only the project owner and the website admin can delete this project.");
+            }
         }
-
+        let ratingsAssociatedTotheProject = await Rating.find({projectId});
+        for(let x = 0 ; x < ratingsAssociatedTotheProject.length; x ++){
+            let rating = ratingsAssociatedTotheProject[x];
+            if(rating.ratingType == 'Professional') {
+                await Rating.findByIdAndDelete(rating._id.toString());
+                await recalculateProfessionalRating(rating.userId.toString());
+            } else {
+                await Rating.findByIdAndDelete(rating._id.toString());
+            }
+        }
         await Project.findByIdAndDelete(projectId);
-        await Rating.findByIdAndDelete(projectId)
         return response_success(res, "Project deleted successfully!");
     } catch (error: any) {
         if (error instanceof Error) {

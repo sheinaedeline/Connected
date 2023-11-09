@@ -140,7 +140,7 @@ export const projectObj = {
 export const ratingObj = {
     userId: {
       type: Schema.Types.ObjectId,
-      // required: true,
+      required: true,
     },
     projectId: {
       type: Schema.Types.ObjectId,

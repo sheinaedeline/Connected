@@ -37,3 +37,6 @@ to make the get projects api multipurpose. Additionaly also implemented paginati
 Week 7
 Created the upload CV Api, Edit Profile API, and started working on the admin statistics api. Additionaly helped the frontend team in figuring out how to share database data
 between team members.
+
+Week 8
+Did the second demo, Finished the admin API statistics api, created the get reviews API, Fixed a bug in the get projects api
