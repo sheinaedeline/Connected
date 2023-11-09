@@ -12,6 +12,7 @@ export default function RegistrationCompany() {
     const [companyName, setCompanyName] = useState("");
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
+    const [emailDomain, setEmailDomain] = useState(true);
     const [confirmEmail, setConfirmEmail] = useState("");
     const [emailMatch, setEmailMatch] = useState(true);
     const [phoneNumber, setPhoneNumber] = useState("");
@@ -30,6 +31,19 @@ export default function RegistrationCompany() {
             setEmailMatch(e.target.value === confirmEmail);
         }
     };
+
+    const handleEmailDomain = (e) => {
+        const personalEmails = ["@gmail", "@yahoo", "@live", "@outlook", "@hotmail", "@aol", "@aim", "@titan", "@icloud"];
+
+        // If email is a personal email domain
+        const domain = e.target.value.split('@')[1].split('.')[0];
+        
+        if (personalEmails.includes(`@${domain}`)) {
+            setEmailDomain(false);
+        } else {
+            setEmailDomain(true);
+        }
+    }
 
     const handleConfirmEmail = (e) => {
         setConfirmEmail(e.target.value);
@@ -244,9 +258,11 @@ export default function RegistrationCompany() {
                                     required
                                     value={email}
                                     onChange={handleEmail}
+                                    onBlur={handleEmailDomain}
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
+                            {!emailDomain && <p className="text-xs text-red-400">Email should not be a personal one!</p>}
                         </div>
                         <div>
                             <label htmlFor="confirmEmail" className="block text-sm font-medium leading-6 text-gray-900">

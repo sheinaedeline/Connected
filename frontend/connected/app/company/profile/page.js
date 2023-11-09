@@ -46,7 +46,7 @@ export default function CompanyProfile() {
                 address: address,
                 socialURL: companyLink,
                 abn: ABN,
-                tags: industryType.join(","),
+                tags: industryType,
                 userimage: userImage,
             };
 
