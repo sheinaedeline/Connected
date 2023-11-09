@@ -8,6 +8,7 @@ import Header from '/components/Header.js';
 import { useUserData } from "../../context/context";
 import axios from 'axios';
 import Link from 'next/link';
+import tradingBackground from 'assets/Trading Background.png';
 
 export default function CompanyHome() {
     // const { state } = useUserData();
@@ -73,7 +74,7 @@ export default function CompanyHome() {
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
                               src={item.imageSrc}
-                              alt={item.imageAlt}
+                              alt=""
                               width={300}
                               height={200}
                               className="object-cover object-center group-hover:opacity-75"
@@ -109,8 +110,8 @@ export default function CompanyHome() {
                         <Link key={item.id} href={`/view/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
-                              src={item.imageSrc}
-                              alt={item.imageAlt}
+                              src={tradingBackground}
+                              alt=""
                               width={300}
                               height={200}
                               className="object-cover object-center group-hover:opacity-75"
@@ -145,8 +146,8 @@ export default function CompanyHome() {
                         <a key={item.id} href={item.href} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
-                              src={item.imageSrc}
-                              alt={item.imageAlt}
+                              src={item.imageSrc ? item.imageSrc : profile}
+                              alt=""
                               width={300}
                               height={200}
                               className="object-cover object-center group-hover:opacity-75"

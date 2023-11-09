@@ -50,6 +50,10 @@ export default function Login() {
         }
     };
 
+    const forgetPasswordButton = async () => {
+        
+    };
+
     return (
         <div className="bg-white dark:bg-black">
             <section className="relative">
@@ -89,9 +93,9 @@ export default function Login() {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <a href="#" className="font-semibold text-blue-600 hover:text-blue-500">
+                                    <button onClick={forgetPasswordButton} className="font-semibold text-blue-600 hover:text-blue-500">
                                         Forgot password?
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                             <div className="mt-2">
