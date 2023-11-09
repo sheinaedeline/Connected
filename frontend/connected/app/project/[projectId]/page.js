@@ -356,7 +356,7 @@ export default function ViewProjectID({params}) {
             const data = { 
                 projectId: projectId,
                 ratings: rating,
-                reviews: review
+                review: review
             };
     
             try {

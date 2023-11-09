@@ -38,6 +38,7 @@ export default function ViewProfile({params}) {
     const [userImage, setUserImage] = useState("");
     const [fetchUserType, setFetchUserType] = useState("");
     const [projectsList, setProjectsList] = useState([]);
+    const [deleteUser, setDeleteUser] = useState(false);
 
     // GET View Profile
     useEffect(() => {
@@ -144,6 +145,27 @@ export default function ViewProfile({params}) {
         slider.scrollLeft = slider.scrollLeft + 500;
     };
 
+    useEffect(() => {
+        if (deleteUser) {
+            const deleteUserRequest = async () => {
+                try {
+                    const response = await axios.delete(`http://127.0.0.1:3000/admin/deleteuser/${params.userId}`, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                    console.log('Delete project successful', response.data);
+                    if (owner === accountId) {
+                        router.push('/company/project');
+                    } else if (userType === 'admin') {
+                        router.push('/admin');
+                    }
+                } catch (error) {
+                    console.error('Delete project failed', error);
+                }
+            };
+
+            deleteUserRequest();
+            setDeleteUser(false);
+        }
+    }, [deleteUser]);
+
 
     return (
         <div className="bg-white dark:bg-black">
@@ -177,6 +199,15 @@ export default function ViewProfile({params}) {
                                         Hire Professional
                                     </button>)
                                 }
+                                {(fetchUserType ==='admin') && (
+                                <div>
+                                    <button
+                                        className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                        onClick={() => setDeleteUser(true)}
+                                    >
+                                        Delete user
+                                    </button>
+                                </div>)}
                                 <AiOutlineHeart size={40}/>
                                 <AiFillLinkedin size={40}/>
                             </div>
