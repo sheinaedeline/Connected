@@ -8,7 +8,6 @@ import Header from '/components/Header.js';
 import { useUserData } from "../../context/context";
 import axios from 'axios';
 import Link from 'next/link';
-import tradingBackground from 'assets/Trading Background.png';
 
 const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', 'beverages', 'retail', 'services'];
 
@@ -221,23 +220,23 @@ export default function CompanyHome() {
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                       {professionalList.length > 0 && professionalList.map((item) => (
                         <Link key={item.id} href={`/view/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                          <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                              src={tradingBackground}
-                              alt=""
-                              width={300}
-                              height={200}
-                              className="object-cover object-center group-hover:opacity-75"
+                        <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                          <Image
+                                src={item.userImage ? item.userImage : "https://2456764.fs1.hubspotusercontent-na1.net/hub/2456764/hubfs/confident%20busines%20man_1200x627.jpg?width=680&name=confident%20busines%20man_1200x627.jpg"}
+                                alt={item.imageAlt}
+                                width={300}
+                                height={200}
+                                className="object-cover object-center group-hover:opacity-75"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
-                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.tags}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
+                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.email}</p>
+                            {item.rating && <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.averageUserRating}/5</p>}
+                            <p className="col-span-2 text-xs text-gray-600 truncate">{item.phoneNumber} </p>
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                           </div>
-                        </Link>
+                      </Link> 
                       ))}
                     </div>
                     <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
