@@ -8,6 +8,7 @@ import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
 import axios from 'axios';
 import { useUserData } from "context/context";
+import ChangePasswordModal from "/components/ChangePasswordModal.js";
 
 export default function CompanyProfile() {
     // const { state } = useUserData();
@@ -22,49 +23,42 @@ export default function CompanyProfile() {
     const [ABN, setABN] = useState("");
     const [companyLink, setCompanyLink] = useState("");
     const [description, setDescription] = useState("");
-    const [password, setPassword] = useState("");
     const [industryType, setIndustryType] = useState("");
     const [userImage, setUserImage] = useState("");
-    const [updateButton, setUpdateButton] = useState(false);
 
-    // Update Button
-    const handleUpdateButton = () => {
-        setUpdateButton(!updateButton);
-    }
+    const [modalState, setModalState] = useState(false);
+    const showModal = () => {
+        console.log("change password", modalState);
+        setModalState(true);
+    };
 
     // POST Edit Profile
-    useEffect(() => {
-        const editProfile = async () => {
-            // New data
-            const data = {
-                firstName: companyName,
-                userName: username,
-                email: email,
-                password: password,
-                description: description,
-                phoneNumber: phoneNumber,
-                address: address,
-                socialURL: companyLink,
-                abn: ABN,
-                tags: industryType.join(","),
-                userimage: userImage,
-            };
-
-            try {
-                const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
-    
-                // Dispatch
-                console.log('Edit Profile Successful', response.data);
-                
-            } catch (error) {
-                // Handle any errors (e.g., display an error message)
-                console.error('Edit Profile failed', error);
-            }
+    const handleUpdateButton = async () => {
+        // New data
+        const data = {
+            firstName: companyName,
+            userName: username,
+            email: email,
+            description: description,
+            phoneNumber: phoneNumber,
+            address: address,
+            socialURL: companyLink,
+            abn: ABN,
+            tags: industryType,
+            userimage: userImage,
         };
 
-        editProfile();
+        try {
+            const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
 
-    }, [updateButton]);
+            // Dispatch
+            console.log('Edit Profile Successful', response.data);
+            
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('Edit Profile failed', error);
+        }
+    };
 
     // GET View Profile
     useEffect(() => {
@@ -85,7 +79,13 @@ export default function CompanyProfile() {
                 setABN(userData.abn);
                 setCompanyLink(userData.socialURL);
                 setDescription(userData.description);
-                setPassword(userData.password);
+
+                var tags = "";
+                if (userData.tags.length > 1) {
+                    tags = userData.tags.join(",");
+                } else {
+                    tags = userData.tags[0];
+                }
                 setIndustryType(userData.tags);
                 setUserImage(userData.userImage);
                 
@@ -204,26 +204,15 @@ export default function CompanyProfile() {
                             />
                         </div>
                     </div>
-                    <div>
-                        <label htmlFor="password" className="block text-sm font-medium leading-6 text-gray-900">
-                            Password
+                     {/* Change Password Button */}
+                     <div>
+                        <label htmlFor="username" className="block text-sm font-medium leading-6 text-gray-900">
+                            Change Password
                         </label>
-                        <div className="mt-2">
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                            />
-                        </div>
-                    </div>
-                    {/* Change Password Button */}
-                    <div className="flex m-4 pt-4">
                         <button
                             type="submit"
-                            className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            onClick={showModal}
+                            className="mt-2 flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
                             Change Password
                         </button>
@@ -318,6 +307,7 @@ export default function CompanyProfile() {
                     </div>
                 </div>
             </div>
+            <ChangePasswordModal modalState={modalState} setModalState={setModalState}/>
             <Footer/>
         </div>
     )

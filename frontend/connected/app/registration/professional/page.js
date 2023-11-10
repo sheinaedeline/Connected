@@ -75,6 +75,14 @@ export default function RegistrationProfessional() {
             const response = await axios.post('http://127.0.0.1:3000/user/register', data);
             // Handle the response as needed (e.g., show a success message or redirect the user)
             console.log('Registration successful', response.data);
+            const payloadData = {
+                accountId: response.data.content._id, 
+                userType: response.data.content.userType,
+                jwtToken: response.data.content.jwtToken,
+            };
+
+            // Set the userId in local storage
+            localStorage.setItem("loggedUser", JSON.stringify(payloadData));
             router.push('/professional');
         } catch (error) {
             // Handle any errors (e.g., display an error message)

@@ -167,6 +167,9 @@ Setting up Backend on Mac:
 5. Stop mongo services when stopping backend too
 - brew services stop mongodb-community@7.0
 
+To export and import data
+mongodump -d webApp
+
 
 #######################################
 WK06 

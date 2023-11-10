@@ -6,11 +6,19 @@ import axios from 'axios';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserData } from "../../context/context";
+import { AiOutlineSmile } from 'react-icons/ai';
 
 export default function Login() {
     const router = useRouter();
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [hiddenEmail, setHiddenEmail] = useState("");
+    const [forgetPassword, setForgetPassword] = useState(false);
+    const [temporaryPassword, setTemporaryPassword] = useState("");
+    const [changePassword, setChangePassword] = useState(false);
+    const [newPassword, setNewPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
+    const [passwordMatch, setPasswordMatch] = useState(true);
     // const { dispatch } = useUserData();
 
     const handleSubmit = async (e) => {
@@ -46,7 +54,56 @@ export default function Login() {
             }
         } catch (error) {
             // Handle any errors (e.g., display an error message)
-            console.error('Login failed', error);
+            console.error('Login Failed', error);
+        }
+    };
+
+    const handleForgetButton = async () => {
+        const hidden = email.split("@")[0];
+        const domain = email.split("@")[1];
+        const finalEmail = hidden[0] + "***" + hidden[hidden.length - 1] + "@" + domain;
+        setHiddenEmail(finalEmail);
+
+        try {
+            const response = await axios.post(`http://127.0.0.1:3000/user/forgetpassword/${email}`);
+
+            // Dispatch
+            console.log('Forget Password successful', response.data);
+            setForgetPassword(true);
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('Forget Password Failed', error);
+        }
+    };
+
+    const handleNewPassword = (e) => {
+        setNewPassword(e.target.value);
+        if (confirmPassword) {
+            setPasswordMatch(e.target.value === confirmPassword);
+        }
+    };
+
+    const handleConfirmPassword = (e) => {
+        setConfirmPassword(e.target.value);
+        setPasswordMatch(newPassword === e.target.value);
+    };
+
+    const handleResetPassword = async () => {
+        // New data
+        const data = {
+            email: email,
+            password: newPassword,
+        };
+
+        try {
+            const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+
+            // Dispatch
+            console.log('Reset Password Successful', response.data);
+            
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('Reset Password Failed', error);
         }
     };
 
@@ -60,6 +117,7 @@ export default function Login() {
                         alt="connected logo"
                     />
                 </Link>
+                {!forgetPassword && (
                 <div className="flex flex-col justify-center mx-64 my-10 px-20 pb-2 mb-36 rounded-md border-2 border-blue-900">
                     <h2 className="my-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
                         Log in to Connected
@@ -89,21 +147,20 @@ export default function Login() {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <a href="#" className="font-semibold text-blue-600 hover:text-blue-500">
+                                    <button type="submit" onClick={handleForgetButton} className="font-semibold text-blue-600 hover:text-blue-500">
                                         Forgot password?
-                                    </a>
+                                    </button>
                                 </div>
                             </div>
                             <div className="mt-2">
                                 <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                autoComplete="current-password"
-                                required
-                                value={password}
-                                onChange={e => setPassword(e.target.value)}
-                                className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    id="password"
+                                    name="password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    value={password}
+                                    onChange={e => setPassword(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
                         </div>
@@ -136,6 +193,105 @@ export default function Login() {
                         </a>
                     </p>
                 </div>
+                )}
+                
+                {/* Forget Button Clicked */}
+                {forgetPassword && !changePassword && (
+                <div className="flex flex-col justify-center mx-64 my-10 px-20 pb-2 mb-36 rounded-md border-2 border-blue-900">
+                    <h2 className=" my-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                        Help is on the way! <AiOutlineSmile className="inline-block"/>
+                    </h2>
+                    <div className="block sm:inline pb-4">We have sent an email to <strong className="font-bold">{hiddenEmail}</strong> with a temporary password. To reset your password, enter in the temporary first.</div>
+                    <form className="space-y-6" action="#" method="POST">
+                        <div>
+                            <label htmlFor="temporaryPassword" className="pt-3 block text-sm font-medium leading-6 text-gray-900">
+                                Temporary Password
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="temporaryPassword"
+                                    name="password"
+                                    type="password"
+                                    autoComplete="current-password"
+                                    required
+                                    value={temporaryPassword}
+                                    onChange={e => setTemporaryPassword(e.target.value)}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                        </div>
+
+                        <button
+                            type="submit"
+                            onClick={() => setChangePassword(true)}
+                            className="flex w-full justify-center rounded-md bg-blue-900 mt-4 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                            Continue
+                        </button>
+                    </form>
+
+                    <p className="mt-8 text-center text-sm text-gray-500 pb-8">
+                        Didn't receive your temporary password?{' '}
+                        <button onClick={handleForgetButton} className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+                            Resend email
+                        </button>
+                    </p>
+                </div>
+                )}
+
+                {/* Correct Temporary Password Entered --> Change Password */}
+                {changePassword && (
+                <div className="flex flex-col justify-center mx-64 my-10 px-20 pb-2 mb-36 rounded-md border-2 border-blue-900">
+                    <h2 className=" my-8 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+                        Reset your password
+                    </h2>
+                    <form className="space-y-6 mb-8" action="#" method="POST">
+                        <div className="block sm:inline pb-4"><strong className="font-bold">Enter a new password for your account.</strong> The password should be at least 8 characters long. To make it stronger, use upper and lower case letters, numbers, and special characters like !\"?$%^&.</div>
+                            <div>
+                                <label htmlFor="newPassword" className="block text-sm font-medium leading-6 text-gray-900">
+                                    New Password
+                                </label>
+                                <div className="mt-2">
+                                    <input
+                                        id="newPassword"
+                                        name="password"
+                                        type="password"
+                                        autoComplete="current-password"
+                                        required
+                                        value={newPassword}
+                                        onChange={handleNewPassword}
+                                        className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                    />
+                            </div>
+                        </div>
+                        <div>
+                            <label htmlFor="confirmPassword" className="block text-sm font-medium leading-6 text-gray-900">
+                                Confirm New Password
+                            </label>
+                            <div className="mt-2">
+                                <input
+                                    id="confirmPassword"
+                                    name="confirmPassword"
+                                    type="password"
+                                    required
+                                    value={confirmPassword}
+                                    onChange={handleConfirmPassword}
+                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                />
+                            </div>
+                            {!passwordMatch && <p className="text-xs text-red-400">Passwords do not match!</p>}
+                        </div>
+
+                        <button
+                            type="submit"
+                            onClick={handleResetPassword}
+                            className="flex w-full justify-center rounded-md bg-blue-900 mt-4 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                            Reset Password
+                        </button>
+                    </form>
+                </div>
+                )}
             </section>
         </div>
     )
