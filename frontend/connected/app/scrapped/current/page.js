@@ -15,7 +15,7 @@ import trading from "assets/Trading Background.png";
 import axios from 'axios';
 import { useUserData } from "context/context";
 
-const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', 'beverages', 'retail', 'services'];
+const options = ['finance',  'investment banking', 'web development', 'manufacturing', 'HR', 'marketing', 'retail', 'accounting'];
 
 export default function page() {
 
@@ -80,6 +80,17 @@ export default function page() {
 
   const handleAcceptButton = () => {
     setRemoveList(professionalList);
+  };
+
+  const tagImages = {
+    "finance": "https://cdn-icons-png.flaticon.com/128/1077/1077976.png",
+    "investment banking": "https://cdn-icons-png.flaticon.com/128/846/846043.png",
+    "web development": "https://cdn-icons-png.flaticon.com/128/10210/10210601.png",
+    "manufacturing": "https://cdn-icons-png.flaticon.com/128/1433/1433114.png",
+    "HR": "https://cdn-icons-png.flaticon.com/128/6846/6846565.png",
+    "marketing": "https://cdn-icons-png.flaticon.com/128/1997/1997928.png",
+    "retail": "https://cdn-icons-png.flaticon.com/128/2769/2769277.png",
+    "accounting": "https://cdn-icons-png.flaticon.com/128/1570/1570887.png"
   };
 
   return (

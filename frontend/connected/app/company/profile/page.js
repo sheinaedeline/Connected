@@ -24,7 +24,10 @@ export default function CompanyProfile() {
     const [companyLink, setCompanyLink] = useState("");
     const [description, setDescription] = useState("");
     const [industryType, setIndustryType] = useState("");
-    const [userImage, setUserImage] = useState("");
+    const [userImage, setUserImage] = useState(null);
+    const [userImageString, setUserImageString] = useState('');
+    const [updateButton, setUpdateButton] = useState(false);
+    const [password, setPassword] = useState(""); 
 
     const [modalState, setModalState] = useState(false);
     const showModal = () => {
@@ -32,33 +35,52 @@ export default function CompanyProfile() {
         setModalState(true);
     };
 
+    // Update Button
+    const handleUpdateButton = () => {
+        setUpdateButton(!updateButton);
+    }
+
     // POST Edit Profile
-    const handleUpdateButton = async () => {
-        // New data
-        const data = {
-            firstName: companyName,
-            userName: username,
-            email: email,
-            description: description,
-            phoneNumber: phoneNumber,
-            address: address,
-            socialURL: companyLink,
-            abn: ABN,
-            tags: industryType,
-            userimage: userImage,
+    useEffect(() => {
+        const editProfile = async () => {
+            // New data
+            const data = {
+                firstName: companyName,
+                userName: username,
+                email: email,
+                password: password,
+                description: description,
+                phoneNumber: phoneNumber,
+                address: address,
+                socialURL: companyLink,
+                abn: ABN,
+                userimage: userImage,
+            };
+
+            try {
+                const formData = new FormData();
+                if(userImage !== null){
+                    formData.append('userimage',userImage);
+                }
+                const fields = ['firstName', 'userName', 'email', 'password', 'description', 'phoneNumber', 'address', 'socialURL', 'abn'];
+                for (let field of fields){
+                    formData.append(field, data[field]);
+                }
+                const response = await axios.post('http://127.0.0.1:3000/user/editprofile', formData, { headers: { 'Authorization': `Bearer ${state.jwtToken}`, 'content-type': 'multipart/form-data'}});
+    
+                // Dispatch
+                console.log('Edit Profile Successful', response.data);
+                
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('Edit Profile failed', error);
+            }
         };
 
-        try {
-            const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+        editProfile();
+        return () => URL.revokeObjectURL(userImage);
 
-            // Dispatch
-            console.log('Edit Profile Successful', response.data);
-            
-        } catch (error) {
-            // Handle any errors (e.g., display an error message)
-            console.error('Edit Profile failed', error);
-        }
-    };
+    }, [updateButton, userImage]);
 
     // GET View Profile
     useEffect(() => {
@@ -87,7 +109,9 @@ export default function CompanyProfile() {
                     tags = userData.tags[0];
                 }
                 setIndustryType(userData.tags);
-                setUserImage(userData.userImage);
+                if(userData.userImage){
+                    setUserImageString(userData.userImage);
+                }
                 
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
@@ -97,6 +121,36 @@ export default function CompanyProfile() {
 
         viewProfile();
     }, []);
+
+    function fileToDataUrl(file) {
+        if(file === null){ //Checks if the passed file is null, if it is null then return nothing
+            return new Promise((resolve,reject) => {
+                resolve(null);
+            })
+        } else { //If the file is not null then process it and return the file reader as a promise
+            const validFileTypes = [ 'image/jpeg', 'image/png', 'image/jpg' ]
+            const valid = validFileTypes.find(type => type === file.type);
+            // Bad data, let's walk away.
+            if (!valid) {
+                throw Error('provided file is not a png, jpg or jpeg image.');
+            }
+            
+            const reader = new FileReader();
+            const dataUrlPromise = new Promise((resolve,reject) => {
+                reader.onerror = reject;
+                reader.onload = () => resolve(reader.result);
+            });
+            reader.readAsDataURL(file);
+            return dataUrlPromise;
+        }
+    }
+
+    async function handleImageUpload(event) {
+        const file = event.target.files[0];
+        const fileBase64 = await fileToDataUrl(file)
+        setUserImage(file);
+        setUserImageString(fileBase64)
+    }
 
     return (
         <div className="bg-white dark:bg-black">
@@ -108,33 +162,23 @@ export default function CompanyProfile() {
                     My Profile
                 </h2>
 
-                {/* Profile Picture */}
                 <div className="flex gap-4 items-center">
                     <Image
-                        src={userImage ? userImage : profile}
+                        src={userImageString !== '' ? userImageString : profile}
                         width={100}
                         height={100}
                         alt="connected logo"
                     />
-                    {/* Upload Profile Picture Button */}
-                    {/* <button
-                        type="submit"
-                        onC
-                        className="h-8 items-center flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                    >
-                        Upload Profile Picture
-                    </button> */}
                     <div>
                         <label htmlFor="companyName" className="block text-sm font-medium leading-6 text-gray-900">
                             Upload Profile Picture
                         </label>
                         <div className="mt-2">
-                            <input
+                        <input
                                 id="companyName"
                                 name="companyName"
                                 type="file"
-                                value={userImage}
-                                onChange={e => setUserImage(e.target.value)}
+                                onChange={handleImageUpload}
                                 className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                             />
                         </div>

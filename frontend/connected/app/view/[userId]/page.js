@@ -41,6 +41,7 @@ export default function ViewProfile({params}) {
     const [deleteUser, setDeleteUser] = useState(false);
     const [userImageString, setUserImageString] = useState('');
     const [userFileString, setUserFileString] = useState(null);
+    
 
     // GET View Profile
     useEffect(() => {
@@ -185,7 +186,7 @@ export default function ViewProfile({params}) {
                     <div className="group grid grid-cols-4 grid-rows-2">
                         <div className="aspect-h-1 aspect-w-1 overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
-                                src={userImage !== null ? profile : userImage}
+                                src={userImageString !== '' ? userImageString : profile}
                                 alt="Profile Picture"
                                 width={300}
                                 height={200}
