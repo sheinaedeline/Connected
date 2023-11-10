@@ -89,7 +89,7 @@ export async function createProject(req: Request, res: Response): Promise<Respon
 
 
 
-export async function getProjects(req: Request, res: Response): Promise<Response> {
+export async function getProjects(req: Request, res: Response): Promise<Response> { //Api function that allows the user to paginate the projects in the platform
     try {
         const {tags, size, page, companyId, projectName, startsAt, endsAt, userStatus ,userId, status, sortBy} = req.body;
         let required_fields = [
@@ -227,64 +227,6 @@ export async function getProjects(req: Request, res: Response): Promise<Response
     }
 }
 
-
-// View All Available Projects
-// export async function getProjects(req: Request, res: Response): Promise<Response> {
-//     try {
-//         // Retrieve all projects from the database
-//         const projects = await Project.find();
-//         console.log(projects)
-//         return response_success(res,projects,"Succesfully Get Project");
-//     } catch (error:any) {
-//         if(error instanceof Error){
-//             return response_bad_request(res,error.message)
-//         } 
-//         return response_bad_request(res,error.message);
-//     }
-// }
-
-// Company users can view their own projects
-export async function getMyCompanyProjects(req: Request, res: Response): Promise<Response> {
-    try {
-        const userID = req.body["_id"];
-        // Query the Project collection to retrieve all projects associated with the company
-        const companyProjects = await Project.find({ owner: userID });
-        // Check if the company has any projects
-        if (!companyProjects || companyProjects.length === 0) {
-            return response_not_found(res, "No projects found for your company");
-        }
-        // Return the fetched projects in the response
-        return response_success(res, companyProjects, "Projects retrieved successfully for your company");
-
-    } catch (error:any) {
-        if(error instanceof Error){
-            return response_bad_request(res,error.message)
-        } 
-        return response_internal_server_error(res, error.message);
-    }
-}
-
-// Professional users or other company users can view a company's projects by looking up owner ID.
-export async function getCompanyProjects(req: Request, res: Response): Promise<Response> {
-    try {
-        const ownerID = req.params.ownerID
-        // Query the Project collection to retrieve all projects associated with the company
-        const companyProjects = await Project.find({ owner: ownerID });
-        // Check if the company has any projects
-        if (!companyProjects || companyProjects.length === 0) {
-            return response_not_found(res, "No projects found for this company");
-        }
-        // Return the fetched projects in the response
-        return response_success(res, companyProjects, "Projects retrieved successfully for the company");
-
-    } catch (error:any) {
-        if(error instanceof Error){
-            return response_bad_request(res,error.message)
-        } 
-        return response_internal_server_error(res, error.message);
-    }
-}
-
 // view project details by ID
 export async function getProjectById(req: Request, res: Response): Promise<Response> {
     try {
@@ -367,7 +309,6 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
             return response_bad_request(res, "Project not found.");
         }
         // Check if the user making the request is the owner of the project if the user is not an admin
-
         if(req.body['role'] !== 'admin'){
             if (project.owner.toString() !== userId) {
                 return response_bad_request(res, "Only the project owner and the website admin can edit the details of this project.");

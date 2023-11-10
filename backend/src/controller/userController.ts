@@ -2,11 +2,9 @@ import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found, response_forbidden } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
 import UserPaginate from '@mongodb/userPaginateModel';
-import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
 import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, recalculateProjectRating, recalculateProfessionalRating} from '@utils/utils';
 import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
-import { Buffer } from 'buffer';
 import crypto from 'crypto';
 import nodemailer from 'nodemailer';
 import { IUser } from './projectController';
@@ -15,7 +13,7 @@ import Rating from '@mongodb/ratingModel';
 import RatingPaginate from '@mongodb/ratingPaginateModel';
 
 
-export async function register(req: Request, res: Response): Promise<Response> {
+export async function register(req: Request, res: Response): Promise<Response> { //API function register a new user
     try {
         const {userType, firstName, lastName, userName, email, description, phoneNumber, address, dob, socialURL, abn, password, tags} = req.body;
         let required_fields = [
@@ -116,7 +114,7 @@ export async function register(req: Request, res: Response): Promise<Response> {
     }
 }
 
-export async function login(req: Request, res: Response): Promise<Response> {
+export async function login(req: Request, res: Response): Promise<Response> { // Api function to login that will return a JWT token upon a succesfull login
     try {
         const {email, password} = req.body;
         let required_fields = [
@@ -152,7 +150,7 @@ export async function login(req: Request, res: Response): Promise<Response> {
     }
 }
 
-export async function editProfile(req: Request, res: Response): Promise<Response> {
+export async function editProfile(req: Request, res: Response): Promise<Response> { //Api function that allows a user to edit their  own profile. Additionaly also allow admin to edit other user profile
     try {
         const {userId,firstName, lastName, userName, email, description, phoneNumber, address, dob, socialURL, abn, password, tags} = req.body;
         let userToUpdateId =  userId?userId:req.body['_id'];
@@ -283,7 +281,7 @@ export async function editProfile(req: Request, res: Response): Promise<Response
 }
 
 
-export async function uploadCV(req: Request, res: Response): Promise<Response> {
+export async function uploadCV(req: Request, res: Response): Promise<Response> { //Api that allow user to upload their pdf cv
     try {
         const user = await User.findById(req.body['_id']);
         if(user === null){
