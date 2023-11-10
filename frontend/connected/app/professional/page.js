@@ -33,7 +33,7 @@ export default function ProfessionalHome() {
       var slider = document.getElementById(id);
       slider.scrollLeft = slider.scrollLeft + 500;
     };
-
+    
     // GET View Profile
     useEffect(() => {
         const viewProfile = async () => {
@@ -221,12 +221,12 @@ export default function ProfessionalHome() {
                       {professionalList.length > 0 && professionalList.map((item) => (
                         <Link key={item.id} href={`/view/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                              src={item.userImage}
-                              alt={item.imageAlt}
-                              width={300}
-                              height={200}
-                              className="object-cover object-center group-hover:opacity-75"
+                          <Image
+                                src={item.userImage ? item.userImage : "https://upload.wikimedia.org/wikipedia/commons/3/3a/M%C3%BCnster%2C_LVM%2C_B%C3%BCrogeb%C3%A4ude_--_2013_--_5149-51.jpg"}
+                                alt={item.imageAlt}
+                                width={300}
+                                height={200}
+                                className="object-cover object-center group-hover:opacity-75"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
