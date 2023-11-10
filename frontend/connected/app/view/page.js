@@ -145,8 +145,6 @@ export default function ViewProfile() {
                                 <AiFillLinkedin size={40}/>
                             </div>
                             <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">{industryType}</p>
-                            {/* <p className="mt-1 text-sm text-right font-medium text-gray-600">Rating {rating}/5</p> */}
-                            {/* <p className="mt-1 text-sm text-right font-medium text-gray-600">{skills} skills</p> */}
                             <p className="col-span-4 text-xs text-gray-600">{address}</p>
                             <p className="text-xs text-gray-600">{phoneNumber}</p>
                             <p className="col-span-3 text-left text-xs text-gray-600">{email}</p>
