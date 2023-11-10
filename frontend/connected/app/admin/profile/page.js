@@ -26,8 +26,9 @@ export default function CompanyProfile() {
     const [description, setDescription] = useState("");
     const [password, setPassword] = useState("");
     const [industryType, setIndustryType] = useState("");
-    const [userImage, setUserImage] = useState("");
-    const [updateButton, setUpdateButton] = useState(false);
+    const [userImage, setUserImage] = useState(null);
+    const [userImageString, setUserImageString] = useState('');
+    const [updateButton, setUpdateButton] = useState(false); 
     
 
     // Update Button
@@ -53,7 +54,15 @@ export default function CompanyProfile() {
             };
 
             try {
-                const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                const formData = new FormData();
+                if(userImage !== null){
+                    formData.append('userimage',userImage);
+                }
+                const fields = ['firstName', 'userName', 'email', 'password', 'description', 'phoneNumber', 'address', 'socialURL', 'abn'];
+                for (let field of fields){
+                    formData.append(field, data[field]);
+                }
+                const response = await axios.post('http://127.0.0.1:3000/user/editprofile', formData, { headers: { 'Authorization': `Bearer ${state.jwtToken}`, 'content-type': 'multipart/form-data'}});
     
                 // Dispatch
                 console.log('Edit Profile Successful', response.data);
@@ -65,8 +74,9 @@ export default function CompanyProfile() {
         };
 
         editProfile();
+        return () => URL.revokeObjectURL(userImage);
 
-    }, [updateButton]);
+    }, [updateButton, userImage]);
 
     // GET View Profile
     useEffect(() => {
@@ -77,7 +87,7 @@ export default function CompanyProfile() {
                 // Dispatch
                 console.log('View Profile Successful', response.data);
                 const userData = response.data.content.user;
-
+                console.log(`file is ${userData.userImage}`);
                 // Set variable states
                 setCompanyName(userData.firstName);
                 setUsername(userData.userName);
@@ -87,9 +97,11 @@ export default function CompanyProfile() {
                 setABN(userData.abn);
                 setCompanyLink(userData.socialURL);
                 setDescription(userData.description);
-                setPassword(userData.password);
                 setIndustryType(userData.tags);
-                setUserImage(userData.userImage);
+                if(userData.userImage){
+                    setUserImageString(userData.userImage);
+                }
+               
                 
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
@@ -100,15 +112,34 @@ export default function CompanyProfile() {
         viewProfile();
     }, []);
 
-    function handleImageUpload(event) {
+    function fileToDataUrl(file) {
+        if(file === null){ //Checks if the passed file is null, if it is null then return nothing
+            return new Promise((resolve,reject) => {
+                resolve(null);
+            })
+        } else { //If the file is not null then process it and return the file reader as a promise
+            const validFileTypes = [ 'image/jpeg', 'image/png', 'image/jpg' ]
+            const valid = validFileTypes.find(type => type === file.type);
+            // Bad data, let's walk away.
+            if (!valid) {
+                throw Error('provided file is not a png, jpg or jpeg image.');
+            }
+            
+            const reader = new FileReader();
+            const dataUrlPromise = new Promise((resolve,reject) => {
+                reader.onerror = reject;
+                reader.onload = () => resolve(reader.result);
+            });
+            reader.readAsDataURL(file);
+            return dataUrlPromise;
+        }
+    }
+
+    async function handleImageUpload(event) {
         const file = event.target.files[0];
-        const reader = new FileReader();
-    
-        reader.onloadend = () => {
-            setUserImage(reader.result);
-        };
-    
-        reader.readAsDataURL(file);
+        const fileBase64 = await fileToDataUrl(file)
+        setUserImage(file);
+        setUserImageString(fileBase64)
     }
     
 
@@ -117,15 +148,15 @@ export default function CompanyProfile() {
             <Header/>
 
             <div className="flex flex-col justify-center px-32">
-                {/* Page Title */}
+
                 <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                     My Profile
                 </h2>
 
-                {/* Profile Picture */}
+                
                 <div className="flex gap-4 items-center">
                     <Image
-                        src={userImage ? userImage : profile}
+                        src={userImageString !== '' ? userImageString : profile}
                         width={100}
                         height={100}
                         alt="connected logo"
@@ -147,7 +178,6 @@ export default function CompanyProfile() {
                 </div>
 
 
-                {/* Account Credentials */}
                 <div className="mt-12 grid grid-cols-2 gap-4">
                     <div>
                         <label htmlFor="companyName" className="block text-sm font-medium leading-6 text-gray-900">
@@ -225,7 +255,7 @@ export default function CompanyProfile() {
                             />
                         </div>
                     </div>
-                    {/* Change Password Button */}
+
                     <div className="flex m-4 pt-4">
                         <button
                             type="submit"
@@ -237,7 +267,6 @@ export default function CompanyProfile() {
                 </div>
 
 
-                {/* Personal Details */}
                 <div className="mt-12 grid grid-cols-2 gap-4">
                     <div className="col-span-2">
                         <button

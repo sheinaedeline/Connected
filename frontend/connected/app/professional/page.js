@@ -179,25 +179,28 @@ export default function ProfessionalHome() {
                     <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                       {filteredProjectList.length > 0  && filteredProjectList.filter(item => (item.status === 'new' || item.status === 'ongoing') && (selectedOptions.length === 0 || selectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (                  
                         <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                          <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                              src={item.imageSrc}
-                              alt={item.imageAlt}
-                              width={300}
-                              height={200}
-                              className="object-cover object-center group-hover:opacity-75"
-                            />
-                          </div>
-                          <div className="grid grid-cols-2 gap-2 p-4">
+                        <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                          <Image
+                            src={item.imageSrc}
+                            alt={item.imageAlt}
+                            width={300}
+                            height={200}
+                            className="object-cover object-center group-hover:opacity-75"
+                          />
+                        </div>
+                        <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                            <p className="col-span-2 text-xs italic text-gray-600">{item.start_date}</p>
-                            <p className="col-span-2 text-xs italic text-gray-600">{item.end_date}</p>
+                            <p className="col-span-2 text-xs text-gray-600 truncate">
+                            Start Date: {new Date(item.start_date).toLocaleDateString()}
+                            </p>
+                            <p className="col-span-2 text-xs text-gray-600 truncate">
+                            End Date: {new Date(item.end_date).toLocaleDateString()}
+                            </p>
                             <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">{item.price_budget}</p>
-                            <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
+                            <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
-                          </div>
-                        </a>
+                        </div>
+                      </a>
                       ))}
                     </div>
                     <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProjects')} size={40} />
@@ -219,7 +222,7 @@ export default function ProfessionalHome() {
                         <Link key={item.id} href={`/view/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
-                              src={item.imageSrc}
+                              src={item.userImage}
                               alt={item.imageAlt}
                               width={300}
                               height={200}
@@ -228,9 +231,9 @@ export default function ProfessionalHome() {
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
-                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.tags}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
+                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.email}</p>
+                            {item.rating && <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.averageUserRating}/5</p>}
+                            <p className="col-span-2 text-xs text-gray-600 truncate">{item.phoneNumber} </p>
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                           </div>
                         </Link>
@@ -262,13 +265,16 @@ export default function ProfessionalHome() {
                           />
                         </div>
                         <div className="grid grid-cols-2 gap-2 p-4">
-                          <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                          <p className="col-span-2 text-xs italic text-gray-600">{item.start_date}</p>
-                          <p className="col-span-2 text-xs italic text-gray-600">{item.end_date}</p>
-                          <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
-                          <p className="mt-1 text-sm font-medium text-gray-600">{item.price_budget}</p>
-                          <p className="mt-1 text-sm text-right text-gray-600">{item.industry}</p>
-                          <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
+                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
+                            <p className="col-span-2 text-xs text-gray-600 truncate">
+                            Start Date: {new Date(item.start_date).toLocaleDateString()}
+                            </p>
+                            <p className="col-span-2 text-xs text-gray-600 truncate">
+                            End Date: {new Date(item.end_date).toLocaleDateString()}
+                            </p>
+                            <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
+                            <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
+                            <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                         </div>
                       </a>
                       ))}
