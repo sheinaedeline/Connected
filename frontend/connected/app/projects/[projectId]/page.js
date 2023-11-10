@@ -1,19 +1,12 @@
 'use client';
-import profile from "assets/Profile Icon.png";
-import Image from 'next/image';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
-import { sampleCompany } from 'public/data.js';
 import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
 import axios from 'axios';
-import { useUserData } from "context/context";
+import { useRouter } from 'next/navigation';
 
-export default function CompanyProfile() {
-    // const { state } = useUserData();
+export default function projectProfile({params}) {
     const state = JSON.parse(localStorage.getItem("loggedUser"));
-    const { accountId, userType } = state;
-    const [projectId, setProjectId] = useState("");
     
     const [project_title, setProject_title] = useState("");
     const [tags, setTags] = useState([]);
@@ -32,10 +25,13 @@ export default function CompanyProfile() {
     const [approved_applicants, setApproved_applicants] = useState([]);
     const [projectImage, setProjectImage] = useState("");
     const [updateButton, setUpdateButton] = useState(false);
+    const router = useRouter();
 
     // Update Button
-    const handleUpdateButton = () => {
+    const handleUpdateButton = async () => {
         setUpdateButton(!updateButton);
+        // After updating the project details, redirect to the project page
+        router.push(`/project/${params.projectId}`);
     }
 
     // POST Edit Project
@@ -62,14 +58,13 @@ export default function CompanyProfile() {
             
 
             try {
-                const response = await axios.put(`http://127.0.0.1:3000/project/653b55906f170de1334a03ba/edit`, data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
-                // const response = await axios.put(`http://127.0.0.1:3000/project/${projectId}/edit`, data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+                const response = await axios.put(`http://127.0.0.1:3000/project/${params.projectId}/edit`, data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
                 // Dispatch
                 console.log('Edit Project Successful', response.data);
                 
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
-                console.error('Edit Profile failed', error);
+                console.error('Edit Project failed', error);
             }
         };
 
@@ -81,8 +76,7 @@ export default function CompanyProfile() {
     useEffect(() => {
         const viewProject = async () => {
             try {
-                const response = await axios.get(`http://127.0.0.1:3000/project/653b55906f170de1334a03ba`);
-                // const response = await axios.get(`http://127.0.0.1:3000/project/${projectId}`);
+                const response = await axios.get(`http://127.0.0.1:3000/project/${params.projectId}`);
     
                 // Dispatch
                 console.log('View Project Successful', response.data);
@@ -92,8 +86,8 @@ export default function CompanyProfile() {
                 setProject_title(projectData.project_title);
                 setTags(projectData.tags);
                 setDescription(projectData.description);
-                setStart_date(projectData.start_date.$date);
-                setEnd_date(projectData.end_date.$date);
+                setStart_date(new Date(projectData.start_date).toISOString().split('T')[0]);
+                setEnd_date(new Date(projectData.end_date).toISOString().split('T')[0]);
                 setNo_professional(projectData.No_professional);
                 setExpected_working_hours(projectData.expected_working_hours);
                 setSkills(projectData.skills);
@@ -107,7 +101,7 @@ export default function CompanyProfile() {
                 setProjectImage(projectData.projectImage);
                 
             } catch (error) {
-                // Handle any errors (e.g., display an error message)
+
                 console.error('View Project failed', error);
             }
         };
@@ -126,21 +120,13 @@ export default function CompanyProfile() {
                 </h2>
 
                 {/* Project Picture */}
-                <div className="flex gap-4 items-center">
+                {/* <div className="flex gap-4 items-center">
                     <Image
                         src={projectImage ? projectImage : profile}
                         width={100}
                         height={100}
                         alt="connected logo"
                     />
-                    {/* Upload Profile Picture Button */}
-                    {/* <button
-                        type="submit"
-                        onC
-                        className="h-8 items-center flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
-                    >
-                        Upload Profile Picture
-                    </button> */}
                     <div>
                         <label htmlFor="project_title" className="block text-sm font-medium leading-6 text-gray-900">
                             Upload Project Picture
@@ -156,7 +142,7 @@ export default function CompanyProfile() {
                             />
                         </div>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="mt-12 grid grid-cols-2 gap-4">
                     <div>

@@ -111,7 +111,7 @@ export default function page() {
     };
 
     useEffect(() => {
-        const getProject = async () => {
+        const viewProfile = async () => {
             const data = { 
                 size: 100,
                 page: 1
@@ -135,7 +135,7 @@ export default function page() {
     
         };
 
-        getProject();
+    viewProfile();
     }, []);
 
     useEffect(() => {
@@ -329,6 +329,7 @@ export default function page() {
         </div>
     );
   }
+        
 
   return (
     <div className="bg-white dark:bg-black">
@@ -407,9 +408,9 @@ export default function page() {
       <section className="relative">
         <div className="px-4 pt-10 mx-auto max-w-7xl md:pt-16">
           <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-                  Planned{' '}
+                  Waiting{' '}
               <a href="" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
-                  Projects
+                  Approvals
               </a>
           </h2>
           <form className="flex" role="search">
@@ -440,37 +441,37 @@ export default function page() {
         <div className="relative flex items-center">
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
             <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-            {filteredProjectList.length > 0  && filteredProjectList.filter(item => item.status === 'new' && item.owner._id === accountId && (selectedOptions.length === 0 || selectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (
+            {filteredProjectList.length > 0  && filteredProjectList.filter(item => (item.status === 'new' || item.status === 'ongoing') && item.potential_applicants.includes(accountId) && (selectedOptions.length === 0 || selectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (
               <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                  <Image
-                    src={item.imageSrc}
-                    alt={item.imageAlt}
-                    width={300}
-                    height={200}
-                    className="object-cover object-center group-hover:opacity-75"
-                  />
-                </div>
-                <div className="grid grid-cols-2 gap-2 p-4">
-                    <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                    <p className="col-span-2 text-xs text-gray-600 truncate">
-                    Start Date: {new Date(item.start_date).toLocaleDateString()}
-                    </p>
-                    <p className="col-span-2 text-xs text-gray-600 truncate">
-                    End Date: {new Date(item.end_date).toLocaleDateString()}
-                    </p>
-                    <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
-                    <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
-                    <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
-                </div>
-              </a>
+              <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                <Image
+                  src={item.imageSrc}
+                  alt={item.imageAlt}
+                  width={300}
+                  height={200}
+                  className="object-cover object-center group-hover:opacity-75"
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-2 p-4">
+                  <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
+                  <p className="col-span-2 text-xs text-gray-600 truncate">
+                  Start Date: {new Date(item.start_date).toLocaleDateString()}
+                  </p>
+                  <p className="col-span-2 text-xs text-gray-600 truncate">
+                  End Date: {new Date(item.end_date).toLocaleDateString()}
+                  </p>
+                  <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
+                  <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
+                  <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
+              </div>
+            </a>
             ))}
           </div>
           <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProjects')} size={40} />
         </div>
 
         <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-          Ongoing {' '}
+          Joined {' '}
           <a href="" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
               Projects
           </a>
@@ -505,7 +506,7 @@ export default function page() {
         <div className="relative flex items-center">
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
             <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-            {filteredSecondaryProjectList.length > 0  && filteredSecondaryProjectList.filter(item => item.status === 'ongoing' && (secondarySelectedOptions.length === 0 || secondarySelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (              
+            {filteredSecondaryProjectList.length > 0  && filteredSecondaryProjectList.filter(item => (item.status === 'new' || item.status === 'ongoing') && item.approved_applicants.includes(accountId) && (secondarySelectedOptions.length === 0 || secondarySelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (              
             <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                 <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                 <Image
@@ -528,7 +529,7 @@ export default function page() {
                     <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
                     <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                 </div>
-          </a>
+            </a>
             ))}
           </div>
           <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProjects')} size={40} />
@@ -570,16 +571,16 @@ export default function page() {
         <div className="relative flex items-center">
           <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
             <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
-            {filteredThirdProjectList.length > 0  && filteredThirdProjectList.filter(item => item.status === 'completed' && item.owner._id === accountId && (thirdSelectedOptions.length === 0 || thirdSelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (                
+            {filteredThirdProjectList.length > 0  && filteredThirdProjectList.filter(item => item.status === 'completed' && item.approved_applicants.includes(accountId) && (thirdSelectedOptions.length === 0 || thirdSelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (                
                 <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                 <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                  <Image
+                <Image
                     src={item.imageSrc}
                     alt={item.imageAlt}
                     width={300}
                     height={200}
                     className="object-cover object-center group-hover:opacity-75"
-                  />
+                />
                 </div>
                 <div className="grid grid-cols-2 gap-2 p-4">
                     <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
@@ -593,7 +594,7 @@ export default function page() {
                     <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
                     <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                 </div>
-              </a>
+            </a>
               ))}
             </div>
             <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProjects')} size={40} />

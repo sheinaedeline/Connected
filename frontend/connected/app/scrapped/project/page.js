@@ -1,24 +1,18 @@
 'use client';
 import Image from 'next/image';
-import profile from "assets/Profile Icon.png";
 import { useState, useEffect } from 'react';
-import { sampleProfessional } from '/public/data.js';
-import { AiFillLinkedin } from 'react-icons/ai';
 import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
 import axios from 'axios';
-import { useUserData } from "context/context";
 import { useRouter } from "next/navigation";
 
 
 export default function ViewProject() {
-    // const { state } = useUserData();
     const state = JSON.parse(localStorage.getItem("loggedUser"));
     const { accountId, userType } = state;
     const router = useRouter();
-    const [projectId, setProjectId] = useState("");
     
-    // Project Data
+
     const [_id, set_id] = useState("");
     const [owner, setOwner] = useState("");
     const [project_title, setProject_title] = useState("");
@@ -37,7 +31,7 @@ export default function ViewProject() {
     const [potential_applicants, setPotential_applicants] = useState([]);
     const [approved_applicants, setApproved_applicants] = useState([]);
 
-    // Fetch Profile Data
+
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [username, setUsername] = useState("");
@@ -72,7 +66,6 @@ export default function ViewProject() {
         const viewProject = async () => {
             try {
                 const response = await axios.get(`http://127.0.0.1:3000/project/653b55906f170de1334a03ba`);
-                // const response = await axios.get(`http://127.0.0.1:3000/project/${projectId}`);
     
                 // Dispatch
                 console.log('View Project Successful', response.data);

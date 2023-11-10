@@ -1,5 +1,8 @@
 import { DateTime } from "luxon";
 import { Types } from "mongoose";
+import Rating from "@mongodb/ratingModel";
+import Project from "@mongodb/projectModel";
+import User from "@mongodb/userModel";
 
 export const check_req_field = (req_field:any):Boolean => {
     if (req_field == null || req_field == ''){
@@ -40,4 +43,32 @@ export const sql_date_string_checker = (iso_string:string):Boolean => {
 export const idToObjectId = (id:string):Types.ObjectId => {
     let _id = new Types.ObjectId(id);
     return _id;
+}
+
+export const recalculateProjectRating = async (projectId: string):Promise<number|null> => {
+        // Calculate the average rating of the project
+        const allRatings = await Rating.find({ projectId, ratingType: "Company" });
+        const averageRating = allRatings.length > 0 ? allRatings.reduce((acc, { ratings }) => acc + ratings, 0) / allRatings.length : null;
+        let updateOptions = averageRating == null ? {
+            $unset : {averageProjectRating: 1}
+        } : {
+            averageProjectRating: averageRating
+        }
+        // Update the project's average rating
+        await Project.findByIdAndUpdate(projectId, updateOptions);
+        return averageRating;
+}
+
+export const recalculateProfessionalRating = async (userId: string):Promise<number|null> => {
+    // Calculate the average rating of the user
+    const allRatings = await Rating.find({ userId, ratingType: "Professional" });
+    const averageRating = allRatings.length > 0 ? allRatings.reduce((acc, { ratings }) => acc + ratings, 0) / allRatings.length: null;
+    let updateOptions = averageRating == null ? {
+        $unset : {averageUserRating: 1}
+    } : {
+        averageUserRating: averageRating
+    }
+    // Update the user's average rating
+    await User.findByIdAndUpdate(userId, updateOptions );
+    return averageRating;
 }

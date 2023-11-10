@@ -128,5 +128,33 @@ export const projectObj = {
     },
     approved_applicants: {
         type: [Schema.Types.ObjectId],
+    },
+    averageProjectRating: {
+        type: Number
+    },
+    invited_applicants: {
+        type: [Schema.Types.ObjectId],
+    }
+}
+
+export const ratingObj = {
+    userId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    projectId: {
+      type: Schema.Types.ObjectId,
+      required: true,
+    },
+    ratings: {
+      type: Number,
+      required: true,
+    },
+    ratingType: {
+      type: String, // either a rating for professional or a rating for a project
+      required: true,
+    },
+    review: {
+      type: String,
     }
 }

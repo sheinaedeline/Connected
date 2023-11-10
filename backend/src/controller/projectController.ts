@@ -1,14 +1,15 @@
 //Bootstrap Code
 import type { Request, Response } from 'express';
-import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found } from '@utils/responseUtils';
+import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found, response_forbidden } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
-import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime, idToObjectId } from '@utils/utils';
+import { check_req_field, sql_date_string_checker, recalculateProfessionalRating } from '@utils/utils';
 export type {IUser} from '@interfaces/mongoDBInterfaces'
 import ProjectPaginate from '@mongodb/projectPaginateModel';
 import Project from '@mongodb/projectModel';
+import Rating from '@mongodb/ratingModel';
 import { IProject } from '@interfaces/mongoDBInterfaces';
 import { DateTime } from "luxon";
-import projectPaginateModel from '@mongodb/projectPaginateModel';
+import RatingPaginate from '@mongodb/ratingPaginateModel';
 import { Schema, Types } from 'mongoose';
 import nodemailer from 'nodemailer';
 
@@ -167,7 +168,8 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             ...(status && {status: status.toLowerCase()}),
             ...((userStatus && userStatus === 'joined') && {approved_applicants:userId}),
             ...((userStatus && userStatus === 'pending') && {potential_applicants: userId}),
-            ...((!userStatus && userId) && {potential_applicants: userId, approved_applicants:userId}),
+            ...((userStatus && userStatus === 'invited') && {invited_applicants: userId}),
+            ...((!userStatus && userId) && { $or: [{potential_applicants: userId}, {approved_applicants:userId}, {invited_applicants: userId}]}),
         }
 
 
@@ -187,7 +189,7 @@ export async function getProjects(req: Request, res: Response): Promise<Response
 
         const myCustomLabels = {
             totalDocs: 'amountOfProjects',
-            docs: 'projectList',
+            docs: 'projectArray',
             limit: 'size',
             page: 'currentPage'
         };
@@ -197,7 +199,7 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             ...(Object.keys(sort).length > 0 && {sort}),
             limit: size,
             populate,
-            projection: "-__v -hash_password",
+            projection: "-__v",
             lean: true,
             leanWithId: true,
             customLabels: myCustomLabels,
@@ -208,8 +210,8 @@ export async function getProjects(req: Request, res: Response): Promise<Response
         }
   
         let projects = await ProjectPaginate.paginate(query, options);
-        let {projectList, ...rest} = projects;
-        let projectsList = Array.isArray(projectList)?projectList.map((e) => {
+        let {projectArray, ...rest} = projects;
+        let projectsList = Array.isArray(projectArray)?projectArray.map((e) => {
             let {_id, ...otherFields} = e;
             return {
                 ...otherFields
@@ -342,7 +344,7 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
         const projectId = req.params.id;
         const userId = req.body["_id"];
         const updatedDetails = req.body;
-        const project = await Project.findById(projectId);
+        const project:any = await Project.findById(projectId);
 
         // Define which fields can be edited
         const editableFields: (keyof IProject)[] = [
@@ -364,10 +366,13 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
         if (project === null) {
             return response_bad_request(res, "Project not found.");
         }
-        // Check if the user making the request is the owner of the project
-        if (project.owner.toString() !== userId) {
-            return response_bad_request(res, "Only the project owner can edit the details of this project.");
-        }
+        // Check if the user making the request is the owner of the project if the user is not an admin
+
+        if(req.body['role'] !== 'admin'){
+            if (project.owner.toString() !== userId) {
+                return response_bad_request(res, "Only the project owner and the website admin can edit the details of this project.");
+            }
+        } 
         // Update the fields
         editableFields.forEach(field => {
             if (req.body[field]) {
@@ -397,11 +402,23 @@ export async function deleteProject(req: Request, res: Response): Promise<Respon
         if (!project) {
             return response_bad_request(res, "Project not found.");
         }
-        // Check if the user making the request is the owner of the project
-        if (project.owner.toString() !== userId) {
-            return response_bad_request(res, "Only the project owner can delete this project.");
+    
+         // Check if the user making the request is the owner of the project if the user is not an admin
+        if(req.body['role'] !== 'admin'){
+            if (project.owner.toString() !== userId) {
+                return response_bad_request(res, "Only the project owner and the website admin can delete this project.");
+            }
         }
-
+        let ratingsAssociatedTotheProject = await Rating.find({projectId});
+        for(let x = 0 ; x < ratingsAssociatedTotheProject.length; x ++){
+            let rating = ratingsAssociatedTotheProject[x];
+            if(rating.ratingType == 'Professional') {
+                await Rating.findByIdAndDelete(rating._id.toString());
+                await recalculateProfessionalRating(rating.userId.toString());
+            } else {
+                await Rating.findByIdAndDelete(rating._id.toString());
+            }
+        }
         await Project.findByIdAndDelete(projectId);
         return response_success(res, "Project deleted successfully!");
     } catch (error: any) {
@@ -498,9 +515,18 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
         }
         // Check if user has requested to join the project
         const potentialApplicants = project.potential_applicants.map((applicant) => applicant.toString());
-        if (!potentialApplicants.includes(userId)) {
-            return response_bad_request(res, "User has not requested to join this project.");
+        if(action === "approve" || action === "reject") {
+            if (!potentialApplicants.includes(userId)) {
+                return response_bad_request(res, "User has not requested to join this project.");
+            }
         }
+        const approvedApplicants = project.approved_applicants.map((applicant) => applicant.toString());
+        if(action === "remove") {
+            if (!approvedApplicants.includes(userId)) {
+                return response_bad_request(res, "User has not been approved to be in the project");
+            }
+        }
+
         
         //set up email
         const transporter = nodemailer.createTransport({
@@ -535,7 +561,16 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
                 subject: `Rejection to Join Project - ${project.project_title}`,
                 text: `You have been rejected to join the project '${project.project_title}' as a professional.`,
             };
-        } else {
+        } else if (action === "remove") {
+            project.approved_applicants = project.approved_applicants.filter((requestId) => requestId.toString() !== userId);
+            mailOptions = {
+                from: 'okaybuddy646@gmail.com',
+                to: professional.email,
+                subject: `Removed From Project - ${project.project_title}`,
+                text: `You have been removed from the project '${project.project_title}'`,
+            };
+        }  
+        else {
             return response_bad_request(res, "Invalid action. Use 'approve' or 'reject'.");
         }
         // Send the email
@@ -547,7 +582,7 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
             }
         });
         const updatedProject = await project.save();
-        const message = action === "approve" ? "Professional approved successfully" : "Professional rejected successfully";
+        const message = action === "approve" ? "Professional approved successfully" : action === "remove"?"Professional removed succesfully":"Professional rejected successfully";
         return response_success(res, updatedProject, message);
     } catch (error: any) {
         if (error instanceof Error) {
@@ -596,6 +631,17 @@ export async function inviteProfessional(req: Request, res: Response): Promise<R
         if (project.owner.toString() !== ownerId.toString()) {
             return response_unauthorized(res, "Only the project owner can send invitations.");
         }
+        
+        // update invited applicants
+        const professional = await User.findOne({ email: professionalEmail });
+        if (!professional) {
+            return response_not_found(res, "Professional with the given email not found.");
+        }
+
+        // Update invited applicants
+        const professionalId = new mongoose.Types.ObjectId(professional._id);
+        project.invited_applicants.push(professionalId);
+        const updatedProject = await project.save();
 
         //Nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -626,7 +672,92 @@ export async function inviteProfessional(req: Request, res: Response): Promise<R
                 return response_success(res, "Invitation email sent successfully");
             }
         });
-        return response_success(res, "Succesfully send email");
+        return response_success(res, updatedProject, "Succesfully send email");
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }
+}
+
+export async function getReviews(req: Request, res: Response): Promise<Response> {
+    try {
+        const { size, page } = req.body;
+        const projectId = req.params.id;
+        let required_fields = [
+			'size',
+            'page'
+		];
+
+		for (const fields of required_fields) {
+			let valid = check_req_field(req.body[fields])
+            if(!valid){
+                throw new Error(`${fields} cannot be empty`)
+            }
+		}
+
+        if(typeof page != "number" || typeof size != "number"){
+            throw new Error("page and size must be a number")
+        }
+
+        if(page <=0 || size <= 0){
+            throw new Error("page and size number must be greater than 0");
+        }
+
+        const project = await Project.findById(projectId);
+        if (!project) {
+            return response_not_found(res, "Project not found");
+        }
+        if (project.status != "completed") {
+            return response_forbidden(res, "Project not completed, cannot get reviews for it yet!");
+        } 
+
+        const myCustomLabels = {
+            totalDocs: 'amountOfReviews',
+            docs: 'reviewArray',
+            limit: 'size',
+            page: 'currentPage'
+        };
+        
+        
+        let populate = [
+            {
+                path: 'userId',
+                select: 'firstName userName lastName',
+                model:'User',
+            }
+        ]
+
+        let query = {
+            projectId,
+            ratingType: "Company"
+        }
+
+        const options = {
+            page,
+            sort: { firstName: 'asc', lastName: 'asc' },
+            limit: size,
+            populate,
+            projection: "-__v",
+            lean: true,
+            leanWithId: true,
+            customLabels: myCustomLabels,
+            useCustomCountFn: async () => {
+                let count = await Rating.countDocuments(query);
+                return count;
+            }
+        }
+  
+        let ratings = await RatingPaginate.paginate(query, options);
+        let {reviewArray, ...rest} = ratings;
+        let reviewsList = Array.isArray(reviewArray)?reviewArray.map((e) => {
+            let {_id, ...otherFields} = e;
+            return {
+                ...otherFields
+            }
+        }):[]
+        return response_success(res,{reviewsList, ...rest},"Request Success")
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);

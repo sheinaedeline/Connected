@@ -3,7 +3,7 @@ import { response_bad_request, response_success, response_internal_server_error,
 import User from '@mongodb/userModel';
 import UserPaginate from '@mongodb/userPaginateModel';
 import { AuthorizeTokenResponse } from '@interfaces/authInterface'; 
-import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, getCurrentTime, idToObjectId } from '@utils/utils';
+import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, recalculateProjectRating, recalculateProfessionalRating} from '@utils/utils';
 import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
 import { Buffer } from 'buffer';
@@ -12,6 +12,7 @@ import nodemailer from 'nodemailer';
 import { IUser } from './projectController';
 import Project from '@mongodb/projectModel';
 import Rating from '@mongodb/ratingModel';
+import RatingPaginate from '@mongodb/ratingPaginateModel';
 
 
 export async function register(req: Request, res: Response): Promise<Response> {
@@ -455,7 +456,6 @@ export async function forgetPassword(req: Request, res: Response): Promise<Respo
         if (!user) {
             return response_bad_request(res, 'User not found.');
         }
-
         //generate temporary password (update password in database)
         const temporaryPassword = crypto.randomBytes(10).toString('base64url');
         const hashedPassword = await bcrypt.hashSync(temporaryPassword, 10);
@@ -489,11 +489,11 @@ export async function forgetPassword(req: Request, res: Response): Promise<Respo
                 return response_internal_server_error(res,'Failed to send forget password email');
             } else {
                 console.log('Email sent:', info.response);
-                return response_success(res, 'Temporary password sent successfully');
+                return response_success(res, `${temporaryPassword}`);
             }
         });
-
-        return response_success(res, 'Temporary password is sent to User. User must be reminded to create a new password once logged in.');
+        
+        return response_success(res, `${temporaryPassword}`);
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
@@ -519,20 +519,19 @@ export async function rateProfessionalUser(req: Request, res: Response): Promise
         if (existingRating) {
             // If the rating already exists, update it.
             existingRating.ratings = ratings;
-            const updatedRating = await existingRating.save();
-            return response_success(res, updatedRating, "Your rating has been updated successfully!");
+            await existingRating.save();
+        } else { // user does not have a rating
+            let newRating = new Rating({
+                userId,
+                projectId,
+                ratings,
+                ratingType: "Professional",
+            });
+            await newRating.save();
         }
-        
-        // user does not have a rating
-        let newRating = new Rating({
-            userId,
-            projectId,
-            ratings,
-            ratingType: "Professional",
-        });
-        const savedRating = await newRating.save();
-        return response_success(res, savedRating, "You have successfully rated this professional user!")
-
+        // Recalculate the average rating of the professional user
+        let averageRating = await recalculateProfessionalRating(userId);
+        return response_success(res, { averageRating }, "The professional user's average rating has been updated successfully!");
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
@@ -544,27 +543,35 @@ export async function rateProfessionalUser(req: Request, res: Response): Promise
 
 export async function rateProject(req: Request, res: Response): Promise<Response> {
     try {
-        const {projectId, userId, ratings, reviews} = req.body;
+        const { projectId, userId, ratings, review } = req.body;
         const project = await Project.findById(projectId);
         const existingRating = await Rating.findOne({ projectId, userId, ratingType: "Company" });
-
         if (!project) {
             return response_not_found(res, "Project not found");
-        } if (project.status != "completed") {
-            return response_forbidden(res, "Project not completed, cannot rate it yet!")
-        } if (existingRating) {
+        } 
+        if (project.status != "completed") {
+            return response_forbidden(res, "Project not completed, cannot rate it yet!");
+        } 
+        // If the rating already exists, update it
+        if (existingRating) {
             existingRating.ratings = ratings;
-            const updatedRating = await existingRating.save();
-            return response_success(res, updatedRating, "Your rating has been updated successfully!");
+            existingRating.review = review;
+            await existingRating.save();
+        } else {
+            // Create a new rating
+            let newRating = new Rating({
+                userId,
+                projectId,
+                ratings,
+                review,
+                ratingType: "Company",
+            });
+            await newRating.save();
         }
-        let newRating = new Rating({
-            projectId,
-            ratings,
-            ratingType: "Company",
-            reviews
-        });
-        const savedRating = await newRating.save();
-        return response_success(res, savedRating, "You have successfully rated this project!")
+        // Recalculate the average rating of the project
+        let averageRating = await recalculateProjectRating(projectId);
+        // Send success response
+        return response_success(res, { averageRating }, "The project's average rating has been updated successfully!");
 
     } catch (error: any) {
         if (error instanceof Error) {
@@ -574,26 +581,123 @@ export async function rateProject(req: Request, res: Response): Promise<Response
     } 
 }
 
-// export async function getProfessionalRating(req: Request, res: Response): Promise<Response> {
-//     try {
-//         const {userId} = req.body
-//         const user = await User.findById(userId);
-//         const allRatings = await Rating.find({ userId, ratingType: "Professional" });
 
-//         if (!user) {
-//             return response_not_found(res, "User not found");
-//         } if (!allRatings) {
-//             return response_not_found(res, "Ratings not found");
-//         }
-//         const averageRating = allRatings.reduce((acc, rating) => acc + rating.ratings, 0) / allRatings.length;
-//         user.averageRating = averageRating
-//         await user.save()
+export async function getMultipleUserDetail(req: Request, res: Response): Promise<Response> {
+    try {
+        const {userIds} = req.body;
+        if(Array.isArray(userIds)){
+            for (const item of userIds){
+                if(typeof item != 'string'){
+                    throw new Error('Value inside userIds array must be a string')
+                }
+            }
+        }else{
+            throw new Error('userIds field must be an array')
+        }
 
+        let userDetailsArr:any[] = [];
+        for(let ids of userIds) {
+            let userDetail = await User.findById(ids).select('firstName lastName userName').lean();
+            let modifiedUserObj = {};
+            if(userDetail){
+                let {_id, ...rest} = userDetail
+                modifiedUserObj = {...rest, id: _id.toString()}
+            }
+            userDetailsArr.push(modifiedUserObj);
+        }
+   
+        return response_success(res, {userDetailsArr}, "You have successfully rated this professional user!")
 
-//     } catch (error: any) {
-//         if (error instanceof Error) {
-//             return response_bad_request(res, error.message);
-//         }
-//         return response_internal_server_error(res, error.message);
-//     }
-// }
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }   
+}
+
+// send email to invite professionals
+export async function getReviews(req: Request, res: Response): Promise<Response> {
+    try {
+        const { size, page } = req.body;
+        const userId = req.params.id;
+        let required_fields = [
+			'size',
+            'page'
+		];
+
+		for (const fields of required_fields) {
+			let valid = check_req_field(req.body[fields])
+            if(!valid){
+                throw new Error(`${fields} cannot be empty`)
+            }
+		}
+
+        if(typeof page != "number" || typeof size != "number"){
+            throw new Error("page and size must be a number")
+        }
+
+        if(page <=0 || size <= 0){
+            throw new Error("page and size number must be greater than 0");
+        }
+
+        const user = await User.findById(userId);
+        if (!user) {
+            return response_not_found(res, "User not found");
+        }
+        if (user.userType != "professional") {
+            return response_forbidden(res, "Can only get reviews for professional users, if you want to find reviews for a company, find it by their projects");
+        } 
+
+        const myCustomLabels = {
+            totalDocs: 'amountOfReviews',
+            docs: 'reviewArray',
+            limit: 'size',
+            page: 'currentPage'
+        };
+        
+        
+        let populate = [
+            {
+                path: 'userId',
+                select: 'firstName userName lastName',
+                model:'User',
+            }
+        ]
+
+        let query = {
+            userId,
+            ratingType: "Professional"
+        }
+
+        const options = {
+            page,
+            sort: { firstName: 'asc', lastName: 'asc' },
+            limit: size,
+            populate,
+            projection: "-__v",
+            lean: true,
+            leanWithId: true,
+            customLabels: myCustomLabels,
+            useCustomCountFn: async () => {
+                let count = await Rating.countDocuments(query);
+                return count;
+            }
+        }
+  
+        let ratings = await RatingPaginate.paginate(query, options);
+        let {reviewArray, ...rest} = ratings;
+        let reviewsList = Array.isArray(reviewArray)?reviewArray.map((e) => {
+            let {_id, ...otherFields} = e;
+            return {
+                ...otherFields
+            }
+        }):[]
+        return response_success(res,{reviewsList, ...rest},"Request Success")
+    } catch (error: any) {
+        if (error instanceof Error) {
+            return response_bad_request(res, error.message);
+        }
+        return response_internal_server_error(res, error.message);
+    }
+}
