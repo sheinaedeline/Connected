@@ -49,7 +49,7 @@ export default function ChangePasswordModal({modalState, setModalState}) {
 
     return (
         <>
-
+        {/* Inspo from https://headlessui.com/react/dialog */}
         <Transition appear show={modalState} as={Fragment}>
             <Dialog as="div" className="relative z-10" onClose={closeModal}>
             <Transition.Child
