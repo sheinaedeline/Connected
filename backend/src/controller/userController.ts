@@ -456,7 +456,6 @@ export async function forgetPassword(req: Request, res: Response): Promise<Respo
         if (!user) {
             return response_bad_request(res, 'User not found.');
         }
-
         //generate temporary password (update password in database)
         const temporaryPassword = crypto.randomBytes(10).toString('base64url');
         const hashedPassword = await bcrypt.hashSync(temporaryPassword, 10);
@@ -490,11 +489,11 @@ export async function forgetPassword(req: Request, res: Response): Promise<Respo
                 return response_internal_server_error(res,'Failed to send forget password email');
             } else {
                 console.log('Email sent:', info.response);
-                return response_success(res, 'Temporary password sent successfully');
+                return response_success(res, `${temporaryPassword}`);
             }
         });
-
-        return response_success(res, 'Temporary password is sent to User. User must be reminded to create a new password once logged in.');
+        
+        return response_success(res, `${temporaryPassword}`);
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
