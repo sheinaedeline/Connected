@@ -56,6 +56,7 @@ export const recalculateProjectRating = async (projectId: string):Promise<number
         }
         // Update the project's average rating
         await Project.findByIdAndUpdate(projectId, updateOptions);
+        
         return averageRating;
 }
 

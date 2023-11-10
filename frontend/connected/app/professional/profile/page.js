@@ -31,6 +31,10 @@ export default function ProfessionalProfile() {
         console.log("change password", modalState);
         setModalState(true);
     };
+    const [updateButton, setUpdateButton] = useState(false);
+    const [userImageString, setUserImageString] = useState('');
+    const [userFileString, setUserFileString] = useState(null);
+
 
     const handleFileUpload = async (event) => {
         const file = event.target.files[0];
@@ -110,7 +114,13 @@ export default function ProfessionalProfile() {
                     tags = userData.tags[0];
                 }
                 setIndustryType(tags);
-                setUserImage(userData.userImage);
+                
+                if(userData.userImage){
+                    setUserImageString(userData.userImage);
+                }
+                if(userData.userFile){
+                    setUserFileString(userData.userFile);
+                }
                 
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
@@ -177,6 +187,22 @@ export default function ProfessionalProfile() {
                             />
                         </div>
                     </div>
+                    {userFileString && 
+                        <button onClick={() => {
+                            const link = document.createElement('a');
+                            link.href = userFileString;
+                            link.download = 'file.pdf';
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
+                        }}
+                        className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                        >
+                            Download CV
+                        </button>
+                    }
+
+
                 </div>
 
                 {/* Account Credentials */}
