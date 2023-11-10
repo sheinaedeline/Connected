@@ -33,7 +33,6 @@ export async function createProject(req: Request, res: Response): Promise<Respon
             'expected_working_hours',
             'online_offline'
 		];
-        // console.log(project_title)
 		for (const fields of required_fields) {
 			let valid = check_req_field(req.body[fields])
             if(!valid){
@@ -76,7 +75,6 @@ export async function createProject(req: Request, res: Response): Promise<Respon
         
         const savedProject = await newProject.save();
 
-        // console.log(savedProject._id.toString());
         return response_success(res,savedProject,"Succesfully Created Project");
 
     } catch (error:any) {
@@ -231,10 +229,8 @@ export async function getProjects(req: Request, res: Response): Promise<Response
 export async function getProjectById(req: Request, res: Response): Promise<Response> {
     try {
         const projectId = req.params.id; // Get the project ID from the request parameters
-        console.log(projectId)
         // Find the project by ID in the database
         const project = await Project.findById(projectId);
-        console.log(projectId, project)
         if (!project) {
             return response_not_found(res, 'Project not found');
         }
@@ -255,7 +251,6 @@ export async function updateProjectStatus(req: Request, res: Response): Promise<
         const projectId = req.params.id;
         const { newStatus } = req.body;
         const userId = req.body["_id"];
-        console.log('user id: ',userId)
         // Validate the project status
         if (!Object.values(ProjectStatus).includes(newStatus)) {
             return response_bad_request(res, "Invalid new status provided. e.g. ongoing, new or completed");
@@ -303,8 +298,6 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
             'price_budget',
             'req_prof_criteria'
         ];
-        // console.log(project)
-        // console.log(updatedDetails)
         if (project === null) {
             return response_bad_request(res, "Project not found.");
         }
@@ -322,7 +315,6 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
         });
         // Save the updated project
         await project.save();
-        // console.log(project)
         await project.save();
         return response_success(res, project, `Project details updated for ${project}`);
     } catch (error: any) {

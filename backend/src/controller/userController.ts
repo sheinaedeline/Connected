@@ -399,32 +399,6 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
     }
 }
 
-
-
-
-export async function tokenTest(req: Request, res: Response): Promise<Response|void> {
-    try {
-        // if(req.file){
-        // const image = { data: req.file.buffer, contentType: req.file?.mimetype }
-        // console.log(image);
-        // const savedImage = await ImageModel.create({image});
-        // console.log(savedImage);
-        // res.setHeader( 'Content-Type', savedImage.image.contentType);
-        // res.send(savedImage.image.data);
-        console.log(req.body['_id']);
-        if(req.body['id'] == null){
-            console.log('Is null');
-        }
-        return response_success(res,{},'Token is valid');
-        
-    } catch (error:any) {
-        if(error instanceof Error){
-            return response_bad_request(res,error.message)
-        } 
-        return response_internal_server_error(res, error.message)
-    }
-}
-
 export async function viewProfile(req: Request, res: Response): Promise<Response> {
     try {
         const {id} = req.params;
@@ -458,8 +432,6 @@ export async function forgetPassword(req: Request, res: Response): Promise<Respo
         const temporaryPassword = crypto.randomBytes(10).toString('base64url');
         const hashedPassword = await bcrypt.hashSync(temporaryPassword, 10);
         await User.updateOne({ email: email }, { $set: { hash_password: hashedPassword } });
-        console.log(temporaryPassword)
-        console.log(hashedPassword)
 
         //send temp password to user
         //Nodemailer transporter
