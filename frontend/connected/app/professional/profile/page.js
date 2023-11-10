@@ -23,7 +23,6 @@ export default function ProfessionalProfile() {
     const [DOB, setDOB] = useState("");
     const [linkedIn, setLinkedIn] = useState("");
     const [description, setDescription] = useState("");
-    const [password, setPassword] = useState("");
     const [industryType, setIndustryType] = useState("");
     const [userImage, setUserImage] = useState("");
 
@@ -62,7 +61,6 @@ export default function ProfessionalProfile() {
             lastName: lastName,
             userName: username,
             email: email,
-            password: password,
             description: description,
             phoneNumber: phoneNumber,
             address: address,
@@ -104,7 +102,6 @@ export default function ProfessionalProfile() {
                 setDOB(userData.DOB);
                 setLinkedIn(userData.socialURL);
                 setDescription(userData.description);
-                setPassword(userData.password);
 
                 var tags = "";
                 if (userData.tags.length > 1) {

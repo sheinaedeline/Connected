@@ -23,7 +23,6 @@ export default function CompanyProfile() {
     const [ABN, setABN] = useState("");
     const [companyLink, setCompanyLink] = useState("");
     const [description, setDescription] = useState("");
-    const [password, setPassword] = useState("");
     const [industryType, setIndustryType] = useState("");
     const [userImage, setUserImage] = useState("");
 
@@ -40,7 +39,6 @@ export default function CompanyProfile() {
             firstName: companyName,
             userName: username,
             email: email,
-            password: password,
             description: description,
             phoneNumber: phoneNumber,
             address: address,
@@ -81,7 +79,6 @@ export default function CompanyProfile() {
                 setABN(userData.abn);
                 setCompanyLink(userData.socialURL);
                 setDescription(userData.description);
-                setPassword(userData.password);
 
                 var tags = "";
                 if (userData.tags.length > 1) {
