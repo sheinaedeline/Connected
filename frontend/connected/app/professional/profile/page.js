@@ -7,6 +7,7 @@ import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
 import axios from 'axios';
 import { useUserData } from "context/context";
+import ChangePasswordModal from "/components/ChangePasswordModal.js";
 
 export default function ProfessionalProfile() {
     // const { state } = useUserData();
@@ -25,7 +26,12 @@ export default function ProfessionalProfile() {
     const [password, setPassword] = useState("");
     const [industryType, setIndustryType] = useState("");
     const [userImage, setUserImage] = useState("");
-    const [updateButton, setUpdateButton] = useState(false);
+
+    const [modalState, setModalState] = useState(false);
+    const showModal = () => {
+        console.log("change password", modalState);
+        setModalState(true);
+    };
 
     const handleFileUpload = async (event) => {
         const file = event.target.files[0];
@@ -46,46 +52,36 @@ export default function ProfessionalProfile() {
         }
     };
 
-    // Update Button
-    const handleUpdateButton = () => {
-        setUpdateButton(!updateButton);
-    }
-
     // POST Edit Profile
-    useEffect(() => {
-        const editProfile = async () => {
-            // New data
-            const data = {
-                userId: accountId,
-                firstName: firstName,
-                lastName: lastName,
-                userName: username,
-                email: email,
-                password: password,
-                description: description,
-                phoneNumber: phoneNumber,
-                address: address,
-                socialURL: linkedIn,
-                dob: DOB,
-                tags: industryType,
-                userimage: userImage,
-            };
-
-            try {
-                const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data);
-    
-                // Dispatch
-                console.log('Edit Profile Successful', response.data);
-                
-            } catch (error) {
-                // Handle any errors (e.g., display an error message)
-                console.error('Edit Profile failed', error);
-            }
+    const handleUpdateButton = async () => {
+        // New data
+        const data = {
+            userId: accountId,
+            firstName: firstName,
+            lastName: lastName,
+            userName: username,
+            email: email,
+            password: password,
+            description: description,
+            phoneNumber: phoneNumber,
+            address: address,
+            socialURL: linkedIn,
+            dob: DOB,
+            tags: industryType,
+            userimage: userImage,
         };
 
-        editProfile();
+        try {
+            const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
 
-    }, [updateButton]);
+            // Dispatch
+            console.log('Edit Profile Successful', response.data);
+            
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('Edit Profile failed', error);
+        }
+    };
 
     // GET View Profile
     useEffect(() => {
@@ -108,7 +104,15 @@ export default function ProfessionalProfile() {
                 setLinkedIn(userData.socialURL);
                 setDescription(userData.description);
                 setPassword(userData.password);
-                setIndustryType(userData.tags);
+
+                var tags = "";
+                if (userData.tags.length > 1) {
+                    tags = userData.tags.join(",");
+                } else {
+                    tags = userData.tags[0];
+                }
+
+                setIndustryType(tags);
                 setUserImage(userData.userImage);
                 
             } catch (error) {
@@ -124,7 +128,7 @@ export default function ProfessionalProfile() {
     return (
         <div className="bg-white dark:bg-black">
             <Header/>
-
+            
             <div className="flex flex-col justify-center px-32">
                 {/* Page Title */}
                 <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
@@ -278,6 +282,7 @@ export default function ProfessionalProfile() {
                 <div className="flex justify-end m-4">
                     <button
                         type="submit"
+                        onClick={showModal}
                         className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     >
                         Change Password
@@ -371,10 +376,8 @@ export default function ProfessionalProfile() {
                         </div>
                     </div>
                 </div>
-                {/* <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-                    My Tags
-                </h2> */}
             </div>
+            <ChangePasswordModal modalState={modalState} setModalState={setModalState}/>
             <Footer/>
         </div>
     )

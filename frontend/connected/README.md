@@ -25,9 +25,10 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 1. react-icons
 2. tailwind-scrollbar-hide
 3. axios
+4. @headlessui/react
 
 ```bash
-npm install axios tailwind-scrollbar-hide react-icons --save
+npm install axios tailwind-scrollbar-hide react-icons @headlessui/react --save
 ```
 
 
