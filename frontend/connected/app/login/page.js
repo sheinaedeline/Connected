@@ -15,6 +15,7 @@ export default function Login() {
     const [hiddenEmail, setHiddenEmail] = useState("");
     const [forgetPassword, setForgetPassword] = useState(false);
     const [temporaryPassword, setTemporaryPassword] = useState("");
+    const [correctTempPassword, setCorrectTempPassword] = useState("");
     const [changePassword, setChangePassword] = useState(false);
     const [newPassword, setNewPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -59,16 +60,19 @@ export default function Login() {
     };
 
     const handleForgetButton = async () => {
-        const hidden = email.split("@")[0];
-        const domain = email.split("@")[1];
-        const finalEmail = hidden[0] + "***" + hidden[hidden.length - 1] + "@" + domain;
-        setHiddenEmail(finalEmail);
+        if (hiddenEmail === "") {
+            const hidden = email.split("@")[0];
+            const domain = email.split("@")[1];
+            const finalEmail = hidden[0] + "***" + hidden[hidden.length - 1] + "@" + domain;
+            setHiddenEmail(finalEmail);
+        };
 
         try {
             const response = await axios.post(`http://127.0.0.1:3000/user/forgetpassword/${email}`);
 
             // Dispatch
             console.log('Forget Password successful', response.data);
+            setCorrectTempPassword(response.data.content);
             setForgetPassword(true);
         } catch (error) {
             // Handle any errors (e.g., display an error message)
@@ -89,21 +93,53 @@ export default function Login() {
     };
 
     const handleResetPassword = async () => {
-        // New data
+        // Login data
+        const loginData = {
+            email: email,
+            password: temporaryPassword,
+        };
+
+        // New Data
         const data = {
             email: email,
             password: newPassword,
         };
 
         try {
-            const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+            // Login
+            const login = await axios.post('http://127.0.0.1:3000/user/login', loginData);
+            const payloadData = {
+                accountId: login.data.content._id, 
+                userType: login.data.content.userType,
+                jwtToken: login.data.content.jwtToken,
+            };
+
+            // Set the userId in local storage
+            localStorage.setItem("loggedUser", JSON.stringify(payloadData));
+            
+            // Reset Password
+            const response = await axios.post('http://127.0.0.1:3000/user/editprofile', data, { headers: { 'Authorization': `Bearer ${login.data.content.jwtToken}` }});
 
             // Dispatch
             console.log('Reset Password Successful', response.data);
-            
+            // Home redirect
+            if (login.data.content.userType === 'company') {
+                router.push('/company');
+            } else if (login.data.content.userType === 'professional') {
+                router.push('/professional');
+            }
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Reset Password Failed', error);
+        }
+    };
+
+    // Check if inputted temporary password is correct
+    const handleChangePassword = () => {
+        if (temporaryPassword === correctTempPassword) {
+            setChangePassword(true);
+        } else {
+            alert("Incorrect temporary password entered.");
         }
     };
 
@@ -147,7 +183,7 @@ export default function Login() {
                                     Password
                                 </label>
                                 <div className="text-sm">
-                                    <button type="submit" onClick={handleForgetButton} className="font-semibold text-blue-600 hover:text-blue-500">
+                                    <button type="button" onClick={handleForgetButton} className="font-semibold text-blue-600 hover:text-blue-500">
                                         Forgot password?
                                     </button>
                                 </div>
@@ -222,8 +258,8 @@ export default function Login() {
                         </div>
 
                         <button
-                            type="submit"
-                            onClick={() => setChangePassword(true)}
+                            type="button"
+                            onClick={handleChangePassword}
                             className="flex w-full justify-center rounded-md bg-blue-900 mt-4 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
                             Continue
@@ -232,7 +268,7 @@ export default function Login() {
 
                     <p className="mt-8 text-center text-sm text-gray-500 pb-8">
                         Didn't receive your temporary password?{' '}
-                        <button onClick={handleForgetButton} className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+                        <button type="button" onClick={handleForgetButton} className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
                             Resend email
                         </button>
                     </p>
@@ -283,7 +319,7 @@ export default function Login() {
                         </div>
 
                         <button
-                            type="submit"
+                            type="button"
                             onClick={handleResetPassword}
                             className="flex w-full justify-center rounded-md bg-blue-900 mt-4 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                         >
