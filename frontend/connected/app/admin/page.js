@@ -21,7 +21,7 @@ import Chart from 'chart.js/auto';
 Chart.register(ArcElement);
 
 
-const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', 'beverages', 'retail', 'services'];
+const options = ['finance',  'investment banking', 'web development', 'manufacturing', 'HR', 'marketing', 'retail', 'accounting'];
 
 
 export default function Projects() {

@@ -95,7 +95,7 @@ export default function ProjectTabs({accountId, userType}) {
                 'ring-white/60 ring-offset-2 ring-offset-blue-400 focus:outline-none focus:ring-2'
               )}
             >
-              <ul>
+              <ul className='flex flex-col gap-4'>
                 {projects.map((project) => (
                   <li
                     key={project.id}

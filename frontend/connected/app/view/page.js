@@ -33,6 +33,7 @@ export default function ViewProfile() {
     const [userImage, setUserImage] = useState("");
     const [userImageString, setUserImageString] = useState('');
     const [userFileString, setUserFileString] = useState(null);
+    
 
     const handleEditButton = () => {
         if (userType === 'company') {
@@ -95,7 +96,7 @@ export default function ViewProfile() {
                     <div className="group grid grid-cols-4 grid-rows-2">
                         <div className="aspect-h-1 aspect-w-1 overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
-                                src={userImage !== null ? profile : userImage}
+                                src={userImageString !== '' ? userImageString : profile}
                                 alt="Profile Picture"
                                 width={300}
                                 height={200}

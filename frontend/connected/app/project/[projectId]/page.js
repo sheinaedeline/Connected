@@ -421,7 +421,6 @@ export default function ViewProjectID({params}) {
                             <div className="col-span-3 grid grid-cols-4 gap-2 p-4 mr-10">
                                 <div className="col-span-3 flex flex-col">
                                     <p className="text-3xl font-bold text-gray-900">{project_title}</p>
-                                    <p className="mt-1 text-sm font-medium text-gray-600">{_id}</p>
                                 </div>
                                 <div className="flex flex-evenly gap-x-4 justify-start items-center">
                                     <AiOutlineHeart size={40}/>
