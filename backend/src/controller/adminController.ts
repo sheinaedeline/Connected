@@ -4,7 +4,7 @@ import { response_bad_request, response_success, response_internal_server_error,
 import User from '@mongodb/userModel';
 import Project from '@mongodb/projectModel';
 import Rating from 'mongodb/ratingModel'
-import { recalculateProfessionalRating, recalculateProjectRating } from '@utils/utils';
+import { recalculateProfessionalRating, recalculateProjectRating, recalculateCompanyRating } from '@utils/utils';
 
 // Api Function that get the statistics required for the admin dashboard
 export async function getStatistics(req: Request, res: Response): Promise<Response> { 
@@ -87,15 +87,19 @@ export async function deleteUser(req: Request, res: Response): Promise<Response>
             for (let i = 0 ; i < projectsAssociatedToUser.length; i++){ //Recursively remove the deleted user from any projects that the user was involved in
                 let projectId = projectsAssociatedToUser[i]._id.toString();
                 await Project.findByIdAndUpdate(projectId, {$pull: {potential_applicants: userId, approved_applicants:userId, invited_applicants: userId}});
-            }
-            let ratingsAssociatedToUser = await Rating.find({userId});
-            for (let i = 0; i < ratingsAssociatedToUser.length; i++ ){ //Recurisively remove all the ratings that is related to the user
-                let rating = ratingsAssociatedToUser[i];
-                if(rating.ratingType == 'Company') { //If its a review given by the user to a project, then remove it and recalculate the average rating of the project
+                let ratingsAssociatedToUser = await Rating.find({userId, projectId: projectId});
+                let userHasRated = false;
+                for (let x = 0; x < ratingsAssociatedToUser.length; x++ ){ //Recurisively remove all the ratings that is related to the user
+                    let rating = ratingsAssociatedToUser[x];
+                    if(rating.ratingType == 'Company') { //If its a review given by the user to a project, then remove it and recalculate the average rating of the project
+                        userHasRated = true;
+                    } 
                     await Rating.findByIdAndDelete(rating._id.toString());
-                    await recalculateProjectRating(rating.projectId.toString());
-                } else {
-                    await Rating.findByIdAndDelete(rating._id.toString());
+                    
+                }
+                if(userHasRated){
+                    await recalculateProjectRating(projectId);
+                    await recalculateCompanyRating(projectsAssociatedToUser[i].owner.toString());
                 }
             }
         }

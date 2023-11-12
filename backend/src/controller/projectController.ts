@@ -2,7 +2,7 @@
 import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found, response_forbidden } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
-import { check_req_field, sql_date_string_checker, recalculateProfessionalRating } from '@utils/utils';
+import { check_req_field, sql_date_string_checker, recalculateProfessionalRating, recalculateCompanyRating } from '@utils/utils';
 export type {IUser} from '@interfaces/mongoDBInterfaces'
 import ProjectPaginate from '@mongodb/projectPaginateModel';
 import Project from '@mongodb/projectModel';
@@ -353,6 +353,7 @@ export async function deleteProject(req: Request, res: Response): Promise<Respon
             }
         }
         await Project.findByIdAndDelete(projectId);
+        await recalculateCompanyRating(userId);
         return response_success(res, "Project deleted successfully!");
     } catch (error: any) {
         if (error instanceof Error) {

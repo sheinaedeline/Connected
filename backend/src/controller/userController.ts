@@ -2,7 +2,7 @@ import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found, response_forbidden } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
 import UserPaginate from '@mongodb/userPaginateModel';
-import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, recalculateProjectRating, recalculateProfessionalRating} from '@utils/utils';
+import { check_req_field, valid_email, valid_abn, sql_date_string_checker, valid_phone_number, recalculateProjectRating, recalculateProfessionalRating, recalculateCompanyRating } from '@utils/utils';
 import {generateNewToken, getTokenFromHeader,deleteToken} from '@utils/authUtils';
 import * as bcrypt from 'bcrypt';
 import crypto from 'crypto';
@@ -547,18 +547,7 @@ export async function rateProject(req: Request, res: Response): Promise<Response
         }
         const ownerId = proj.owner;
         // Find all projects where the user is the owner
-        const projects = await Project.find({ owner: ownerId });
-        
-        // Calculate the average rating for the owner/company
-        const averageOwnerRating = projects.length
-            ? projects.reduce((acc, project) => acc + (project.averageProjectRating || 0), 0) / projects.length
-            : 0;
-        let updateOptions = averageOwnerRating == null ? {
-            $unset : {averageUserRating: 1}
-        } : {
-            averageUserRating: averageOwnerRating
-        }
-        await User.findByIdAndUpdate(ownerId, updateOptions );
+        await recalculateCompanyRating(ownerId.toString());
         // Send success response
         return response_success(res, { averageRating }, "The project's average rating has been updated successfully!");
 
@@ -634,8 +623,13 @@ export async function getReviews(req: Request, res: Response): Promise<Response>
         if (!user) {
             return response_not_found(res, "User not found");
         }
-        if (user.userType != "professional") {
-            return response_forbidden(res, "Can only get reviews for professional users, if you want to find reviews for a company, find it by their projects");
+        let projectIds = []
+        if (user.userType === "company") {
+            let projects = await Project.find({owner: userId})
+            console.log(projects);
+            for (let i = 0 ; i < projects.length ; i++ ) {
+                projectIds.push(projects[i]._id.toString())
+            }
         } 
 
         const myCustomLabels = {
@@ -651,14 +645,21 @@ export async function getReviews(req: Request, res: Response): Promise<Response>
                 path: 'userId',
                 select: 'firstName userName lastName',
                 model:'User',
+            },
+            {
+                path: 'projectId',
+                select: 'project_title',
+                model:'Project',
             }
         ]
 
         let query = {
-            userId,
-            ratingType: "Professional"
+            ...(user.userType === 'professional' && {userId}),
+            ratingType: user.userType === 'professional'? 'Professional':'Company',
+            ...(user.userType === 'company' && {projectId: {$in: projectIds}})
         }
 
+        console.log(query);
         const options = {
             page,
             sort: { firstName: 'asc', lastName: 'asc' },
