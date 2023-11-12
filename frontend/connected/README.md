@@ -28,11 +28,11 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 4. react-chartjs-2 chart.js
 5. npm install browser-image-compression
 6. npm install body-parser
-
+7. @headlessui/react
 
 
 ```bash
-npm install axios tailwind-scrollbar-hide react-icons --save
+npm install axios tailwind-scrollbar-hide react-icons @headlessui/react --save
 ```
 
 

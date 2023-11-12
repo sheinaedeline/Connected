@@ -39,6 +39,9 @@ export default function ViewProfile({params}) {
     const [fetchUserType, setFetchUserType] = useState("");
     const [projectsList, setProjectsList] = useState([]);
     const [deleteUser, setDeleteUser] = useState(false);
+    const [userImageString, setUserImageString] = useState('');
+    const [userFileString, setUserFileString] = useState(null);
+    
 
     // GET View Profile
     useEffect(() => {
@@ -68,6 +71,12 @@ export default function ViewProfile({params}) {
                 } else if (userData.userType === 'professional') {
                     setDOB(userData.dob);
                     setLastName(userData.lastName);
+                }
+                if(userData.userImage){
+                    setUserImageString(userData.userImage);
+                }
+                if(userData.userFile){
+                    setUserFileString(userData.userFile);
                 }
                 
             } catch (error) {
@@ -177,7 +186,7 @@ export default function ViewProfile({params}) {
                     <div className="group grid grid-cols-4 grid-rows-2">
                         <div className="aspect-h-1 aspect-w-1 overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                             <Image
-                                src={userImage !== null ? profile : userImage}
+                                src={userImageString !== '' ? userImageString : profile}
                                 alt="Profile Picture"
                                 width={300}
                                 height={200}
@@ -217,6 +226,20 @@ export default function ViewProfile({params}) {
                             <p className="col-span-4 text-xs text-gray-600">{address}</p>
                             <p className="text-xs text-gray-600">{phoneNumber}</p>
                             <p className="col-span-3 text-left text-xs text-gray-600">{email}</p>
+                            {userFileString && 
+                                <button onClick={() => {
+                                    const link = document.createElement('a');
+                                    link.href = userFileString;
+                                    link.download = 'file.pdf';
+                                    document.body.appendChild(link);
+                                    link.click();
+                                    document.body.removeChild(link);
+                                }}
+                                className="flex justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                                >
+                                    Download CV
+                                </button>
+                            }
                         </div>
                         <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
                             <p className="text-lg font-medium text-gray-900">Description</p>

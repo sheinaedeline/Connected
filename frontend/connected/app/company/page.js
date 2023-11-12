@@ -9,7 +9,7 @@ import { useUserData } from "../../context/context";
 import axios from 'axios';
 import Link from 'next/link';
 
-const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', 'beverages', 'retail', 'services'];
+const options = ['finance',  'investment banking', 'web development', 'manufacturing', 'HR', 'marketing', 'retail', 'accounting'];
 
 export default function CompanyHome() {
     // const { state } = useUserData();
@@ -32,6 +32,17 @@ export default function CompanyHome() {
     const slideRight = (id) => {
       var slider = document.getElementById(id);
       slider.scrollLeft = slider.scrollLeft + 500;
+    };
+
+    const tagImages = {
+      "finance": "https://cdn-icons-png.flaticon.com/128/1077/1077976.png",
+      "investment banking": "https://cdn-icons-png.flaticon.com/128/846/846043.png",
+      "web development": "https://cdn-icons-png.flaticon.com/128/10210/10210601.png",
+      "manufacturing": "https://cdn-icons-png.flaticon.com/128/1433/1433114.png",
+      "HR": "https://cdn-icons-png.flaticon.com/128/6846/6846565.png",
+      "marketing": "https://cdn-icons-png.flaticon.com/128/1997/1997928.png",
+      "retail": "https://cdn-icons-png.flaticon.com/128/2769/2769277.png",
+      "accounting": "https://cdn-icons-png.flaticon.com/128/1570/1570887.png"
     };
 
     // GET View Profile
@@ -181,7 +192,7 @@ export default function CompanyHome() {
                         <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                         <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                           <Image
-                            src={item.imageSrc}
+                            src={tagImages[item.tags[0]]}
                             alt={item.imageAlt}
                             width={300}
                             height={200}
@@ -220,23 +231,23 @@ export default function CompanyHome() {
                     <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                       {professionalList.length > 0 && professionalList.map((item) => (
                         <Link key={item.id} href={`/view/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
-                          <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                              src={item.imageSrc}
-                              alt={item.imageAlt}
-                              width={300}
-                              height={200}
-                              className="object-cover object-center group-hover:opacity-75"
+                        <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                          <Image
+                                src={item.userImage ? item.userImage : "https://2456764.fs1.hubspotusercontent-na1.net/hub/2456764/hubfs/confident%20busines%20man_1200x627.jpg?width=680&name=confident%20busines%20man_1200x627.jpg"}
+                                alt={item.imageAlt}
+                                width={300}
+                                height={200}
+                                className="object-cover object-center group-hover:opacity-75"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
-                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.tags}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.rating}/5</p>
-                            <p className="mt-1 text-sm text-right font-medium text-gray-600">{item.skills} skills</p>
+                            <p className="col-span-2 mt-1 text-sm text-blue-600">{item.email}</p>
+                            {item.rating && <p className="mt-1 text-sm font-medium text-gray-600">Rating {item.averageUserRating}/5</p>}
+                            <p className="col-span-2 text-xs text-gray-600 truncate">{item.phoneNumber} </p>
                             <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
                           </div>
-                        </Link>
+                      </Link> 
                       ))}
                     </div>
                     <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
@@ -257,7 +268,7 @@ export default function CompanyHome() {
                         <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                         <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                           <Image
-                            src={item.imageSrc}
+                            src={tagImages[item.tags[0]]}
                             alt={item.imageAlt}
                             width={300}
                             height={200}

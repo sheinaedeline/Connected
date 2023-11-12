@@ -9,7 +9,7 @@ import { useUserData } from "../../context/context";
 import axios from 'axios';
 import Link from 'next/link';
 
-const options = ['bizz', 'software3', 'web development', 'non-profit', 'food', 'beverages', 'retail', 'services'];
+const options = ['finance',  'investment banking', 'web development', 'manufacturing', 'HR', 'marketing', 'retail', 'accounting'];
 
 export default function ProfessionalHome() {
     // const { state } = useUserData();
@@ -34,6 +34,17 @@ export default function ProfessionalHome() {
       slider.scrollLeft = slider.scrollLeft + 500;
     };
 
+    const tagImages = {
+      "finance": "https://cdn-icons-png.flaticon.com/128/1077/1077976.png",
+      "investment banking": "https://cdn-icons-png.flaticon.com/128/846/846043.png",
+      "web development": "https://cdn-icons-png.flaticon.com/128/10210/10210601.png",
+      "manufacturing": "https://cdn-icons-png.flaticon.com/128/1433/1433114.png",
+      "HR": "https://cdn-icons-png.flaticon.com/128/6846/6846565.png",
+      "marketing": "https://cdn-icons-png.flaticon.com/128/1997/1997928.png",
+      "retail": "https://cdn-icons-png.flaticon.com/128/2769/2769277.png",
+      "accounting": "https://cdn-icons-png.flaticon.com/128/1570/1570887.png"
+    };
+    
     // GET View Profile
     useEffect(() => {
         const viewProfile = async () => {
@@ -181,7 +192,7 @@ export default function ProfessionalHome() {
                         <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                         <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                           <Image
-                            src={item.imageSrc}
+                            src={tagImages[item.tags[0]]}
                             alt={item.imageAlt}
                             width={300}
                             height={200}
@@ -221,12 +232,12 @@ export default function ProfessionalHome() {
                       {professionalList.length > 0 && professionalList.map((item) => (
                         <Link key={item.id} href={`/view/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                           <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
-                            <Image
-                              src={item.userImage}
-                              alt={item.imageAlt}
-                              width={300}
-                              height={200}
-                              className="object-cover object-center group-hover:opacity-75"
+                          <Image
+                                src={item.userImage ? item.userImage : "https://upload.wikimedia.org/wikipedia/commons/3/3a/M%C3%BCnster%2C_LVM%2C_B%C3%BCrogeb%C3%A4ude_--_2013_--_5149-51.jpg"}
+                                alt={item.imageAlt}
+                                width={300}
+                                height={200}
+                                className="object-cover object-center group-hover:opacity-75"
                             />
                           </div>
                           <div className="grid grid-cols-2 gap-2 p-4">
@@ -257,7 +268,7 @@ export default function ProfessionalHome() {
                         <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                         <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
                           <Image
-                            src={item.imageSrc}
+                            src={tagImages[item.tags[0]]}
                             alt={item.imageAlt}
                             width={300}
                             height={200}

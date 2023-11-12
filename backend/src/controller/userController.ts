@@ -540,6 +540,25 @@ export async function rateProject(req: Request, res: Response): Promise<Response
         }
         // Recalculate the average rating of the project
         let averageRating = await recalculateProjectRating(projectId);
+        // Update the owner/company's average rating
+        const proj = await Project.findById(projectId);
+        if (!proj) {
+            return response_not_found(res, 'Project not found');
+        }
+        const ownerId = proj.owner;
+        // Find all projects where the user is the owner
+        const projects = await Project.find({ owner: ownerId });
+        
+        // Calculate the average rating for the owner/company
+        const averageOwnerRating = projects.length
+            ? projects.reduce((acc, project) => acc + (project.averageProjectRating || 0), 0) / projects.length
+            : 0;
+        let updateOptions = averageOwnerRating == null ? {
+            $unset : {averageUserRating: 1}
+        } : {
+            averageUserRating: averageOwnerRating
+        }
+        await User.findByIdAndUpdate(ownerId, updateOptions );
         // Send success response
         return response_success(res, { averageRating }, "The project's average rating has been updated successfully!");
 
