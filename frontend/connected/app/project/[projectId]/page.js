@@ -581,24 +581,6 @@ export default function ViewProjectID({params}) {
                             <div className="grid grid-cols-2 gap-2 p-4">
                                 <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
                                 <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
-                                <button
-                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                onClick={() => {
-                                    setProfessionalId(item.id);
-                                    setApproveButton(!approveButton);
-                                }}
-                            >
-                                Accept
-                            </button>
-                            <button
-                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                onClick={() => {
-                                    setProfessionalId(item.id);
-                                    setRejectButton(!rejectButton);
-                                }}
-                            >
-                                Reject
-                            </button>
                           </div>
                         </a>
                     ))}
@@ -607,6 +589,51 @@ export default function ViewProjectID({params}) {
                 </div>
             </div>
             )}
+            {userType === 'professional' && (status === 'new' || status === 'ongoing') && (
+            <div>
+                <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                Invited{' '}
+                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                    Professionals
+                </a>
+                </h2>
+                <div className="relative flex items-center">
+                <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                {invitedList.length > 0 && invitedList.map((item) => (
+                    item.id === accountId && (
+                        <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[200px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                            <div className="grid grid-cols-2 gap-2 p-4">
+                                <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
+                                <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
+                                <button
+                                    className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    onClick={() => {
+                                        setProfessionalId(item.id);
+                                        setApproveButton(!approveButton);
+                                    }}
+                                >
+                                    Accept
+                                </button>
+                                <button
+                                    className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                    onClick={() => {
+                                        setProfessionalId(item.id);
+                                        setRejectButton(!rejectButton);
+                                    }}
+                                >
+                                    Reject
+                                </button>
+                            </div>
+                        </a>
+                    )
+                ))}
+                </div>
+                <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                </div>
+            </div>
+            )}
+
             {owner === accountId && (status === 'completed') && (
                 <div>
                 <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
