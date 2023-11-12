@@ -1,6 +1,4 @@
-import {HydratedDocument} from 'mongoose';
 import { Schema} from 'mongoose';
-import type { QueryWithHelpers, Types} from 'mongoose';
 export interface IUser {
     userType: string,
     firstName: string,
@@ -23,14 +21,6 @@ export interface IUser {
 
 export interface IUserMethods {
     comparePassword(password:string): boolean;
-}
-
-export interface UserQueryHelpers {
-    byUserType(name: string): QueryWithHelpers<
-      HydratedDocument<IUser>[],
-      HydratedDocument<IUser>,
-      UserQueryHelpers
-    >
 }
 
 export interface IProject {

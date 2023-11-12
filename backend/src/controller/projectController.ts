@@ -2,7 +2,7 @@
 import type { Request, Response } from 'express';
 import { response_bad_request, response_success, response_internal_server_error, response_unauthorized, response_not_found, response_forbidden } from '@utils/responseUtils';
 import User from '@mongodb/userModel';
-import { check_req_field, sql_date_string_checker, recalculateProfessionalRating } from '@utils/utils';
+import { check_req_field, sql_date_string_checker, recalculateProfessionalRating, recalculateCompanyRating } from '@utils/utils';
 export type {IUser} from '@interfaces/mongoDBInterfaces'
 import ProjectPaginate from '@mongodb/projectPaginateModel';
 import Project from '@mongodb/projectModel';
@@ -33,7 +33,6 @@ export async function createProject(req: Request, res: Response): Promise<Respon
             'expected_working_hours',
             'online_offline'
 		];
-        // console.log(project_title)
 		for (const fields of required_fields) {
 			let valid = check_req_field(req.body[fields])
             if(!valid){
@@ -76,7 +75,6 @@ export async function createProject(req: Request, res: Response): Promise<Respon
         
         const savedProject = await newProject.save();
 
-        // console.log(savedProject._id.toString());
         return response_success(res,savedProject,"Succesfully Created Project");
 
     } catch (error:any) {
@@ -89,7 +87,7 @@ export async function createProject(req: Request, res: Response): Promise<Respon
 
 
 
-export async function getProjects(req: Request, res: Response): Promise<Response> {
+export async function getProjects(req: Request, res: Response): Promise<Response> { //Api function that allows the user to paginate the projects in the platform
     try {
         const {tags, size, page, companyId, projectName, startsAt, endsAt, userStatus ,userId, status, sortBy} = req.body;
         let required_fields = [
@@ -160,12 +158,27 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             }
         }
 
+        let lowerCasedStatus:string[] = [];
+        if (status){
+            if(Array.isArray(status)){
+                for (const item of status){
+                    if(typeof item != "string"){
+                        throw new Error('Value inside shift_id array must be a string')
+                    }
+                }
+                lowerCasedStatus = status.map( (items:string) => items.toLowerCase());
+            }else{
+                throw new Error('status field must be an array')
+            }
+        }
+
+
         let query = {
             ...(companyId && {owner: companyId }),
             ...(projectName && {project_title: {$regex:new RegExp(`^${projectName}`,'i')}}),
             ...(tags && {tags: {$all: [...lowerCasedTags]}}),
             ...(startsAt && {start_date: {$gte:DateTime.fromSQL(startsAt).toJSDate()}}),
-            ...(status && {status: status.toLowerCase()}),
+            ...(status && {status: {$in: lowerCasedStatus}}),
             ...((userStatus && userStatus === 'joined') && {approved_applicants:userId}),
             ...((userStatus && userStatus === 'pending') && {potential_applicants: userId}),
             ...((userStatus && userStatus === 'invited') && {invited_applicants: userId}),
@@ -227,72 +240,12 @@ export async function getProjects(req: Request, res: Response): Promise<Response
     }
 }
 
-
-// View All Available Projects
-// export async function getProjects(req: Request, res: Response): Promise<Response> {
-//     try {
-//         // Retrieve all projects from the database
-//         const projects = await Project.find();
-//         console.log(projects)
-//         return response_success(res,projects,"Succesfully Get Project");
-//     } catch (error:any) {
-//         if(error instanceof Error){
-//             return response_bad_request(res,error.message)
-//         } 
-//         return response_bad_request(res,error.message);
-//     }
-// }
-
-// Company users can view their own projects
-export async function getMyCompanyProjects(req: Request, res: Response): Promise<Response> {
-    try {
-        const userID = req.body["_id"];
-        // Query the Project collection to retrieve all projects associated with the company
-        const companyProjects = await Project.find({ owner: userID });
-        // Check if the company has any projects
-        if (!companyProjects || companyProjects.length === 0) {
-            return response_not_found(res, "No projects found for your company");
-        }
-        // Return the fetched projects in the response
-        return response_success(res, companyProjects, "Projects retrieved successfully for your company");
-
-    } catch (error:any) {
-        if(error instanceof Error){
-            return response_bad_request(res,error.message)
-        } 
-        return response_internal_server_error(res, error.message);
-    }
-}
-
-// Professional users or other company users can view a company's projects by looking up owner ID.
-export async function getCompanyProjects(req: Request, res: Response): Promise<Response> {
-    try {
-        const ownerID = req.params.ownerID
-        // Query the Project collection to retrieve all projects associated with the company
-        const companyProjects = await Project.find({ owner: ownerID });
-        // Check if the company has any projects
-        if (!companyProjects || companyProjects.length === 0) {
-            return response_not_found(res, "No projects found for this company");
-        }
-        // Return the fetched projects in the response
-        return response_success(res, companyProjects, "Projects retrieved successfully for the company");
-
-    } catch (error:any) {
-        if(error instanceof Error){
-            return response_bad_request(res,error.message)
-        } 
-        return response_internal_server_error(res, error.message);
-    }
-}
-
 // view project details by ID
 export async function getProjectById(req: Request, res: Response): Promise<Response> {
     try {
         const projectId = req.params.id; // Get the project ID from the request parameters
-        console.log(projectId)
         // Find the project by ID in the database
         const project = await Project.findById(projectId);
-        console.log(projectId, project)
         if (!project) {
             return response_not_found(res, 'Project not found');
         }
@@ -313,7 +266,6 @@ export async function updateProjectStatus(req: Request, res: Response): Promise<
         const projectId = req.params.id;
         const { newStatus } = req.body;
         const userId = req.body["_id"];
-        console.log('user id: ',userId)
         // Validate the project status
         if (!Object.values(ProjectStatus).includes(newStatus)) {
             return response_bad_request(res, "Invalid new status provided. e.g. ongoing, new or completed");
@@ -361,13 +313,10 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
             'price_budget',
             'req_prof_criteria'
         ];
-        // console.log(project)
-        // console.log(updatedDetails)
         if (project === null) {
             return response_bad_request(res, "Project not found.");
         }
         // Check if the user making the request is the owner of the project if the user is not an admin
-
         if(req.body['role'] !== 'admin'){
             if (project.owner.toString() !== userId) {
                 return response_bad_request(res, "Only the project owner and the website admin can edit the details of this project.");
@@ -381,7 +330,6 @@ export async function editProjectDetails(req: Request, res: Response): Promise<R
         });
         // Save the updated project
         await project.save();
-        // console.log(project)
         await project.save();
         return response_success(res, project, `Project details updated for ${project}`);
     } catch (error: any) {
@@ -420,6 +368,7 @@ export async function deleteProject(req: Request, res: Response): Promise<Respon
             }
         }
         await Project.findByIdAndDelete(projectId);
+        await recalculateCompanyRating(userId);
         return response_success(res, "Project deleted successfully!");
     } catch (error: any) {
         if (error instanceof Error) {
@@ -453,10 +402,36 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
         if (project.approved_applicants.includes(userId)) {
             return response_bad_request(res, "You've already approved to join this project");
         }
-        // update potential applicants
-        project.potential_applicants.push(userId);
-        const updatedProject = await project.save();
 
+        let mailOptions = {}
+        let responseMessage = ''
+        if (project.invited_applicants.includes(userId)) { //If user is an invited applicant, accept them directly
+            project.invited_applicants = project.invited_applicants.filter((requestId) => requestId.toString() !== userId);
+            project.approved_applicants.push(userId);
+            mailOptions = {
+                from: 'okaybuddy646@gmail.com',
+                to: user.email,
+                subject: `Confirmation for requested project - ${project.project_title}`,
+                text: `Your request to join '${project.project_title}' has been sent.\n
+                    You will get an update on the status of your application soon.\n
+                    `,
+            };
+            responseMessage = 'Succesfully Joined Project'
+        } else {
+            // update potential applicants
+            project.potential_applicants.push(userId);
+            // Email content
+            mailOptions = {
+                from: 'okaybuddy646@gmail.com',
+                to: user.email,
+                subject: `Confirmation for requested project - ${project.project_title}`,
+                text: `Your request to join '${project.project_title}' has been sent.\n
+                    You will get an update on the status of your application soon.\n
+                    `,
+            };
+            responseMessage = 'Request to join project submitted successfully';
+        }
+        const updatedProject = await project.save();
         //Send confirmation email to user
         //Nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -466,16 +441,6 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
                 pass: 'hezg ldar imjg rkkm',
             },
         });
-    
-        // Email content
-        const mailOptions = {
-            from: 'okaybuddy646@gmail.com',
-            to: user.email,
-            subject: `Confirmation for requested project - ${project.project_title}`,
-            text: `Your request to join '${project.project_title}' has been sent.\n
-                You will get an update on the status of your application soon.\n
-                `,
-        };
     
         // Send the email
         transporter.sendMail(mailOptions, (error: Error | null, info: nodemailer.SentMessageInfo) => {
@@ -487,7 +452,7 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
                 return response_success(res, "request to join email sent successfully");
             }
         });
-        return response_success(res, updatedProject, "Request to join project submitted successfully");
+        return response_success(res, updatedProject, responseMessage);
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
