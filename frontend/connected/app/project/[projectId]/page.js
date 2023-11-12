@@ -42,6 +42,7 @@ export default function ViewProjectID({params}) {
     const [approvedList, setApprovedList] = useState([]);
     const [potentialList, setPotentialList] = useState([]);
     const [invitedList, setInvitedList] = useState([]);
+    const [requestButton, setRequestButton] = useState(false);
 
     const slideLeft = (id) => {
         var slider = document.getElementById(id);
@@ -124,6 +125,7 @@ export default function ViewProjectID({params}) {
                 // Dispatch
                 console.log('reject', response.data);
                 alert('Rejected');
+                window.location.reload();
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Request To reject failed', error);
@@ -142,6 +144,7 @@ export default function ViewProjectID({params}) {
                 // Dispatch
                 console.log('Approve', response.data);
                 alert('Approved');
+                window.location.reload();
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Request To approve failed', error);
@@ -158,6 +161,7 @@ export default function ViewProjectID({params}) {
     
                 console.log('remove', response.data);
                 alert('Removed');
+                window.location.reload();
             } catch (error) {
                 console.error('Request To remove failed', error);
             }
@@ -273,6 +277,30 @@ export default function ViewProjectID({params}) {
     useEffect(() => {
         setPotentialList(potentialList);
     }, [potentialList]);
+
+    const handleRequestButton = (itemId) => {
+        setProjectId(itemId);
+        setRequestButton(true);
+    };
+
+    // PUT Request Join Project
+    useEffect(() => {
+        const requestJoin = async () => {
+            console.log("project id bro", projectId);
+            try {
+                const response = await axios.put(`http://127.0.0.1:3000/project/${projectId}/join`, {}, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+    
+                // Dispatch
+                console.log('Request To Join Project Successful', response.data);
+                alert('Request To Join Project Successful');
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('Request To Join Project failed', error);
+            }
+        };
+
+        requestJoin();
+    }, [requestButton]);
 
     function Rating({ projectId, userId }) {
         const [rating, setRating] = useState(0);
@@ -483,6 +511,15 @@ export default function ViewProjectID({params}) {
                                     Edit Project
                                     </button>
                                 </div>)}
+
+                            {(userType === 'professional') && (
+                            <button
+                                type="submit"
+                                onClick={() => handleRequestButton(params.projectId)}
+                                className="flex mt-4 col-span-2 h-[36px] justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            >
+                                Join Project
+                            </button>)}
                     </div>
                 </div>
                 
