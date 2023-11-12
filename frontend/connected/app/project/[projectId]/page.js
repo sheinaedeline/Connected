@@ -292,7 +292,7 @@ export default function ViewProjectID({params}) {
     
                 // Dispatch
                 console.log('Request To Join Project Successful', response.data);
-                alert('Request To Join Project Successful');
+                alert('Request To Join Project Successfull, good luck!');
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Request To Join Project failed', error);
