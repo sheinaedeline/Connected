@@ -7,6 +7,7 @@ import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import jsPDF from 'jspdf';
 
 
 export default function ViewProjectID({params}) {
@@ -43,6 +44,15 @@ export default function ViewProjectID({params}) {
     const [potentialList, setPotentialList] = useState([]);
     const [invitedList, setInvitedList] = useState([]);
     const [requestButton, setRequestButton] = useState(false);
+
+    const downloadPDF = () => {
+        var doc = new jsPDF();
+        doc.text('Certificate of Completion', 10, 10);
+        doc.text('Project Title: ' + project_title, 10, 20);
+        doc.text('End Date: ' + new Date(end_date).toLocaleDateString(), 10, 30);
+        doc.text('Experiences: ' + experiences, 10, 40);
+        doc.save('Certificate_of_Completion.pdf');
+    }
 
     const slideLeft = (id) => {
         var slider = document.getElementById(id);
@@ -496,7 +506,7 @@ export default function ViewProjectID({params}) {
                                         Delete Project
                                     </button>
                                 </div>)}
-                                </div>
+                            </div>
                                 
                             </div>
                             <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
@@ -660,7 +670,9 @@ export default function ViewProjectID({params}) {
                     </h2>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <ProjectRating projectId={params.projectId} userId ={accountId} />
-                    </div> 
+                        <button  className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"     onClick={downloadPDF}>Download Certificate</button> 
+                    </div>
+                    
                 </div>
             
             )}

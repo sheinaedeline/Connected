@@ -30,6 +30,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 6. browser-image-compression
 7. body-parser
 9. @headlessui/react
+10. jsPDF
 
 
 ```bash
