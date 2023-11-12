@@ -1,16 +1,16 @@
 'use client';
 import Logo from "./Logo.js";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import Link from "next/link.js";
 import HeaderRight from "./HeaderRight.js";
 import { useRouter } from "next/navigation.js";
+import { UserContext } from '../context/UserContext.js';
 
 export default function Header() {
   const router = useRouter();
+  const userCtx = useContext(UserContext);
   const [loginState, setLoginState] = useState(false);
-  const [state, setState] = useState({});
-  console.log("hey", loginState === null);
-  console.log("local", loginState);
+  const [userType, setUserType] = useState("");
 
   // Routes to show logo only
   const routesToHideElements = ['/login', '/register'];
@@ -24,14 +24,16 @@ export default function Header() {
     if (getLogin) {
       const getState = JSON.parse(getLogin);
       setLoginState(true);
-      setState(getState);
+      setUserType(getState.userType);
     }
+    // setLoginState(userCtx.loggedIn[0]);
+    // setUserType(userCtx.userType[0]);
   },[]);
 
   return (
     <header className="w-full sticky-nav">
       <div className="flex justify-between px-4">
-        <Logo login={loginState} userType={state.userType}/>
+        <Logo login={loginState} userType={userType}/>
         
         {!hide && !loginState &&
           (<div className="flex justify-between items-center gap-4">
@@ -53,7 +55,7 @@ export default function Header() {
             </Link>
           </div>)
         }
-        {!hide && loginState && (<HeaderRight userType={state.userType}/>)}
+        {!hide && loginState && (<HeaderRight userType={userType}/>)}
       </div>
     </header>
   );

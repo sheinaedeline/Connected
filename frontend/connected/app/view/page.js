@@ -9,6 +9,7 @@ import Header from '/components/Header.js';
 import axios from 'axios';
 import { useUserData } from "context/context";
 import { useRouter } from "next/navigation";
+import ProjectTabs from '/components/ProjectTabs.js';
 
 
 export default function ViewProfile() {
@@ -28,10 +29,8 @@ export default function ViewProfile() {
     const [ABN, setABN] = useState("");
     const [socialURL, setSocialURL] = useState("");
     const [description, setDescription] = useState("");
-    const [password, setPassword] = useState("");
     const [industryType, setIndustryType] = useState("");
     const [userImage, setUserImage] = useState("");
-    const [projectsList, setProjectsList] = useState([]);
     const [userImageString, setUserImageString] = useState('');
     const [userFileString, setUserFileString] = useState(null);
     
@@ -62,7 +61,6 @@ export default function ViewProfile() {
                 setAddress(userData.address);
                 setSocialURL(userData.socialURL);
                 setDescription(userData.description);
-                setPassword(userData.password);
                 setIndustryType(userData.tags);
                 setUserImage(userData.userImage);
 
@@ -85,32 +83,7 @@ export default function ViewProfile() {
             }
         };
 
-        const getProjects = async () => {
-            const queryData = {
-                size: 5,
-                page: 1,
-            };
-
-            if (userType === 'company') {
-                queryData['companyId'] = accountId;
-            } else if (userType === 'professional') {
-                queryData['userId'] = accountId;
-            }
-            
-            try {
-                const response = await axios.post('http://127.0.0.1:3000/project/getProjects', queryData);
-    
-                // Dispatch
-                console.log('Get Projects Successful', response.data);
-                setProjectsList(response.data.content.projectsList); 
-            } catch (error) {
-                // Handle any errors (e.g., display an error message)
-                console.error('Get Projects failed', error);
-            }
-        };
-
         viewProfile();
-        getProjects();
     }, []);
 
     return (
@@ -172,24 +145,10 @@ export default function ViewProfile() {
                 </div>
 
                 {/* Project List */}
-                <h2 className="mt-8 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+                <h2 className="mt-8 text-3xl font-bold tracking-tight text-gray-900">
                     Project List
                 </h2>
-                <div className="flex flex-col w-full gap-6 mb-10">
-                    {projectsList && projectsList.map((item) => (
-                    <div key={item.id} className="group grid grid-cols-3 gap-2 p-4 rounded-md border-2 border-blue-900 w-full">
-                        <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                        <p className="text-md text-right text-blue-900">{item.owner.userName}</p>
-                        <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
-                        <p className="mt-1 text-sm text-right text-gray-600">{item.skills}</p>
-                        {/* <p className="text-sm text-gray-600">Rating {item.rating}/5</p> */}
-                        {/* <p className="col-span-2 font-medium text-sm italic text-blue-600">"{item.remark}"</p> */}
-                        <p className="mt-1 text-sm font-medium text-gray-600">{item.No_professional} Professionals</p>
-                        <p className="mt-1 text-sm font-medium text-gray-600">{item.price_budget}</p>
-                        <p className="mt-1 text-sm font-medium text-gray-600">{item.expected_working_hours} hours</p>
-                    </div>
-                    ))}
-                </div>
+                <ProjectTabs accountId={accountId} userType={userType} />
             </div>
             <Footer/>
         </div>
