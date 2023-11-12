@@ -93,10 +93,9 @@ export default function ViewProfile({params}) {
                 page: 1,
             };
 
-            console.log("Sini cuk", fetchUserType, "helllooo");
             if (fetchUserType === 'company') {
                 queryData['companyId'] = accountId;
-                queryData['status'] = "ongoing";
+                queryData['status'] = ["new", "ongoing"];
                 console.log("queryData",queryData);
             } else if (fetchUserType === 'professional') {
                 queryData['userId'] = accountId;
