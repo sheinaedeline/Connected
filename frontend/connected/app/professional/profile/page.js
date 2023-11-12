@@ -8,11 +8,13 @@ import Header from '/components/Header.js';
 import axios from 'axios';
 import { useUserData } from "context/context";
 import ChangePasswordModal from "/components/ChangePasswordModal.js";
+import { useRouter } from 'next/navigation';
 
 export default function ProfessionalProfile() {
     // const { state } = useUserData();
     const state = JSON.parse(localStorage.getItem("loggedUser"));
     const { accountId, userType } = state;
+    const router = useRouter();
     
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -60,6 +62,7 @@ export default function ProfessionalProfile() {
     // Update Button
     const handleUpdateButton = () => {
         setUpdateButton(!updateButton);
+        router.push("/view");
     }
 
     // POST Edit Profile
@@ -124,7 +127,7 @@ export default function ProfessionalProfile() {
                 setEmail(userData.email);
                 setPhoneNumber(userData.phoneNumber);
                 setAddress(userData.address);
-                setDOB(userData.DOB);
+                setDOB(new Date(userData.dob).toISOString().split('T')[0]);
                 setLinkedIn(userData.socialURL);
                 setDescription(userData.description);
 

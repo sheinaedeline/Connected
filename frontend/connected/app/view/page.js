@@ -67,7 +67,7 @@ export default function ViewProfile() {
                 if (userType === 'company') {
                     setABN(userData.abn);
                 } else if (userType === 'professional') {
-                    setDOB(userData.dob);
+                    setDOB(new Date(userData.dob).toISOString().split('T')[0]);
                     setLastName(userData.lastName);
                 }
                 if(userData.userImage){

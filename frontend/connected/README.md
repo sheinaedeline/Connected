@@ -25,14 +25,15 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 1. react-icons
 2. tailwind-scrollbar-hide
 3. axios
-4. react-chartjs-2 chart.js
-5. npm install browser-image-compression
-6. npm install body-parser
-7. @headlessui/react
+4. react-chartjs-2 
+5. chart.js
+6. browser-image-compression
+7. body-parser
+9. @headlessui/react
 
 
 ```bash
-npm install axios tailwind-scrollbar-hide react-icons @headlessui/react --save
+npm install axios tailwind-scrollbar-hide react-icons react-chartjs-2 chart.js browser-image-compression body-parser @headlessui/react --save
 ```
 
 
