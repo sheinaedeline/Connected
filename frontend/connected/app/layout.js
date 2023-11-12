@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import { UserProvider } from '../context/context.js';
+import { UserContextProvider } from '../context/UserContext.js';
 import Footer from '../components/Footer.js';
 import Header from '../components/Header.js';
 
@@ -15,9 +16,11 @@ export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Header/>
-        {children}
-        <Footer/>
+        {/* <UserContextProvider> */}
+          <Header/>
+          {children}
+          <Footer/>
+        {/* </UserContextProvider> */}
       </body>
     </html>
   )

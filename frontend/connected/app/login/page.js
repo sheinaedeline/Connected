@@ -3,13 +3,15 @@ import logo from "assets/Logo Expanded.png";
 import Image from 'next/image';
 import Link from 'next/link';
 import axios from 'axios';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserData } from "../../context/context";
 import { AiOutlineSmile } from 'react-icons/ai';
+// import { UserContext } from '../context/UserContext.js';
 
 export default function Login() {
     const router = useRouter();
+    // const userCtx = useContext(UserContext);
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [hiddenEmail, setHiddenEmail] = useState("");
@@ -42,6 +44,11 @@ export default function Login() {
                 userType: response.data.content.userType,
                 jwtToken: response.data.content.jwtToken,
             };
+
+            // userCtx.loggedIn[1](true);
+            // userCtx.accountId[1](response.data.content._id);
+            // userCtx.userType[1](response.data.content.userType);
+            // userCtx.jwtToken[1](response.data.content.jwtToken);
 
             // Set the userId in local storage
             localStorage.setItem("loggedUser", JSON.stringify(payloadData));
