@@ -158,12 +158,27 @@ export async function getProjects(req: Request, res: Response): Promise<Response
             }
         }
 
+        let lowerCasedStatus:string[] = [];
+        if (status){
+            if(Array.isArray(status)){
+                for (const item of status){
+                    if(typeof item != "string"){
+                        throw new Error('Value inside shift_id array must be a string')
+                    }
+                }
+                lowerCasedStatus = status.map( (items:string) => items.toLowerCase());
+            }else{
+                throw new Error('status field must be an array')
+            }
+        }
+
+
         let query = {
             ...(companyId && {owner: companyId }),
             ...(projectName && {project_title: {$regex:new RegExp(`^${projectName}`,'i')}}),
             ...(tags && {tags: {$all: [...lowerCasedTags]}}),
             ...(startsAt && {start_date: {$gte:DateTime.fromSQL(startsAt).toJSDate()}}),
-            ...(status && {status: status.toLowerCase()}),
+            ...(status && {status: {$in: lowerCasedStatus}}),
             ...((userStatus && userStatus === 'joined') && {approved_applicants:userId}),
             ...((userStatus && userStatus === 'pending') && {potential_applicants: userId}),
             ...((userStatus && userStatus === 'invited') && {invited_applicants: userId}),
@@ -387,10 +402,34 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
         if (project.approved_applicants.includes(userId)) {
             return response_bad_request(res, "You've already approved to join this project");
         }
-        // update potential applicants
-        project.potential_applicants.push(userId);
-        const updatedProject = await project.save();
 
+        let mailOptions = {}
+
+        if (project.invited_applicants.includes(userId)) {
+            project.invited_applicants = project.invited_applicants.filter((requestId) => requestId.toString() !== userId);
+            project.approved_applicants.push(userId);
+            mailOptions = {
+                from: 'okaybuddy646@gmail.com',
+                to: user.email,
+                subject: `Confirmation for requested project - ${project.project_title}`,
+                text: `Your request to join '${project.project_title}' has been sent.\n
+                    You will get an update on the status of your application soon.\n
+                    `,
+            };
+        } else {
+            // update potential applicants
+            project.potential_applicants.push(userId);
+            // Email content
+            mailOptions = {
+                from: 'okaybuddy646@gmail.com',
+                to: user.email,
+                subject: `Confirmation for requested project - ${project.project_title}`,
+                text: `Your request to join '${project.project_title}' has been sent.\n
+                    You will get an update on the status of your application soon.\n
+                    `,
+            };
+        }
+        const updatedProject = await project.save();
         //Send confirmation email to user
         //Nodemailer transporter
         const transporter = nodemailer.createTransport({
@@ -400,16 +439,6 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
                 pass: 'hezg ldar imjg rkkm',
             },
         });
-    
-        // Email content
-        const mailOptions = {
-            from: 'okaybuddy646@gmail.com',
-            to: user.email,
-            subject: `Confirmation for requested project - ${project.project_title}`,
-            text: `Your request to join '${project.project_title}' has been sent.\n
-                You will get an update on the status of your application soon.\n
-                `,
-        };
     
         // Send the email
         transporter.sendMail(mailOptions, (error: Error | null, info: nodemailer.SentMessageInfo) => {
