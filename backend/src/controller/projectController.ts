@@ -404,8 +404,8 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
         }
 
         let mailOptions = {}
-
-        if (project.invited_applicants.includes(userId)) {
+        let responseMessage = ''
+        if (project.invited_applicants.includes(userId)) { //If user is an invited applicant, accept them directly
             project.invited_applicants = project.invited_applicants.filter((requestId) => requestId.toString() !== userId);
             project.approved_applicants.push(userId);
             mailOptions = {
@@ -416,6 +416,7 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
                     You will get an update on the status of your application soon.\n
                     `,
             };
+            responseMessage = 'Succesfully Joined Project'
         } else {
             // update potential applicants
             project.potential_applicants.push(userId);
@@ -428,6 +429,7 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
                     You will get an update on the status of your application soon.\n
                     `,
             };
+            responseMessage = 'Request to join project submitted successfully';
         }
         const updatedProject = await project.save();
         //Send confirmation email to user
@@ -450,7 +452,7 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
                 return response_success(res, "request to join email sent successfully");
             }
         });
-        return response_success(res, updatedProject, "Request to join project submitted successfully");
+        return response_success(res, updatedProject, responseMessage);
     } catch (error: any) {
         if (error instanceof Error) {
             return response_bad_request(res, error.message);
