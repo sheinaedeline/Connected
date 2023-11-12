@@ -58,6 +58,7 @@ export default function InviteProfessional({params}) {
                 companyId: accountId,
                 size: 5,
                 page: 1,
+                status: ["new", "ongoing"]
             };
 
             try {

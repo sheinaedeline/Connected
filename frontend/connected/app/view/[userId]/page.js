@@ -79,20 +79,25 @@ export default function ViewProfile({params}) {
                     setUserFileString(userData.userFile);
                 }
                 
+                getProjects(userData.userType);
+                
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
             }
         };
 
-        const getProjects = async () => {
+        const getProjects = async (fetchUserType) => {
             const queryData = {
                 size: 5,
                 page: 1,
             };
 
+            console.log("Sini cuk", fetchUserType, "helllooo");
             if (fetchUserType === 'company') {
                 queryData['companyId'] = accountId;
+                queryData['status'] = "ongoing";
+                console.log("queryData",queryData);
             } else if (fetchUserType === 'professional') {
                 queryData['userId'] = accountId;
             }
@@ -110,7 +115,6 @@ export default function ViewProfile({params}) {
         };
 
         viewProfile();
-        getProjects();
     }, []);
 
     // Hire Professional Button
