@@ -335,7 +335,7 @@ export default function ViewProjectID({params}) {
     }
     
 
-    function ProjectRating({ projectId }) {
+    function ProjectRating({ projectId, userId }) {
         const [rating, setRating] = useState(0);
         const [review, setReview] = useState('');
         const [submitted, setSubmitted] = useState(false);
@@ -355,6 +355,7 @@ export default function ViewProjectID({params}) {
         const rateProject = async () => {
             const data = { 
                 projectId: projectId,
+                userId: userId,
                 ratings: rating,
                 review: review
             };
@@ -664,7 +665,7 @@ export default function ViewProjectID({params}) {
                         Rate Project
                     </h2>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <ProjectRating projectId={params.projectId} />
+                        <ProjectRating projectId={params.projectId} userId ={accountId} />
                     </div> 
                 </div>
             
