@@ -40,3 +40,6 @@ between team members.
 
 Week 8
 Did the second demo, Finished the admin API statistics api, created the get reviews API, Fixed a bug in the get projects api
+
+Week 9,
+Worked on the delete user api, delete projects api

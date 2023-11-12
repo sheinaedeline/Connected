@@ -73,7 +73,8 @@ The Steps to creating an API can be divided into multiple steps.
 
     Then you can just test your api using postman in http where for the example above we can test the api in postman where the url is 'http://localhost:3000/user/login'
     
-
+Adding an Admin User:
+Read the howtocreateadmin.txt to find out how
 
 Additional Stuff:
 - Add all Mongoose Model to the mongodb folder where the file naming convention is [modelName]Model.ts

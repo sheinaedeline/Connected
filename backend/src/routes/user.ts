@@ -18,8 +18,4 @@ router.post("/multipleuserdetails", getMultipleUserDetail);
 router.post("/:id/reviews", getReviews);
 export default router;
 
-// checkForRole('any','free')
-// checkForRole() //Same as checkForRole('any','required')
-// checkForRole('co     mpany')
-// checkForRole('professional')
-// checkForRole('admin')
+

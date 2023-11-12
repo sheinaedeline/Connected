@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import paginate from 'mongoose-paginate-v2';
-import type {IUser, UserQueryHelpers, IUserMethods} from '@interfaces/mongoDBInterfaces';
+import type { IUser } from '@interfaces/mongoDBInterfaces';
 import { Schema, Model} from 'mongoose';
 import { userObj } from '@mongodb/schemaObject';
 

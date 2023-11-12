@@ -335,7 +335,7 @@ export default function ViewProjectID({params}) {
     }
     
 
-    function ProjectRating({ projectId }) {
+    function ProjectRating({ projectId, userId }) {
         const [rating, setRating] = useState(0);
         const [review, setReview] = useState('');
         const [submitted, setSubmitted] = useState(false);
@@ -355,6 +355,7 @@ export default function ViewProjectID({params}) {
         const rateProject = async () => {
             const data = { 
                 projectId: projectId,
+                userId: userId,
                 ratings: rating,
                 review: review
             };
@@ -581,24 +582,6 @@ export default function ViewProjectID({params}) {
                             <div className="grid grid-cols-2 gap-2 p-4">
                                 <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
                                 <p className="col-span-2 mt-1 text-sm text-blue-600">{item.industry}</p>
-                                <button
-                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                onClick={() => {
-                                    setProfessionalId(item.id);
-                                    setApproveButton(!approveButton);
-                                }}
-                            >
-                                Accept
-                            </button>
-                            <button
-                                className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                onClick={() => {
-                                    setProfessionalId(item.id);
-                                    setRejectButton(!rejectButton);
-                                }}
-                            >
-                                Reject
-                            </button>
                           </div>
                         </a>
                     ))}
@@ -607,6 +590,8 @@ export default function ViewProjectID({params}) {
                 </div>
             </div>
             )}
+            
+
             {owner === accountId && (status === 'completed') && (
                 <div>
                 <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
@@ -637,7 +622,7 @@ export default function ViewProjectID({params}) {
                         Rate Project
                     </h2>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
-                        <ProjectRating projectId={params.projectId} />
+                        <ProjectRating projectId={params.projectId} userId ={accountId} />
                     </div> 
                 </div>
             
