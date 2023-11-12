@@ -36,6 +36,12 @@ export default function page() {
   const [filteredThirdProjectList, setFilteredThirdProjectList] = useState([]);
   const [thirdSearchInput, setThirdSearchInput] = useState('');
   const [thirdSelectedOptions, setThirdSelectedOptions] = useState([]);
+  const [fourthProjectList, setFourthProjectList] = useState([]);
+  const [filteredFourthProjectList, setFilteredFourthProjectList] = useState([]);
+  const [fourthSearchInput, setFourthSearchInput] = useState('');
+  const [fourthSelectedOptions, setFourthSelectedOptions] = useState([]);
+
+  
   const state = JSON.parse(localStorage.getItem("loggedUser"));
   const { accountId, userType } = state;
   const [firstName, setFirstName] = useState("");
@@ -110,6 +116,26 @@ export default function page() {
         }
     };
 
+    const handleFourthChange = (event) => {
+        setFourthSearchInput(event.target.value);
+    };
+    
+    const handleFourthSearch = (event) => {
+        event.preventDefault(); // Prevent page refresh
+    
+        if (fourthSearchInput.trim() === '') {
+            // If search bar is empty, show all projects
+            setFilteredFourthProjectList(fourthProjectList);
+        } else {
+            // Filter projects based on search input
+            const filteredProjects = fourthProjectList.filter(item => item.project_title.toLowerCase().includes(fourthSearchInput.toLowerCase()));
+    
+            // Update filtered project list with filtered projects
+            setFilteredFourthProjectList(filteredProjects);
+        }
+    };
+    
+
     const tagImages = {
         "finance": "https://cdn-icons-png.flaticon.com/128/1077/1077976.png",
         "investment banking": "https://cdn-icons-png.flaticon.com/128/846/846043.png",
@@ -137,6 +163,7 @@ export default function page() {
                 setProjectList(response.data.content.projectsList);
                 setSecondaryProjectList(response.data.content.projectsList);
                 setThirdProjectList(response.data.content.projectsList);
+                setFourthProjectList(response.data.content.projectsList);
                 // Set variable states
                 
             } catch (error) {
@@ -160,6 +187,11 @@ export default function page() {
     useEffect(() => {
         setFilteredThirdProjectList(thirdProjectList);
     }, [thirdProjectList]);
+
+    useEffect(() => {
+        setFilteredFourthProjectList(fourthProjectList);
+    }, [fourthProjectList]);
+    
 
     useEffect(() => {
         const viewProfile = async () => {
@@ -340,6 +372,56 @@ export default function page() {
         </div>
     );
   }
+
+  function FourthFilter({ setFourthSelectedOptions }) {
+    // const [fourthSelectedOptions, setFourthSelectedOptions] = useState([]);
+    const [showFourthFilter, setShowFourthFilter] = useState(false);
+  
+    const handleCheckboxChange = (option) => {
+        setFourthSelectedOptions(prevState => {
+            if(prevState.includes(option)) {
+                return prevState.filter(opt => opt !== option);
+            } else {
+                return [...prevState, option];
+            }
+        });
+    };
+  
+    return (
+        <div>
+            <button 
+            className="flex w-full justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600" 
+            onClick={() => setShowFourthFilter(!showFourthFilter)}>
+                Toggle Fourth Filter
+            </button>
+            {showFourthFilter && (
+                <div 
+                className="ml-2 py-2 rounded-lg shadow-lg focus:outline-none focus:ring-2 focus:ring-blue-600"
+                >
+                    <h2>Fourth Filter</h2>
+                    {options.map((option, index) => (
+                        <div key={index}>
+                            <input 
+                                type="checkbox" 
+                                id={`fourth-option-${index}`} 
+                                name={`fourth-option-${index}`} 
+                                value={option}
+                                onChange={() => handleCheckboxChange(option)}
+                                checked={fourthSelectedOptions.includes(option)}
+                            />
+                            <label htmlFor={`fourth-option-${index}`}>{option}</label>
+                        </div>
+                    ))}
+                    {/* <h2>Selected Options</h2>
+                    {fourthSelectedOptions.map((option, index) => (
+                        <p key={index}>{option}</p>
+                    ))} */}
+                </div>
+            )}
+        </div>
+    );
+}
+
         
 
   return (
@@ -480,6 +562,72 @@ export default function page() {
           </div>
           <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProjects')} size={40} />
         </div>
+
+        <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
+            Invited {' '}
+            <a href="" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+                Projects
+            </a>
+            </h2>
+            <form className="flex" role="search">
+            <input
+                id="fourthSearchBar"
+                name="fourthSearchBar"
+                type="text"
+                placeholder="Search"
+                value={fourthSearchInput}
+                onChange={handleFourthChange}
+                className="block w-full rounded-l-lg border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+            >
+            </input>
+            <button
+                type="submit"
+                className="flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                onClick={handleFourthSearch}
+            >
+                <Image
+                src={search}
+                width={26}
+                alt="connected logo"
+                />
+            </button>
+            </form>
+
+            <br></br>
+            <FourthFilter setFourthSelectedOptions={setFourthSelectedOptions} />
+
+            <div className="relative flex items-center">
+            <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProjects')} size={40} />
+            <div id='sliderTrendingProjects' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
+                {filteredFourthProjectList.length > 0  && filteredFourthProjectList.filter(item =>(item.status === 'new' || item.status === 'ongoing') && item.invited_applicants.includes(accountId) && (fourthSelectedOptions.length === 0 || fourthSelectedOptions.some(opt => item.tags.includes(opt)))).map((item) => (                
+                <a key={item.id} href={`/project/${item.id}`} className="group rounded-md border-2 border-blue-900 w-[300px] h-[400px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                    <div className="aspect-h-1 aspect-w-1  h-[200px] overflow-hidden xl:aspect-h-8 xl:aspect-w-7">
+                    <Image
+                        src={tagImages[item.tags[0]]}
+                        alt={item.imageAlt}
+                        width={300}
+                        height={200}
+                        className="object-cover object-center group-hover:opacity-75"
+                    />
+                    </div>
+                    <div className="grid grid-cols-2 gap-2 p-4">
+                    <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">
+                        Start Date: {new Date(item.start_date).toLocaleDateString()}
+                    </p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">
+                        End Date: {new Date(item.end_date).toLocaleDateString()}
+                    </p>
+                    <p className="col-span-2 text-sm font-medium text-blue-900">{item.owner.userName}</p>
+                    <p className="mt-1 text-sm font-medium text-gray-600">${item.price_budget}/hour</p>
+                    <p className="col-span-2 text-xs text-gray-600 truncate">{item.description}</p>
+                    </div>
+                </a>
+                ))}
+            </div>
+            <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProjects')} size={40} />
+            </div>
+
 
         <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
           Joined {' '}
