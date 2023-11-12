@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Link from 'next/link';
 import profile from "assets/Profile Icon.png";
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
+import axios from 'axios';
 
 export default function HeaderRight(params) {
     const router = useRouter;
@@ -33,9 +34,21 @@ export default function HeaderRight(params) {
     };
 
     // Logout Button
-    const handleLogoutButton = () => {
-        localStorage.removeItem("loggedUser");
-        router.push('/');
+    const handleLogoutButton = async () => {
+        const getUser = localStorage.getItem("loggedUser");
+        const state = JSON.parse(getUser);
+        try {
+
+            const response = await axios.get('http://127.0.0.1:3000/user/logout',  { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+
+            // Dispatch
+            console.log('Logout successful', response.data);
+            
+            localStorage.removeItem("loggedUser");
+        } catch (error) {
+            // Handle any errors (e.g., display an error message)
+            console.error('Logout Failed', error);
+        }
     };
 
     // Toggle Profile Menu
