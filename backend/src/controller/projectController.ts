@@ -410,7 +410,7 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
             project.approved_applicants.push(userId);
             mailOptions = {
                 from: 'okaybuddy646@gmail.com',
-                to: professional.email,
+                to: user.email,
                 subject: `Approval to Join Project - ${project.project_title}`,
                 text: `You have been approved to join the project '${project.project_title}' as a professional.`,
             };
