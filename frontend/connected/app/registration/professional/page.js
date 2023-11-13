@@ -100,6 +100,7 @@ export default function RegistrationProfessional() {
                         alt="connected logo"
                     />
                 </Link>
+                {/* <Logo /> */}
                 <p className="mt-4 mr-8 text-center text-sm text-gray-500">
                     Here to hire professionals?{' '}
                     <a href="/registration/company" className="font-semibold leading-6 text-blue-600 hover:text-blue-00">

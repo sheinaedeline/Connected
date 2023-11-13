@@ -1,35 +1,35 @@
 "use client";
 import Image from "next/image";
 import { useState } from "react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation.js";
 import Link from 'next/link';
 import profile from "assets/Profile Icon.png";
 import { AiOutlinePlus, AiOutlineSearch } from 'react-icons/ai';
 import axios from 'axios';
 
 export default function HeaderRight(params) {
-    const router = useRouter;
+    const router = useRouter();
     const userType = params.userType;
-    const [searchInput, setSearchInput] = useState("");
+    // const [searchInput, setSearchInput] = useState("");
     const [isMenuOpen, setIsMenuOpen] = useState(false);
   
-    // Search Box
-    const handleChange = (e) => {
-        e.preventDefault();
-        setSearchInput(e.target.value);
-    };
+    // // Search Box
+    // const handleChange = (e) => {
+    //     e.preventDefault();
+    //     setSearchInput(e.target.value);
+    // };
 
-    // Search Button
-    const handleSearch = () => {
-        console.log(searchInput);
-    };
+    // // Search Button
+    // const handleSearch = () => {
+    //     console.log(searchInput);
+    // };
 
     // My Projects Button
     const handleProjectButton = () => {
         if (userType === 'company') {
             router.push('/company/project');
         } else if (userType === 'professional') {
-            router.push('/projects');
+            router.push('/professional/project');
         }
     };
 
@@ -60,7 +60,7 @@ export default function HeaderRight(params) {
     return (
         <div className="flex justify-evenly items-center gap-4">
             {/* Search Bar */}
-            <form className="flex" role="search">
+            {/* <form className="flex" role="search">
                 <input
                     id="searchBar"
                     name="searchBar"
@@ -75,15 +75,15 @@ export default function HeaderRight(params) {
                     type="submit"
                     className="w-[40px] flex justify-center items-center rounded-r-lg bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                     onClick={handleSearch}
-                >
+                > */}
                   {/* <Image
                       src={search}
                       width={26}
                       alt="connected logo"
                   /> */}
-                  <AiOutlineSearch/>
+                  {/* <AiOutlineSearch/>
                 </button>
-            </form>
+            </form> */}
 
             {/* Create new project */}
             {userType === 'company' && (
@@ -127,7 +127,7 @@ export default function HeaderRight(params) {
                 {isMenuOpen && (
                     <div className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabIndex="-1">
                         <Link href="/view" className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-0">Your Profile</Link>
-                        <Link href="/projects"  className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-1">Your Projects</Link>
+                        {/* <button onClick={handleProjectButton} className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-1">Your Projects</button> */}
                         <Link href="/" onClick={handleLogoutButton} className="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabIndex="-1" id="user-menu-item-2">Logout</Link>
                     </div>
                 )}

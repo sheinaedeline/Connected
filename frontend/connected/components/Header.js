@@ -4,22 +4,26 @@ import { useState, useEffect, useContext } from "react";
 import Link from "next/link.js";
 import HeaderRight from "./HeaderRight.js";
 import { useRouter } from "next/navigation.js";
-import { UserContext } from '../context/UserContext.js';
+// import { UserContext } from '../context/UserContext.js';
 
 export default function Header() {
   const router = useRouter();
-  const userCtx = useContext(UserContext);
-  const [loginState, setLoginState] = useState(false);
-  const [userType, setUserType] = useState("");
+//   const userCtx = useContext(UserContext);
+//   const loggedInState = userCtx.loggedIn[0];
+//   const userTypeState = userCtx.userType[0];
+//   const hideRight = userCtx.hideRight;
+//   console.log("test", hide);
 
   // Routes to show logo only
-  const routesToHideElements = ['/login', '/register'];
+  // const routesToHideElements = ['/login', '/register'];
+  // const [hide, setHide] = useState(false);
+  const [loginState, setLoginState] = useState(false);
+  const [userType, setUserType] = useState("");
   const [hide, setHide] = useState(false);
   
   
-  // Get Login Details
+//   Get Login Details
   useEffect(() => {
-    setHide(routesToHideElements.includes(router.pathname));
     const getLogin = localStorage.getItem("loggedUser");
     if (getLogin) {
       const getState = JSON.parse(getLogin);
@@ -33,7 +37,7 @@ export default function Header() {
   return (
     <header className="w-full sticky-nav">
       <div className="flex justify-between px-4">
-        <Logo login={loginState} userType={userType}/>
+      <Logo login={loginState} userType={userType}/>
         
         {!hide && !loginState &&
           (<div className="flex justify-between items-center gap-4">

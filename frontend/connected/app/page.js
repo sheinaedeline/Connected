@@ -30,9 +30,9 @@ export default function Home() {
                   alt="connected logo"
               />
           </Link>
-          <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'right', margin: '10pt' }}>
-            <Link href="/registration"><button style={{ ...buttonStyles, marginRight: '10px' }}>Register</button></Link>
-            <Link href="/login"><button style={buttonStyles}>Login</button></Link>
+          <div className="flex justify-between items-center gap-4">
+            <Link href="/registration"><button className="flex w-[80px] justify-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm">Register</button></Link>
+            <Link href="/login"><button className="flex w-[80px] justify-center rounded-md ring-1 ring-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-blue-900 shadow-sm hover:bg-blue-200">Login</button></Link>
           </div>
         </div>
 

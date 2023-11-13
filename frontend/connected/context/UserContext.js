@@ -1,22 +1,36 @@
-'use client';
-import React, { createContext, useState } from 'react';
+// 'use client';
+// import React, { createContext, useState } from 'react';
 
-export const UserContext = createContext(null);
+// export const UserContext = createContext({
+//     loggedIn: false,
+//     hideRight: true,
+//     accountId: null,
+//     userType: null,
+//     jwtToken: null,
+//     profileLink: null,
+//     projectLink: null
+// });
 
-const UserContextProvider = ({ children }) => {
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [accountId, setAccountId] = useState('');
-  const [userType, setUserType] = useState('');
-  const [jwtToken, setJwtToken] = useState('');
+// export const UserContextProvider = ({ children }) => {
+//   const [loggedIn, setLoggedIn] = useState(false);
+//   const [hideRight, setHideRight] = useState(true);
+//   const [accountId, setAccountId] = useState('');
+//   const [userType, setUserType] = useState('');
+//   const [jwtToken, setJwtToken] = useState('');
+//   const [profileLink, setProfileLink] = useState('');
+//   const [projectLink, setProjectLink] = useState('');
 
-  const store = {
-    loggedIn: [loggedIn, setLoggedIn],
-    accountId: [accountId, setAccountId],
-    userType: [userType, setUserType],
-    jwtToken: [jwtToken, setJwtToken]
-  }
+//   const store = {
+//     loggedIn: [loggedIn, setLoggedIn],
+//     hideRight: [hideRight, setHideRight],
+//     accountId: [accountId, setAccountId],
+//     userType: [userType, setUserType],
+//     jwtToken: [jwtToken, setJwtToken],
+//     profileLink: [profileLink, setProfileLink],
+//     projectLink: [projectLink, setProjectLink]
+//   }
 
-  return <UserContext.Provider value={store}>{children}</UserContext.Provider>
-}
+//   return <UserContext.Provider value={store}>{children}</UserContext.Provider>
+// }
 
-export default UserContextProvider;
+// export default UserContext;

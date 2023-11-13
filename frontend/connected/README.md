@@ -34,7 +34,7 @@ This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-opti
 
 
 ```bash
-npm install axios tailwind-scrollbar-hide react-icons react-chartjs-2 chart.js browser-image-compression body-parser @headlessui/react --save
+npm install axios tailwind-scrollbar-hide react-icons react-chartjs-2 chart.js browser-image-compression body-parser @headlessui/react jspdf --save
 ```
 
 

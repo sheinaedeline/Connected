@@ -1,10 +1,19 @@
+'use client';
 import logo from "assets/Logo Expanded.png"
 import professional from "assets/Professional Icon.png"
 import company from "assets/Company Icon.png"
 import Image from 'next/image'
 import Link from 'next/link'
+// import { UserContext } from '../../context/UserContext.js';
+// import { useState, useEffect, useContext } from "react";
 
 export default function Registration() {
+  // const userCtx = useContext(UserContext);
+  // const loggedInState = userCtx.loggedIn[0];
+  // const userType = userCtx.userType;
+  // const hideRight = userCtx.hideRight;
+  // console.log("test", userType[0]);
+
     return (
         <div className="bg-white dark:bg-black">
           <section className="relative pb-20">
