@@ -58,6 +58,7 @@ export default function InviteProfessional({params}) {
                 companyId: accountId,
                 size: 5,
                 page: 1,
+                status: ["new", "ongoing"]
             };
 
             try {
@@ -88,7 +89,7 @@ export default function InviteProfessional({params}) {
             const inviteData = {
                 professionalEmail: professionalEmail,
                 projectId: projectId,
-                link: "http://127.0.0.1:3001",
+                link: `http://localhost:3001/project/${projectId}`,
             };
             console.log("project Inv", inviteData);
 

@@ -7,6 +7,7 @@ import Footer from '/components/Footer.js';
 import Header from '/components/Header.js';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
+import jsPDF from 'jspdf';
 
 
 export default function ViewProjectID({params}) {
@@ -42,6 +43,16 @@ export default function ViewProjectID({params}) {
     const [approvedList, setApprovedList] = useState([]);
     const [potentialList, setPotentialList] = useState([]);
     const [invitedList, setInvitedList] = useState([]);
+    const [requestButton, setRequestButton] = useState(false);
+
+    const downloadPDF = () => {
+        var doc = new jsPDF();
+        doc.text('Certificate of Completion', 10, 10);
+        doc.text('Project Title: ' + project_title, 10, 20);
+        doc.text('End Date: ' + new Date(end_date).toLocaleDateString(), 10, 30);
+        doc.text('Experiences: ' + experiences, 10, 40);
+        doc.save('Certificate_of_Completion.pdf');
+    }
 
     const slideLeft = (id) => {
         var slider = document.getElementById(id);
@@ -124,6 +135,7 @@ export default function ViewProjectID({params}) {
                 // Dispatch
                 console.log('reject', response.data);
                 alert('Rejected');
+                window.location.reload();
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Request To reject failed', error);
@@ -142,6 +154,7 @@ export default function ViewProjectID({params}) {
                 // Dispatch
                 console.log('Approve', response.data);
                 alert('Approved');
+                window.location.reload();
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Request To approve failed', error);
@@ -158,6 +171,7 @@ export default function ViewProjectID({params}) {
     
                 console.log('remove', response.data);
                 alert('Removed');
+                window.location.reload();
             } catch (error) {
                 console.error('Request To remove failed', error);
             }
@@ -273,6 +287,30 @@ export default function ViewProjectID({params}) {
     useEffect(() => {
         setPotentialList(potentialList);
     }, [potentialList]);
+
+    const handleRequestButton = (itemId) => {
+        setProjectId(itemId);
+        setRequestButton(true);
+    };
+
+    // PUT Request Join Project
+    useEffect(() => {
+        const requestJoin = async () => {
+            console.log("project id bro", projectId);
+            try {
+                const response = await axios.put(`http://127.0.0.1:3000/project/${projectId}/join`, {}, { headers: { 'Authorization': `Bearer ${state.jwtToken}` }});
+    
+                // Dispatch
+                console.log('Request To Join Project Successful', response.data);
+                alert('Request To Join Project Successfull, good luck!');
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('Request To Join Project failed', error);
+            }
+        };
+
+        requestJoin();
+    }, [requestButton]);
 
     function Rating({ projectId, userId }) {
         const [rating, setRating] = useState(0);
@@ -468,7 +506,7 @@ export default function ViewProjectID({params}) {
                                         Delete Project
                                     </button>
                                 </div>)}
-                                </div>
+                            </div>
                                 
                             </div>
                             <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
@@ -483,6 +521,15 @@ export default function ViewProjectID({params}) {
                                     Edit Project
                                     </button>
                                 </div>)}
+
+                            {(userType === 'professional') && (
+                            <button
+                                type="submit"
+                                onClick={() => handleRequestButton(params.projectId)}
+                                className="flex mt-4 col-span-2 h-[36px] justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                            >
+                                Join Project
+                            </button>)}
                     </div>
                 </div>
                 
@@ -623,7 +670,9 @@ export default function ViewProjectID({params}) {
                     </h2>
                     <div style={{ display: 'flex', justifyContent: 'center' }}>
                         <ProjectRating projectId={params.projectId} userId ={accountId} />
-                    </div> 
+                        <button  className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"     onClick={downloadPDF}>Download Certificate</button> 
+                    </div>
+                    
                 </div>
             
             )}

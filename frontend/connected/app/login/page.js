@@ -59,6 +59,8 @@ export default function Login() {
                 router.push('/company');
             } else if (response.data.content.userType === 'professional') {
                 router.push('/professional');
+            } else if (response.data.content.userType === 'admin') {
+                router.push('/admin');
             }
         } catch (error) {
             // Handle any errors (e.g., display an error message)
@@ -135,6 +137,7 @@ export default function Login() {
             } else if (login.data.content.userType === 'professional') {
                 router.push('/professional');
             }
+
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Reset Password Failed', error);
