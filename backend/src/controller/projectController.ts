@@ -405,32 +405,19 @@ export async function requestJoinProject(req: Request, res: Response): Promise<R
 
         let mailOptions = {}
         let responseMessage = ''
-        if (project.invited_applicants.includes(userId)) { //If user is an invited applicant, accept them directly
-            project.invited_applicants = project.invited_applicants.filter((requestId) => requestId.toString() !== userId);
-            project.approved_applicants.push(userId);
-            mailOptions = {
-                from: 'okaybuddy646@gmail.com',
-                to: user.email,
-                subject: `Confirmation for requested project - ${project.project_title}`,
-                text: `Your request to join '${project.project_title}' has been sent.\n
-                    You will get an update on the status of your application soon.\n
-                    `,
-            };
-            responseMessage = 'Succesfully Joined Project'
-        } else {
-            // update potential applicants
-            project.potential_applicants.push(userId);
-            // Email content
-            mailOptions = {
-                from: 'okaybuddy646@gmail.com',
-                to: user.email,
-                subject: `Confirmation for requested project - ${project.project_title}`,
-                text: `Your request to join '${project.project_title}' has been sent.\n
-                    You will get an update on the status of your application soon.\n
-                    `,
-            };
-            responseMessage = 'Request to join project submitted successfully';
-        }
+       
+        project.potential_applicants.push(userId);
+        // Email content
+        mailOptions = {
+            from: 'okaybuddy646@gmail.com',
+            to: user.email,
+            subject: `Confirmation for requested project - ${project.project_title}`,
+            text: `Your request to join '${project.project_title}' has been sent.\n
+                You will get an update on the status of your application soon.\n
+                `,
+        };
+        responseMessage = 'Request to join project submitted successfully';
+        
         const updatedProject = await project.save();
         //Send confirmation email to user
         //Nodemailer transporter
@@ -510,6 +497,7 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
         //approve or reject
         if (action === "approve") {
             project.potential_applicants = project.potential_applicants.filter((requestId) => requestId.toString() !== userId);
+            project.invited_applicants = project.invited_applicants.filter((requestId) => requestId.toString() !== userId);
             const userIdApproved = new mongoose.Types.ObjectId(userId);
             project.approved_applicants.push(userIdApproved);
             mailOptions = {
@@ -520,6 +508,7 @@ export async function manageProfessionalRequest(req: Request, res: Response): Pr
             };
         } else if (action === "reject") {
             project.potential_applicants = project.potential_applicants.filter((requestId) => requestId.toString() !== userId);
+            project.invited_applicants = project.invited_applicants.filter((requestId) => requestId.toString() !== userId);
             mailOptions = {
                 from: 'okaybuddy646@gmail.com',
                 to: professional.email,
