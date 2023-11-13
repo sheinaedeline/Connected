@@ -7,7 +7,7 @@ import Header from '/components/Header.js';
 import axios from 'axios';
 
 
-const options = ['finance',  'investment banking', 'web development', 'manufacturing', 'HR', 'marketing', 'retail', 'accounting'];
+const options = ['Finance',  'Investment Banking', 'Web Development', 'Manufacturing', 'HR', 'Marketing', 'Retail', 'Accounting'];
 
 
 export default function Projects() {

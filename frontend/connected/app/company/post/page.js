@@ -13,6 +13,13 @@ export default function CreateNewJob() {
     const state = JSON.parse(localStorage.getItem("loggedUser"));
     console.log(state);
 
+    const options = ['Finance',  'Investment Banking', 'Web Development', 'Manufacturing', 'HR', 'Marketing', 'Retail', 'Accounting'];
+    const handleChange = (event) => {
+        console.log(event.target.value);
+        const arr = [event.target.value];
+        setTags(arr);
+    };
+
     // Project Information States
     const [projectTitle, setProjectTitle] = useState("");
     const [tags, setTags] = useState("");
@@ -96,18 +103,13 @@ export default function CreateNewJob() {
                             <label htmlFor="tags" className="block text-sm font-medium leading-6 text-gray-900">
                                 Industry Type
                             </label>
-                            <div className="mt-2">
-                                <input
-                                    id="tags"
-                                    name="tags"
-                                    type="text"
-                                    required
-                                    placeholder="Web Development"
-                                    value={tags}
-                                    onChange={handleTags}
-                                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                />
-                            </div>
+                            <select className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" id="dropdown" value={tags} onChange={handleChange}>
+                                {options.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                                ))}
+                            </select>
                         </div>
                         <div>
                             <label htmlFor="startDate" className="block text-sm font-medium leading-6 text-gray-900">
@@ -158,7 +160,7 @@ export default function CreateNewJob() {
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
-                            <label htmlFor="hours" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="hours" className="mt-2 block text-sm font-medium leading-6 text-gray-900">
                                 Expected Working Hours
                             </label>
                             <div className="mt-2">
@@ -174,7 +176,7 @@ export default function CreateNewJob() {
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
-                            <label htmlFor="price" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="price" className="mt-2 block text-sm font-medium leading-6 text-gray-900">
                                 Price per hr
                             </label>
                             <div className="mt-2">
@@ -206,7 +208,7 @@ export default function CreateNewJob() {
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
-                            <label htmlFor="skills" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="skills" className="mt-2 block text-sm font-medium leading-6 text-gray-900">
                                 Technical Skills
                             </label>
                             <div className="mt-2">
@@ -221,7 +223,7 @@ export default function CreateNewJob() {
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
                             </div>
-                            <label htmlFor="requiredCriteria" className="block text-sm font-medium leading-6 text-gray-900">
+                            <label htmlFor="requiredCriteria" className="mt-2 block text-sm font-medium leading-6 text-gray-900">
                                 Soft Skills
                             </label>
                             <div className="mt-2">

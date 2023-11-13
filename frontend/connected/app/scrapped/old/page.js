@@ -15,7 +15,7 @@ import trading from "assets/Trading Background.png";
 import axios from 'axios';
 import { useUserData } from "context/context";
 
-const options = ['finance',  'investment banking', 'web development', 'manufacturing', 'HR', 'marketing', 'retail', 'accounting'];
+const options = ['Finance',  'Investment Banking', 'Web Development', 'Manufacturing', 'HR', 'Marketing', 'Retail', 'Accounting'];
 
 export default function page() {
 

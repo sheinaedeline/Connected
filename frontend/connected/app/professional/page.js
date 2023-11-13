@@ -9,7 +9,7 @@ import { useUserData } from "../../context/context";
 import axios from 'axios';
 import Link from 'next/link';
 
-const options = ['finance',  'investment banking', 'web development', 'manufacturing', 'HR', 'marketing', 'retail', 'accounting'];
+const options = ['Finance',  'Investment Banking', 'Web Development', 'Manufacturing', 'HR', 'Marketing', 'Retail', 'Accounting'];
 
 export default function ProfessionalHome() {
     // const { state } = useUserData();
@@ -90,7 +90,7 @@ export default function ProfessionalHome() {
     useEffect(() => {
         const viewProfile = async () => {
             const data = { 
-                size: 5,
+                size: 50,
                 page: 1
               };
 
@@ -257,9 +257,9 @@ export default function ProfessionalHome() {
                 <div>
                   <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                     Projects in {' '}
-                    <Link href="/companies" className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
+                    <span className="font-semibold leading-6 text-blue-600 hover:text-blue-500">
                       {randomTag}
-                    </Link>
+                    </span>
                   </h2>
                   <div className="relative flex items-center">
                     <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderProjects')} size={40} />
