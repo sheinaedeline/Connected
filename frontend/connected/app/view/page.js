@@ -211,20 +211,21 @@ export default function ViewProfile() {
                         key={project.id}
                         className="relative rounded-md p-3 bg-white shadow ring-2 hover:bg-gray-100 hover:ring-blue-500"
                     >
-                        <div className="flex justify-between space-x-1 leading-5">
-                            <h2 className="text-md font-medium leading-5">{project.rating}/5</h2>
-                            {/* {[1, 2, 3, 4, 5].map((starIndex) => (
-                                <span 
-                                    key={starIndex} 
-                                    onClick={() => handleStarClick(starIndex)}
-                                    style={{ cursor: submitted ? 'default' : 'pointer', color: starIndex <= rating ? 'gold' : 'gray' }}
-                                >
-                                    ★
-                                </span>
-                            ))} */}
-                        </div>
                     <div className="flex justify-between space-x-1 leading-5">
-                      <h2 className="text-md font-medium leading-5">{project.project_title}</h2>
+                        <div className="flex space-x-1 leading-5">
+                                <h2 className="text-md font-medium leading-5">{project.project_title}</h2>
+                                <div>
+                                {[1, 2, 3, 4, 5].map((starIndex) => (
+                                    <span 
+                                        key={starIndex} 
+                                        // onClick={() => handleStarClick(starIndex)}
+                                        style={{ color: starIndex <= project.rating ? 'gold' : 'gray' }}
+                                    >
+                                        ★
+                                    </span>
+                                ))}
+                                </div>
+                            </div>
                       <p className="text-sm text-right text-blue-900">{project.owner.userName} company</p>
                     </div>
 

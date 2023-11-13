@@ -6,7 +6,7 @@ export default function page() {
     <div className="bg-white dark:bg-black">
       <section className="relative">
         <div className="px-4 pt-10 mx-auto max-w-7xl md:pt-16"> 
-          <div className="w-full pb-5 mx-auto text-center md:w-11/12">'
+          <div className="w-full pb-5 mx-auto text-center md:w-11/12">
 
             <h1 className="mb-3 text-5xl font-bold tracking-tight text-gray-900 dark:text-gray-100 md:text-6xl">
               ConnectEd
