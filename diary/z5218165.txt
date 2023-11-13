@@ -65,3 +65,13 @@ Week 8
 - Finished Sprint 3 development
 - Tested APIs in postman
 - Getting feedbacks from both backend and frontend team
+
+Week 9
+- Checking on frontend team for integration
+- making sure all APIs from sprint 1,2 and 3 work
+- frequently ask frontend team on their progress making sure it will be finished on time
+
+Week 10
+- Final demo presentation
+- Finishing final report
+- Submit peer assessment and source code
