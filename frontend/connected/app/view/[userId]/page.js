@@ -21,6 +21,8 @@ export default function ViewProfile({params}) {
     const [hireButton, setHireButton] = useState(false);
     const [requestButton, setRequestButton] = useState(false);
     const [projectId, setProjectId] = useState("");
+    const [reviewList, setReviewList] = useState([]);
+    const [projectList, setProjectList] = useState([]);
     
     // Fetch Profile Data
     const [firstName, setFirstName] = useState("");
@@ -41,6 +43,23 @@ export default function ViewProfile({params}) {
     const [deleteUser, setDeleteUser] = useState(false);
     const [userImageString, setUserImageString] = useState('');
     const [userFileString, setUserFileString] = useState(null);
+
+    const formatDate = (inputDate) => {
+        const date = new Date(inputDate);
+        if (isNaN(date)) {
+          return 'Invalid Date';
+        }
+        const day = String(date.getDate()).padStart(2, '0');
+        const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        const month = monthNames[date.getMonth()];
+        const year = date.getFullYear();
+      
+        return `${day} ${month} ${year}`;
+    };
+
+    function classNames(...classes) {
+        return classes.filter(Boolean).join(' ')
+    };
     
 
     // GET View Profile
@@ -80,6 +99,7 @@ export default function ViewProfile({params}) {
                 }
                 
                 getProjects(userData.userType);
+                getReviews();
                 
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
@@ -107,6 +127,40 @@ export default function ViewProfile({params}) {
                 // Dispatch
                 console.log('Get Projects Successful', response.data);
                 setProjectsList(response.data.content.projectsList); 
+            } catch (error) {
+                // Handle any errors (e.g., display an error message)
+                console.error('Get Projects failed', error);
+            }
+        };
+
+        const getReviews = async () => {
+            const queryData = {
+                size: 10,
+                page: 1,
+            };
+
+            const completedData = {
+                size: 10,
+                page: 1,
+                userId: userId,
+                status: ["completed"]
+            }
+            
+            try {
+                const res = await axios.post(`http://127.0.0.1:3000/user/${userId}/reviews`, queryData);
+                const projRes = await axios.post('http://127.0.0.1:3000/project/getProjects', completedData);
+                console.log('Get Reviews success', res.data.content.reviewsList);
+                console.log('Get Project success', projRes.data.content.projectsList);
+
+                setReviewList(res.data.content.reviewsList);
+                const projectsInReviews = projRes.data.content.projectsList.filter(project => res.data.content.reviewsList.some(review => review.projectId._id === project.id)).map(project => {
+                    const matchingReview = res.data.content.reviewsList.find(review => review.projectId._id === project.id);
+                    return { ...project, rating: matchingReview.ratings,
+                    };
+                });
+                console.log("review", projectsInReviews);
+                setProjectList(projectsInReviews);
+                
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Get Projects failed', error);
@@ -252,29 +306,63 @@ export default function ViewProfile({params}) {
                 </div>
 
                 {/* Project List */}
-                {fetchUserType === 'professional' ? 
+                {fetchUserType === 'professional' &&
                 (<div>
-                    <h2 className="mt-8 text-3xl font-bold leading-9 tracking-tight text-gray-900">
-                    Project List
+                    <h2 className="mt-8 text-3xl font-bold tracking-tight text-gray-900">
+                        Project Ratings
                     </h2>
-                    <div className="flex flex-col w-full gap-6 mb-10">
-                        {projectsList && projectsList.map((item) => (
-                        <div key={item.id} className="group grid grid-cols-3 gap-2 p-4 rounded-md border-2 border-blue-900 w-full">
-                            <p className="col-span-2 text-lg font-bold text-gray-900">{item.project_title}</p>
-                            {/* <p className="text-md text-right text-blue-900">{item.owner.userName}</p> */}
-                            <p className="col-span-2 text-xs italic text-gray-600">{item.start_date} - {item.end_date}</p>
-                            <p className="mt-1 text-sm text-right text-gray-600">{item.skills}</p>
-                            {/* <p className="text-sm text-gray-600">Rating {item.rating}/5</p> */}
-                            {/* <p className="col-span-2 font-medium text-sm italic text-blue-600">"{item.remark}"</p> */}
-                            <p className="mt-1 text-sm font-medium text-gray-600">{item.No_professional} Professionals</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">{item.price_budget}</p>
-                            <p className="mt-1 text-sm font-medium text-gray-600">{item.expected_working_hours} hours</p>
+                    {/* <ProjectTabs accountId={accountId} userType={userType} /> */}
+                    {reviewList.length === 0 && <p className="text-lg font-medium text-gray-900">No ratings yet, Complete a project!</p>}
+                    {reviewList.length > 0 && projectList.map((project) => (
+                        <div
+                            key={project.id}
+                            className="relative rounded-md p-3 bg-white shadow ring-2 hover:bg-gray-100 hover:ring-blue-500"
+                        >
+                        <div className="flex justify-between space-x-1 leading-5">
+                            <div className="flex space-x-1 leading-5">
+                                    <h2 className="text-md font-medium leading-5">{project.project_title}</h2>
+                                    <div>
+                                    {[1, 2, 3, 4, 5].map((starIndex) => (
+                                        <span 
+                                            key={starIndex} 
+                                            // onClick={() => handleStarClick(starIndex)}
+                                            style={{ color: starIndex <= project.rating ? 'gold' : 'gray' }}
+                                        >
+                                            ★
+                                        </span>
+                                    ))}
+                                    </div>
+                                </div>
+                        <p className="text-sm text-right text-blue-900">{project.owner.userName} company</p>
                         </div>
-                        ))}
+
+                        <p className="mt-1 space-x-1 text-xs italic font-normal leading-4 text-gray-500">{formatDate(project.start_date)} - {formatDate(project.end_date)}</p>
+
+                        <ul className="mt-1 flex space-x-1 justify-between text-xs font-normal leading-4">
+                        <li>{project.description}</li>
+                        <li>{project.skills}</li>
+                        </ul>
+
+                        <ul className="mt-1 flex space-x-1 text-xs font-medium leading-4 text-gray-500">
+                        <li>{project.No_professional} professionals</li>
+                        <li>&middot;</li>
+                        <li>{project.price_budget}</li>
+                        <li>&middot;</li>
+                        <li>{project.expected_working_hours} hours</li>
+                        </ul>
+
+                        <Link
+                        href={`/project/${project.id}`}
+                        className={classNames(
+                            'absolute inset-0 rounded-md',
+                            'ring-blue-400 focus:z-10 focus:outline-none focus:ring-2'
+                        )}
+                        />
                     </div>
+                    ))}
                 </div>)
-                :
-                (<div>
+                }
+                {fetchUserType === 'company' && (<div>
                     <h2 className="mt-8 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                         Join a project at{' '}
                         <Link href="/company-list" className="font-semibold leading-6 text-blue-900 hover:text-blue-500">

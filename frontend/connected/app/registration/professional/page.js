@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 
 export default function RegistrationProfessional() {
     const router = useRouter();
+    const options = ['Finance',  'Investment Banking', 'Web Development', 'Manufacturing', 'HR', 'Marketing', 'Retail', 'Accounting'];
     
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -48,6 +49,9 @@ export default function RegistrationProfessional() {
         setPasswordMatch(password === e.target.value);
     };
     
+    const handleChange = (event) => {
+        setIndustryType(event.target.value);
+      };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -230,7 +234,7 @@ export default function RegistrationProfessional() {
                             <label htmlFor="industryType" className="block text-sm font-medium leading-6 text-gray-900">
                                 Industry Type
                             </label>
-                            <div className="mt-2">
+                            {/* <div className="mt-2">
                                 <input
                                     id="industryType"
                                     name="industryType"
@@ -240,7 +244,15 @@ export default function RegistrationProfessional() {
                                     onChange={e => setIndustryType(e.target.value)}
                                     className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
                                 />
-                            </div>
+                            </div> */}
+                            <select className="mt-2 block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" id="dropdown" value={industryType} onChange={handleChange}>
+                                {options.map((option) => (
+                                <option key={option} value={option}>
+                                    {option}
+                                </option>
+                                ))}
+                            </select>
+
                         </div>
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">

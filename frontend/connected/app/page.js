@@ -22,7 +22,7 @@ export default function Home() {
   return (
     <div className="bg-white dark:bg-black">
       <section className="relative">
-        <div className="flex justify-between">
+        <div className="flex justify-between mx-4">
           <Link href="/company">
               <Image
                   src={logo}

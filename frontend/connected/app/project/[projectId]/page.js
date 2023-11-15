@@ -9,6 +9,7 @@ import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import jsPDF from 'jspdf';
 
+const options = ['Finance',  'Investment Banking', 'Web Development', 'Manufacturing', 'HR', 'Marketing', 'Retail', 'Accounting'];
 
 export default function ViewProjectID({params}) {
 
@@ -45,6 +46,18 @@ export default function ViewProjectID({params}) {
     const [invitedList, setInvitedList] = useState([]);
     const [requestButton, setRequestButton] = useState(false);
 
+    
+    const tagImages = {
+        "finance": "https://cdn-icons-png.flaticon.com/128/1077/1077976.png",
+        "investment banking": "https://cdn-icons-png.flaticon.com/128/846/846043.png",
+        "web development": "https://cdn-icons-png.flaticon.com/128/10210/10210601.png",
+        "manufacturing": "https://cdn-icons-png.flaticon.com/128/1433/1433114.png",
+        "HR": "https://cdn-icons-png.flaticon.com/128/6846/6846565.png",
+        "marketing": "https://cdn-icons-png.flaticon.com/128/1997/1997928.png",
+        "retail": "https://cdn-icons-png.flaticon.com/128/2769/2769277.png",
+        "accounting": "https://cdn-icons-png.flaticon.com/128/1570/1570887.png"
+      };
+
     const downloadPDF = () => {
         var doc = new jsPDF();
         doc.text('Certificate of Completion', 10, 10);
@@ -56,12 +69,12 @@ export default function ViewProjectID({params}) {
 
     const slideLeft = (id) => {
         var slider = document.getElementById(id);
-        slider.scrollLeft = slider.scrollLeft - 500;
+        slider.scrollLeft = slider.scrollLeft - 350;
     };
 
     const slideRight = (id) => {
         var slider = document.getElementById(id);
-        slider.scrollLeft = slider.scrollLeft + 500;
+        slider.scrollLeft = slider.scrollLeft + 350;
     };
 
     const goEdit = (projectId) => {
@@ -364,7 +377,7 @@ export default function ViewProjectID({params}) {
                 <button 
                     onClick={handleSubmit} 
                     disabled={submitted}  
-                    className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${submitted ? 'bg-gray-500 cursor-default' : 'bg-blue-900 hover:bg-blue-500'}`}
+                    className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${submitted ? 'bg-gray-350 cursor-default' : 'bg-blue-900 hover:bg-blue-350'}`}
                 >
                     Submit
                 </button>
@@ -440,7 +453,7 @@ export default function ViewProjectID({params}) {
                 <button 
                     onClick={handleSubmit} 
                     disabled={submitted}  
-                    className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${submitted ? 'bg-gray-500 cursor-default' : 'bg-blue-900 hover:bg-blue-500'}`}
+                    className={`flex w-full justify-center rounded-md px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600 ${submitted ? 'bg-gray-350 cursor-default' : 'bg-blue-900 hover:bg-blue-350'}`}
                     style={{ width: '100%' }}
                 >
                     Submit Project Rating
@@ -456,77 +469,94 @@ export default function ViewProjectID({params}) {
                 {/* project details */}
                 <div className="flex flex-col justify-center px-32 mt-4 gap-y-8">
                     <div className="flex flex-col rounded-md border-2 border-blue-900 w-full">
-                        <div className="group grid grid-cols-4 grid-rows-2">
-                            <div className="col-span-3 grid grid-cols-4 gap-2 p-4 mr-10">
-                                <div className="col-span-3 flex flex-col">
+                        <div className="group grid grid-cols-4">
+                            <div className="col-span-4 grid grid-cols-4 gap-2 p-4 mr-10">
+                                <div className="col-span-2 flex gap-4">
                                     <p className="text-3xl font-bold text-gray-900">{project_title}</p>
+                                    <Image
+                                        src={tagImages[tags[0]]}
+                                        alt=""
+                                        width={35}
+                                        height={35}
+                                        className="object-cover object-center group-hover:opacity-75"
+                                    />
                                 </div>
-                                <div className="flex flex-evenly gap-x-4 justify-start items-center">
-                                    <AiOutlineHeart size={40}/>
-                                    <AiFillLinkedin size={40}/>
-                                </div>
-                                <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">{skills}</p>
-                                <p className="mt-1 text-sm text-right font-medium text-gray-600">No. of Professionals {No_professional}</p>
-                                <p className="mt-1 text-sm text-right font-medium text-gray-600">Expected Working Hours {expected_working_hours}</p>
-                                <p className="col-span-4 text-xs text-gray-600">{online_offline}</p>
-                                <p className="text-xs text-gray-600">{price_budget}</p>
-                                <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">
-                                Start Date: {new Date(start_date).toLocaleDateString()}
-                                </p>
-                                <p className="col-span-2 mt-1 text-sm text-left italic text-blue-600">
-                                End Date: {new Date(end_date).toLocaleDateString()}
-                                </p>
-                                <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Tags: {tags.join(", ")}</p>
-                                <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Experiences: {experiences}</p>
-                                <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Required Professional Criteria: {req_prof_criteria}</p>
-                                <p className="col-span-4 mt-1 text-sm text-left italic text-blue-600">Status: {status}</p>
-                                {owner === accountId && status === 'new' && (
-                                    <button
-                                        className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                        onClick={() => changeStatus('ongoing')}
-                                    >
-                                        Start Project
-                                    </button>
-                                )}
+                                <div className="col-span-2 flex flex-end gap-x-4 justify-start items-center">
+                                    {(owner === accountId || userType === 'admin') && (
+                                    <div>
+                                        <button
+                                        className="w-32 justify-center rounded-md ring-1 ring-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-blue-900 shadow-sm hover:bg-blue-200"
+                                        onClick={() => goEdit(params.projectId)}>
+                                        Edit Project
+                                        </button>
+                                    </div>)}
+                                    {owner === accountId && status === 'new' && (
+                                        <button
+                                            className="w-32 ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                            onClick={() => changeStatus('ongoing')}
+                                        >
+                                            Start Project
+                                        </button>
+                                    )}
 
-                                {owner === accountId && status === 'ongoing' && (
-                                    <button
-                                        className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                        onClick={() => changeStatus('completed')}
-                                    >
-                                        Finish Project
-                                    </button>
-                                )}
-                                {(owner === accountId || userType === 'admin') && (
-                                <div>
-                                    <button
-                                        className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                        onClick={() => setDeleteProject(true)}
-                                    >
-                                        Delete Project
-                                    </button>
-                                </div>)}
+                                    {owner === accountId && status === 'ongoing' && (
+                                        <button
+                                            className="w-32 ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                            onClick={() => changeStatus('completed')}
+                                        >
+                                            Finish Project
+                                        </button>
+                                    )}
+                                    {(owner === accountId || userType === 'admin') && (
+                                    <div>
+                                        <button
+                                            className="w-32 ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
+                                            onClick={() => setDeleteProject(true)}
+                                        >
+                                            Delete Project
+                                        </button>
+                                    </div>)}
+                                </div>
+                                <div className="col-span-4 flex gap-3 mt-1">
+                                    <p className=" text-sm text-left italic text-blue-600">
+                                    Start Date: {new Date(start_date).toLocaleDateString()}
+                                    </p>
+                                    <p className=" text-sm text-left italic text-blue-600">
+                                    End Date: {new Date(end_date).toLocaleDateString()}
+                                    </p>
+                                </div>
+
+                                <div className="col-span-4 flex gap-3 mt-1">
+                                    <p className=" text-md font-medium ">Project in {tags.join(", ")}</p>
+                                    <p className="text-md font-medium text-gray-600">Held in {online_offline}</p>
+                                </div>
+
+                                <div className="col-span-4 flex gap-3 mt-1">
+                                    <p className="text-sm text-gray-600">${price_budget}/hr</p>
+                                    <div>&middot;</div>
+                                    <p className="text-sm text-gray-600">No. of Professionals: {No_professional}</p>
+                                    <div>&middot;</div>
+                                    <p className="text-sm text-gray-600">Expected Working Hours: {expected_working_hours}hr</p>
+                                </div>
+
+                                {/* <div className="col-span-4 flex gap-3 mt-1"> */}
+                                <p className="col-span-4 text-sm text-left ">Skills Preferred: {skills}</p>
+                                <p className="col-span-4 text-sm text-left  ">Experiences: {experiences}</p>
+                                <p className="col-span-4 text-sm text-left  ">Required Professional Criteria: {req_prof_criteria}</p>
+                                {/* </div> */}
+                                <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
+                                    <p className="text-lg font-medium text-gray-900">Description</p>
+                                    <p className="mt-4 text-left text-xs text-gray-600">{description}</p>
+                                </div>
+                                
                             </div>
                                 
                             </div>
-                            <div className="col-span-4 my-6 mx-10 p-4 rounded-md border-2 border-teal-900">
-                                <p className="text-lg font-medium text-gray-900">Description</p>
-                                <p className="mt-4 text-left text-xs text-gray-600">{description}</p>
-                            </div>
-                            {(owner === accountId || userType === 'admin') && (
-                                <div>
-                                    <button
-                                    className="ml-2 py-2 bg-blue-600 text-white rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
-                                    onClick={() => goEdit(params.projectId)}>
-                                    Edit Project
-                                    </button>
-                                </div>)}
-
                             {(userType === 'professional') && (
                             <button
                                 type="submit"
                                 onClick={() => handleRequestButton(params.projectId)}
-                                className="flex mt-4 col-span-2 h-[36px] justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+                                className="flex mt-4 col-span-2 h-[36px] justify-center items-center rounded-md bg-blue-900 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-blue-350 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
                             >
                                 Join Project
                             </button>)}
@@ -535,15 +565,15 @@ export default function ViewProjectID({params}) {
                 
             
             {owner === accountId && (status === 'new' || status === 'ongoing') && (
-            <div>
+            <div className='px-4'>
                 <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                 Onboard{' '}
-                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-350">
                     Professionals
                 </a>
                 </h2>
                 <div className="relative flex items-center">
-                <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                <MdChevronLeft className="opacity-35 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                 <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                     {approvedList.length > 0 && approvedList.map((item) => (
                     // rest of your code
@@ -563,21 +593,21 @@ export default function ViewProjectID({params}) {
                         </a>
                     ))}
                 </div>
-                <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                <MdChevronRight className="opacity-35 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
                 </div>
             </div>
             )}
 
             {owner === accountId && (status === 'new' || status === 'ongoing') && (
-            <div>
+            <div className='px-4'>
                 <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                 Applied{' '}
-                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-350">
                     Professionals
                 </a>
                 </h2>
                 <div className="relative flex items-center">
-                <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                <MdChevronLeft className="opacity-35 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                 <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                     {potentialList.length > 0 && potentialList.map((item) => (
                     // rest of your code
@@ -607,21 +637,21 @@ export default function ViewProjectID({params}) {
                         </a>
                     ))}
                 </div>
-                <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                <MdChevronRight className="opacity-35 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
                 </div>
             </div>
             )}
 
             {owner === accountId && (status === 'new' || status === 'ongoing') && (
-            <div>
+            <div className='px-4'>
                 <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                 Invited{' '}
-                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-350">
                     Professionals
                 </a>
                 </h2>
                 <div className="relative flex items-center">
-                <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                <MdChevronLeft className="opacity-35 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                 <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                     {invitedList.length > 0 && invitedList.map((item) => (
                     // rest of your code
@@ -633,25 +663,25 @@ export default function ViewProjectID({params}) {
                         </a>
                     ))}
                 </div>
-                <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                <MdChevronRight className="opacity-35 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
                 </div>
             </div>
             )}
             
 
             {owner === accountId && (status === 'completed') && (
-                <div>
+                <div className='px-4'>
                 <h2 className="my-4 text-3xl font-bold leading-9 tracking-tight text-gray-900">
                     Past{' '}
-                    <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-500">
+                    <a href="/professional-list" className="font-semibold leading-6 text-teal-900 hover:text-blue-350">
                       Professionals
                     </a>
                 </h2>
                 <div className="relative flex items-center">
-                  <MdChevronLeft className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
+                  <MdChevronLeft className="opacity-35 cursor-pointer hover:opacity-100" onClick={() => slideLeft('sliderTrendingProfessionals')} size={40} />
                   <div id='sliderTrendingProfessionals' className="w-full h-full overflow-x-scroll scroll whitespace-nowrap scroll-smooth scrollbar-hide">
                   {approvedList.length > 0 && approvedList.map((item) => (
-                      <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[450px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
+                      <a key={item.id} className="group rounded-md border-2 border-blue-900 w-[300px] h-[435px] inline-block m-4 cursor-pointer hover:scale-105 ease-in-out duration-300">
                         <div className="grid grid-cols-2 gap-2 p-4">
                             <p className="col-span-2 text-lg font-bold text-gray-900">{item.firstName} {item.lastName}</p>
                             <Rating projectId={params.projectId} userId={item.id} />
@@ -659,7 +689,7 @@ export default function ViewProjectID({params}) {
                     </a>
                     ))}
                   </div>
-                  <MdChevronRight className="opacity-50 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
+                  <MdChevronRight className="opacity-35 cursor-pointer hover:opacity-100" onClick={() => slideRight('sliderTrendingProfessionals')} size={40} />
                 </div>
               </div> 
             )}

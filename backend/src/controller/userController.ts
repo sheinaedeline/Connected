@@ -321,7 +321,7 @@ export async function logout(req: Request, res: Response): Promise<Response> {
 
 export async function getUsers(req: Request, res: Response): Promise<Response> {
     try {
-        const {userType, size, page, tags} = req.body;
+        const {userType, size, page, tags, sortBy} = req.body;
         let required_fields = [
             'userType',
 			'size',
@@ -341,6 +341,26 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
 
         if(page <=0 || size <= 0){
             throw new Error('page and size number must be greater than 0');
+        }
+
+        let splittedSortBy:string[] = sortBy?sortBy.split(' '):[]
+        if(sortBy){
+            if(splittedSortBy.length !== 2){
+                throw new Error('The format of the sortBy field must be: "rating asc|desc"')
+            }
+            let validSortKey = [
+                'rating',
+            ]
+            if(!validSortKey.includes(splittedSortBy[0])){
+                throw new Error('Invalid Sort Key');
+            }
+            if(splittedSortBy[1] != 'asc' && splittedSortBy[1] != 'desc' ){
+                throw new Error('valid sorting value is either asc or desc');
+            }
+        }
+
+        let sort = {
+            ...(splittedSortBy[0] === 'rating' && {averageUserRating:splittedSortBy[1]}),
         }
 
         const myCustomLabels = {
@@ -373,6 +393,7 @@ export async function getUsers(req: Request, res: Response): Promise<Response> {
             page,
             limit: size,
             projection: '-__v -hash_password',
+            ...(Object.keys(sort).length > 0 && {sort}),
             lean: true,
             leanWithId: true,
             customLabels: myCustomLabels,
