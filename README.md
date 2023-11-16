@@ -1,6 +1,7 @@
 # Connected Website How To Install and Run
 
 ## How to Install for Windows (Window Version that is used during development is Windows 10):
+### Installation
 1. Ensure you have Node and NPM Installed (Node Version That is used during Development: v18.16.0. NPM Version Used During Development: 9.5.1 )
 2. Install MongoDB Community Server on your computer (https://www.mongodb.com/try/download/community), Make sure to also install MongoDB compass which should come in one package with the MongoDB Community Server Installer
 3. Using your commandline, Go to the backend folder and run npm install.
@@ -13,8 +14,7 @@
 7. Then Go to the 'connected' (located in /frontend/connected folder located inside the frontendfolder and run npm install
 
 
-
-# Populating The Database using the existing database)
+### Populating The Database using the existing database)
 1. To Populate the Database, First download the MongoDB Command Line Database Tools Download from https://fastdl.mongodb.org/tools/db/mongodb-database-tools-windows-x86_64-100.9.1.zip or https://www.mongodb.com/try/download/database-tools.
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/993e8da8-44dd-4f0b-a0e9-3a867571150b"> <br>
 2. Extract the files inside the bin folder of the downloaded file into any folder. Inside that folder create another folder called dump
@@ -26,7 +26,7 @@ To use any accounts inside the user collection their default password is 1234123
 
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/aa25bb48-02f4-4d78-9447-2d41bf6494a8"> <br>
 
-# (Optional: Viewing the Postman Documentation)
+### (Optional: Viewing the Postman Documentation)
 1. Install Postman on your machine and open it
 2. Click Import on postman and drag/select all the files inside the Potman folder of the project directory
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/2d4015a8-a5ab-4afe-b0ad-5309f3f805af"> <br>
