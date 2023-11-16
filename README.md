@@ -19,7 +19,9 @@ How to Install for Windows (Window Version that is used during development is Wi
 3. From the project folder, Copy the webApp folder into the dump folder you just created
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/c1bfd6ff-f275-4c5b-8d4b-2bc17dc84b52"> <br>
 4. Afterwards run the mongorestore application and it should automatically import the database. To check you can click the refresh databases button in the mongodb compass and it should show the webapp database
+<br>
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/aa25bb48-02f4-4d78-9447-2d41bf6494a8"> <br>
+<br>
 Note: To use any accounts inside the user collection their default password is 12341234
 
 (Optional: Viewing the Postman Documentation)
