@@ -14,7 +14,7 @@
 7. Then Go to the 'connected' (located in /frontend/connected folder located inside the frontendfolder and run npm install
 
 
-## Populating The Database using the existing database)
+## Populating The Database using the provided existing database)
 1. To Populate the Database, First download the MongoDB Command Line Database Tools Download from https://fastdl.mongodb.org/tools/db/mongodb-database-tools-windows-x86_64-100.9.1.zip or https://www.mongodb.com/try/download/database-tools.
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/993e8da8-44dd-4f0b-a0e9-3a867571150b"> <br>
 2. Extract the files inside the bin folder of the downloaded file into any folder. Inside that folder create another folder called dump
