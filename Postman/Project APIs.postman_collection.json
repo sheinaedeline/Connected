@@ -1,0 +1,1238 @@
+{
+	"info": {
+		"_postman_id": "bc6577a0-eace-4a0c-a3ce-c3c9e2332774",
+		"name": "Project APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "11299890",
+		"_collection_link": "https://gold-meteor-599339.postman.co/workspace/OK-BUDDY-COMP9900~c49f2943-398c-432d-a78a-3fc4ba4e8506/collection/30218243-bc6577a0-eace-4a0c-a3ce-c3c9e2332774?action=share&source=collection_link&creator=11299890"
+	},
+	"item": [
+		{
+			"name": "Create Project API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByb2Zlc3Npb25hbDRAZ21haWwuY29tIiwicm9sZSI6ImNvbXBhbnkiLCJfaWQiOiI2NTM1ZTYxYjI2ODRiMzQ5MjY3NzRkOTgiLCJpYXQiOjE2OTgzMTE4MjgsImV4cCI6MTY5ODM5ODEyOH0.ToIysZAqtsZ0uNanfw7deV_MCME3QmzovtyGpyCUe1c"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"project_title\": \"car2\",\r\n    \"tags\": [\"bizz\", \"software3\"],\r\n    \"description\": \"create a website for moodle33\",\r\n    \"start_date\": \"2020-08-22\",\r\n    \"end_date\": \"2021-09-27\",\r\n    \"No_professional\": \"353\",\r\n    \"expected_working_hours\": \"15\",\r\n    \"skills\": \"python, react, node js, vs code\",\r\n    \"experiences\": \"web dev intern roles\",\r\n    \"online_offline\": \"offline\",\r\n    \"price_budget\": \"$1000/hr\",\r\n    \"req_prof_criteria\": \"good communication skills\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{localhost}}/project/create",
+				"description": "API to create a project.\n\nNOTE: only a company user can create a project"
+			},
+			"response": []
+		},
+		{
+			"name": "Get Projects API",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"size\": 5,\r\n    \"page\": 1,\r\n    // \"companyId\": \"put company User id here\",\r\n    // \"userId\": \"6535e5e72684b34926774d92\",\r\n    // \"userStatus\": \"Either joined or pending, or invited\"\r\n    \"status\": [\"new\", \"completed\"]\r\n    // \"startsAt\": \"2020-08-22\",\r\n    // \"tags\": [\"Hotel\"],\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "127.0.0.1:3000/project/getProjects",
+				"description": "# **API For Paginating projects(Company/Professional)**\n\nAPI to to paginate Projects with filters that you can apply.\n\nHere are some general use cases and how to use the api.\n\n1. Getting all projects in general:\n    1. To do this just send the api with the size and page parameter. So if you want to get the first page just do size:(whatever size you want) and page:\n    2. You can add additional filters such as status and tags if you want to\n2. Getting a Projects Tied to a specific company\n    1. To get a projects tied to a specific company you can just turn on the companyId\n    2. You can add more filters as you want\n3. Getting a project tied to a user\n    1. To see projects where the user has applied or joined just add the userId filter\n    2. To see projects where the user is an applicant, use the userId filter with userStatus field set to pending\n    3. To see projects where the user is already joined then set the userId filter with userStatus set to joined\n    4. To see projects where the user is currently an invited applicants then set the userId filter with userStatus set to invited\n\nIMPORTANT:\n\nFilters can be used together with each other\n\n## Request Type: json\n\nRequest Format\n\n|  | required | type | description | example |\n| --- | --- | --- | --- | --- |\n| companyId | false | text | company user account id used to filter projects belonging to a specific company | \"6535e61b2684b34926774d98\" |\n| size | true | number | The size of the pagination you want to get | 4 |\n| page | true | number | The page of the pagination you want to fetch (Starts from 1) | 1 |\n| tags | false | Array | Array of text that represents the tags you want to use as a filter | \\[tag1,tag2\\] |\n| status | false | Array of stirng where value is  <br>Either new or ongoing or completed | Status filter if you want to filter projects that is new , ongoing or completed | \\[\"new\", \"ongoing\"\\] |\n| userId | false (true if you also use the userStatus filter) | text | professional user account id used to filter projects where the professionaluser is part of the project |  |\n| userStatus | false | Either joined or pending | Can be used to filter projects for a specific professsional user where they have applied to the project or where they have joined the projecet |  |\n| sortBy | false | text in the format of  <br>\"sortKey sortOrder\" | Used to sort the projects based on either their startDate or endDate ascendingly or descendingly  <br>  <br>Valid sortKey:  <br>\\-startDate  <br>\\-endDate  <br>  <br>Valid sortOrder:  <br>\\-asc  <br>\\-desc | To sort by start date ascendingly:  <br>startDate asc  <br>  <br>to Sort by start date descendingly  <br>startDate desc  <br>  <br>to sort by end date ascendingly:  <br>endDate asc  <br>  <br>to sort by end date descendingly:  <br>endDate desc |\n\n## Response Type: json\n\nResponse for both Professional user and company user\n\n| Field Name | type | description | example |\n| --- | --- | --- | --- |\n| projectsList | Array | An Array of Documents representing the project. Each Object also contains an owner o | Can see from the examples |\n| owner | Object | An object inside eahc project object inside the projects list.  <br>The owner object represents the owner of the project or the company account that owns the project.  <br>The owner object contain the owner account id and username |  |\n| amountOfProjects | number | Number of total users projects on the filter given in the api |  |\n| size | number | the size of each pagination page |  |\n| totalPages | number | The total number of pages available based on the pagination filters that is provided |  |\n| currentPage | number | The current page number in the pagination |  |\n| hasPrevPage | boolean | Just ignore this one |  |\n| hasNextPage | boolean | Just ignore this one |  |\n| prevPage | number | null | The number of the previous page of this pagination result. Will be null if there is no prevPage |\n| nextPage | number | null | The number of the next page of this pagination result, will be null if there is no nextPage |"
+			},
+			"response": [
+				{
+					"name": "Get Projects API (Get Any Projects)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 5,\r\n    \"page\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/getProjects"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"b5f-+kDe1q5HRYJaEp/R2OyG2kidNQw\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 28 Oct 2023 07:54:32 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"projectsList\": [\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"software3\",\n                    \"website3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2022-08-22T00:00:00.000Z\",\n                \"end_date\": \"2024-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"approved_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"createdAt\": \"2023-10-25T06:17:09.793Z\",\n                \"updatedAt\": \"2023-10-26T08:39:40.124Z\",\n                \"id\": \"6538b2e54ae5d9810a635158\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"business\",\n                    \"actuarial\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2025-08-22T00:00:00.000Z\",\n                \"end_date\": \"2027-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:17:48.827Z\",\n                \"updatedAt\": \"2023-10-26T09:17:48.827Z\",\n                \"id\": \"653a2ebcea6abf5902db5281\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"caz\",\n                \"tags\": [\n                    \"hotel\",\n                    \"entertaiment\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:04.280Z\",\n                \"updatedAt\": \"2023-10-26T09:18:04.280Z\",\n                \"id\": \"653a2eccea6abf5902db5284\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"car2\",\n                \"tags\": [\n                    \"bizz\",\n                    \"software3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$500/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:21.939Z\",\n                \"updatedAt\": \"2023-10-26T09:18:21.939Z\",\n                \"id\": \"653a2eddea6abf5902db5287\"\n            }\n        ],\n        \"amountOfProjects\": 4,\n        \"size\": 5,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"pagingCounter\": 1,\n        \"hasPrevPage\": false,\n        \"hasNextPage\": false,\n        \"prevPage\": null,\n        \"nextPage\": null\n    },\n    \"message\": \"Request Success\",\n    \"errors\": []\n}"
+				},
+				{
+					"name": "Get Projects API (For Specific Professional User)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": \"6535e5e72684b34926774d92\",\r\n    \"size\": 2,\r\n    \"page\": 1\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/getProjects"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"3a8-frmxLbZ6BGX2ynvOuPUmmSaTh9o\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Fri, 27 Oct 2023 06:52:17 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"projectsList\": [\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"software3\",\n                    \"website3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2022-08-22T00:00:00.000Z\",\n                \"end_date\": \"2024-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"approved_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"createdAt\": \"2023-10-25T06:17:09.793Z\",\n                \"updatedAt\": \"2023-10-26T08:39:40.124Z\",\n                \"id\": \"6538b2e54ae5d9810a635158\"\n            }\n        ],\n        \"amountOfProjects\": 1,\n        \"size\": 2,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"pagingCounter\": 1,\n        \"hasPrevPage\": false,\n        \"hasNextPage\": false,\n        \"prevPage\": null,\n        \"nextPage\": null\n    },\n    \"message\": \"Request Success\",\n    \"errors\": []\n}"
+				},
+				{
+					"name": "Get Projects API (With Sorting Ascending)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 5,\r\n    \"page\": 1,\r\n    \"sortBy\": \"startDate desc\"\r\n    // \"companyId\": \"6535e61b2684b34926774d98\",\r\n    // \"startsAt\": \"2020-08-22\",\r\n    // \"status\": \"new\",\r\n    // \"tags\": [\"Hotel\"],\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/getProjects"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"b5f-1byQfyusKJKtqEZi1f1iwUiqppY\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 28 Oct 2023 07:55:06 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"projectsList\": [\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"business\",\n                    \"actuarial\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2025-08-22T00:00:00.000Z\",\n                \"end_date\": \"2027-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:17:48.827Z\",\n                \"updatedAt\": \"2023-10-26T09:17:48.827Z\",\n                \"id\": \"653a2ebcea6abf5902db5281\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"software3\",\n                    \"website3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2022-08-22T00:00:00.000Z\",\n                \"end_date\": \"2024-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"approved_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"createdAt\": \"2023-10-25T06:17:09.793Z\",\n                \"updatedAt\": \"2023-10-26T08:39:40.124Z\",\n                \"id\": \"6538b2e54ae5d9810a635158\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"caz\",\n                \"tags\": [\n                    \"hotel\",\n                    \"entertaiment\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:04.280Z\",\n                \"updatedAt\": \"2023-10-26T09:18:04.280Z\",\n                \"id\": \"653a2eccea6abf5902db5284\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"car2\",\n                \"tags\": [\n                    \"bizz\",\n                    \"software3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$500/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:21.939Z\",\n                \"updatedAt\": \"2023-10-26T09:18:21.939Z\",\n                \"id\": \"653a2eddea6abf5902db5287\"\n            }\n        ],\n        \"amountOfProjects\": 4,\n        \"size\": 5,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"pagingCounter\": 1,\n        \"hasPrevPage\": false,\n        \"hasNextPage\": false,\n        \"prevPage\": null,\n        \"nextPage\": null\n    },\n    \"message\": \"Request Success\",\n    \"errors\": []\n}"
+				},
+				{
+					"name": "Get Projects API (With Sorting Descending)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 5,\r\n    \"page\": 1,\r\n    \"sortBy\": \"startDate desc\"\r\n    // \"companyId\": \"6535e61b2684b34926774d98\",\r\n    // \"startsAt\": \"2020-08-22\",\r\n    // \"status\": \"new\",\r\n    // \"tags\": [\"Hotel\"],\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/getProjects"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"b5f-1byQfyusKJKtqEZi1f1iwUiqppY\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 28 Oct 2023 07:55:32 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"projectsList\": [\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"business\",\n                    \"actuarial\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2025-08-22T00:00:00.000Z\",\n                \"end_date\": \"2027-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:17:48.827Z\",\n                \"updatedAt\": \"2023-10-26T09:17:48.827Z\",\n                \"id\": \"653a2ebcea6abf5902db5281\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"software3\",\n                    \"website3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2022-08-22T00:00:00.000Z\",\n                \"end_date\": \"2024-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"approved_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"createdAt\": \"2023-10-25T06:17:09.793Z\",\n                \"updatedAt\": \"2023-10-26T08:39:40.124Z\",\n                \"id\": \"6538b2e54ae5d9810a635158\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"caz\",\n                \"tags\": [\n                    \"hotel\",\n                    \"entertaiment\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:04.280Z\",\n                \"updatedAt\": \"2023-10-26T09:18:04.280Z\",\n                \"id\": \"653a2eccea6abf5902db5284\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"car2\",\n                \"tags\": [\n                    \"bizz\",\n                    \"software3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$500/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:21.939Z\",\n                \"updatedAt\": \"2023-10-26T09:18:21.939Z\",\n                \"id\": \"653a2eddea6abf5902db5287\"\n            }\n        ],\n        \"amountOfProjects\": 4,\n        \"size\": 5,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"pagingCounter\": 1,\n        \"hasPrevPage\": false,\n        \"hasNextPage\": false,\n        \"prevPage\": null,\n        \"nextPage\": null\n    },\n    \"message\": \"Request Success\",\n    \"errors\": []\n}"
+				},
+				{
+					"name": "Get Projects API (For Specific Company)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 5,\r\n    \"page\": 1,\r\n    \"companyId\": \"6535e61b2684b34926774d98\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/getProjects"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"b5f-+kDe1q5HRYJaEp/R2OyG2kidNQw\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 28 Oct 2023 07:56:09 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"projectsList\": [\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"software3\",\n                    \"website3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2022-08-22T00:00:00.000Z\",\n                \"end_date\": \"2024-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"approved_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"createdAt\": \"2023-10-25T06:17:09.793Z\",\n                \"updatedAt\": \"2023-10-26T08:39:40.124Z\",\n                \"id\": \"6538b2e54ae5d9810a635158\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"business\",\n                    \"actuarial\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2025-08-22T00:00:00.000Z\",\n                \"end_date\": \"2027-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:17:48.827Z\",\n                \"updatedAt\": \"2023-10-26T09:17:48.827Z\",\n                \"id\": \"653a2ebcea6abf5902db5281\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"caz\",\n                \"tags\": [\n                    \"hotel\",\n                    \"entertaiment\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:04.280Z\",\n                \"updatedAt\": \"2023-10-26T09:18:04.280Z\",\n                \"id\": \"653a2eccea6abf5902db5284\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"car2\",\n                \"tags\": [\n                    \"bizz\",\n                    \"software3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$500/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:21.939Z\",\n                \"updatedAt\": \"2023-10-26T09:18:21.939Z\",\n                \"id\": \"653a2eddea6abf5902db5287\"\n            }\n        ],\n        \"amountOfProjects\": 4,\n        \"size\": 5,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"pagingCounter\": 1,\n        \"hasPrevPage\": false,\n        \"hasNextPage\": false,\n        \"prevPage\": null,\n        \"nextPage\": null\n    },\n    \"message\": \"Request Success\",\n    \"errors\": []\n}"
+				},
+				{
+					"name": "Get Projects API(With Tags Filter)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 5,\r\n    \"page\": 1,\r\n    \"tags\": [\"software3\",\"website3\"]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/getProjects"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"3a8-SbNAfWVX0onJyk0jPPkcsnuWSIs\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 28 Oct 2023 07:56:44 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"projectsList\": [\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"software3\",\n                    \"website3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2022-08-22T00:00:00.000Z\",\n                \"end_date\": \"2024-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"approved_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"createdAt\": \"2023-10-25T06:17:09.793Z\",\n                \"updatedAt\": \"2023-10-26T08:39:40.124Z\",\n                \"id\": \"6538b2e54ae5d9810a635158\"\n            }\n        ],\n        \"amountOfProjects\": 1,\n        \"size\": 5,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"pagingCounter\": 1,\n        \"hasPrevPage\": false,\n        \"hasNextPage\": false,\n        \"prevPage\": null,\n        \"nextPage\": null\n    },\n    \"message\": \"Request Success\",\n    \"errors\": []\n}"
+				},
+				{
+					"name": "Get Projects API (Filter with status)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 5,\r\n    \"page\": 1,\r\n    \"status\": \"new\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/getProjects"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"b5f-+kDe1q5HRYJaEp/R2OyG2kidNQw\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Sat, 28 Oct 2023 07:58:06 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"projectsList\": [\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"software3\",\n                    \"website3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2022-08-22T00:00:00.000Z\",\n                \"end_date\": \"2024-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"approved_applicants\": [\n                    \"6535e5e72684b34926774d92\"\n                ],\n                \"createdAt\": \"2023-10-25T06:17:09.793Z\",\n                \"updatedAt\": \"2023-10-26T08:39:40.124Z\",\n                \"id\": \"6538b2e54ae5d9810a635158\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"business\",\n                    \"actuarial\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2025-08-22T00:00:00.000Z\",\n                \"end_date\": \"2027-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:17:48.827Z\",\n                \"updatedAt\": \"2023-10-26T09:17:48.827Z\",\n                \"id\": \"653a2ebcea6abf5902db5281\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"caz\",\n                \"tags\": [\n                    \"hotel\",\n                    \"entertaiment\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:04.280Z\",\n                \"updatedAt\": \"2023-10-26T09:18:04.280Z\",\n                \"id\": \"653a2eccea6abf5902db5284\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"car2\",\n                \"tags\": [\n                    \"bizz\",\n                    \"software3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$500/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:21.939Z\",\n                \"updatedAt\": \"2023-10-26T09:18:21.939Z\",\n                \"id\": \"653a2eddea6abf5902db5287\"\n            }\n        ],\n        \"amountOfProjects\": 4,\n        \"size\": 5,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"pagingCounter\": 1,\n        \"hasPrevPage\": false,\n        \"hasNextPage\": false,\n        \"prevPage\": null,\n        \"nextPage\": null\n    },\n    \"message\": \"Request Success\",\n    \"errors\": []\n}"
+				},
+				{
+					"name": "Get Projects API (With Status)",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"size\": 5,\r\n    \"page\": 1,\r\n    // \"companyId\": \"put company User id here\",\r\n    // \"userId\": \"6535e5e72684b34926774d92\",\r\n    // \"userStatus\": \"Either joined or pending, or invited\"\r\n    \"status\": [\"new\", \"completed\"]\r\n    // \"startsAt\": \"2020-08-22\",\r\n    // \"tags\": [\"Hotel\"],\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/getProjects"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"b4a-D3fK9idUunht//EE7hJnJdbCEnM\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 12 Nov 2023 07:40:42 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"projectsList\": [\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"software3\",\n                    \"website3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2022-08-22T00:00:00.000Z\",\n                \"end_date\": \"2024-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"completed\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-25T06:17:09.793Z\",\n                \"updatedAt\": \"2023-11-12T06:53:40.960Z\",\n                \"averageProjectRating\": 5,\n                \"id\": \"6538b2e54ae5d9810a635158\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"mood2313\",\n                \"tags\": [\n                    \"business\",\n                    \"actuarial\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2025-08-22T00:00:00.000Z\",\n                \"end_date\": \"2027-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:17:48.827Z\",\n                \"updatedAt\": \"2023-10-26T09:17:48.827Z\",\n                \"id\": \"653a2ebcea6abf5902db5281\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"caz\",\n                \"tags\": [\n                    \"hotel\",\n                    \"entertaiment\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$1000/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:04.280Z\",\n                \"updatedAt\": \"2023-10-26T09:18:04.280Z\",\n                \"id\": \"653a2eccea6abf5902db5284\"\n            },\n            {\n                \"owner\": {\n                    \"_id\": \"6535e61b2684b34926774d98\",\n                    \"userName\": \"FreddyUser\"\n                },\n                \"project_title\": \"car2\",\n                \"tags\": [\n                    \"bizz\",\n                    \"software3\"\n                ],\n                \"description\": \"create a website for moodle33\",\n                \"start_date\": \"2020-08-22T00:00:00.000Z\",\n                \"end_date\": \"2021-09-27T00:00:00.000Z\",\n                \"No_professional\": \"353\",\n                \"expected_working_hours\": \"15\",\n                \"skills\": \"python, react, node js, vs code\",\n                \"experiences\": \"web dev intern roles\",\n                \"online_offline\": \"offline\",\n                \"price_budget\": \"$500/hr\",\n                \"req_prof_criteria\": \"good communication skills\",\n                \"status\": \"new\",\n                \"potential_applicants\": [],\n                \"approved_applicants\": [],\n                \"createdAt\": \"2023-10-26T09:18:21.939Z\",\n                \"updatedAt\": \"2023-10-26T09:18:21.939Z\",\n                \"id\": \"653a2eddea6abf5902db5287\"\n            }\n        ],\n        \"amountOfProjects\": 4,\n        \"size\": 5,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"pagingCounter\": 1,\n        \"hasPrevPage\": false,\n        \"hasNextPage\": false,\n        \"prevPage\": null,\n        \"nextPage\": null\n    },\n    \"message\": \"Request Success\",\n    \"errors\": []\n}"
+				}
+			]
+		},
+		{
+			"name": "Get A Project Details API",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/project/:id",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"project",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "65268cb859223125a6295404"
+						}
+					]
+				},
+				"description": "API to view a specific project detail"
+			},
+			"response": []
+		},
+		{
+			"name": "Update Project Status API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbXBhbnlAZ21haWwuY29tIiwicm9sZSI6ImNvbXBhbnkiLCJfaWQiOiI2NTI2NzkzOWE1NTBhY2NiY2EyMjkyNmMiLCJpYXQiOjE2OTcwMjAyMTcsImV4cCI6MTY5NzEwNjUxN30.AJWbQDbBsIRW0Jd4CbUFt7FjtqNTQpf3BfEN0fNFwK4"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"newStatus\": \"new\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/project/:id/updateStatus",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"project",
+						":id",
+						"updateStatus"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "65267fb96f9a394b8a52acfa",
+							"description": "id of the project"
+						}
+					]
+				},
+				"description": "API to update project status to completed or ongoing\n\nNOTE:\n\n\\-default value for status is new when project is first created\n\n\\-only the creator of the project can call this API"
+			},
+			"response": []
+		},
+		{
+			"name": "Request Join Project API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByb2Zlc3Npb25hbDJAZ21haWwuY29tIiwicm9sZSI6InByb2Zlc3Npb25hbCIsIl9pZCI6IjY1MzVlNWU3MjY4NGIzNDkyNjc3NGQ5MiIsImlhdCI6MTY5OTc3NTM4NiwiZXhwIjoxNjk5ODYxNjg2fQ.t-wmCZP-OdegG8TIFEE0bNNsWGLPkAGWO4Xa_gCvGuE"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/project/:projectId/join",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"project",
+						":projectId",
+						"join"
+					],
+					"variable": [
+						{
+							"key": "projectId",
+							"value": "653a2eddea6abf5902db5287",
+							"description": "id of the project"
+						}
+					]
+				},
+				"description": "API to request to join a project.\n\nNOTE:\n\n- This will append the user into the potential applicants field in the project details\n- Only professional user can call this\n- Professional user will receive confirmation email if their request to join is received succesfully\n    \n- API will automatically accepts applicant who were invited directly into the project"
+			},
+			"response": [
+				{
+					"name": "Request Join Project API (Invited Applicant)",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/project/:projectId/join",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"project",
+								":projectId",
+								"join"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "653a2eddea6abf5902db5287",
+									"description": "id of the project"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"31c-c6efQWWzCXuRrkE3o1jmTHd3wnY\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 12 Nov 2023 07:49:07 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"_id\": \"653a2eddea6abf5902db5287\",\n        \"owner\": \"6535e61b2684b34926774d98\",\n        \"project_title\": \"car2\",\n        \"tags\": [\n            \"bizz\",\n            \"software3\"\n        ],\n        \"description\": \"create a website for moodle33\",\n        \"start_date\": \"2020-08-22T00:00:00.000Z\",\n        \"end_date\": \"2021-09-27T00:00:00.000Z\",\n        \"No_professional\": \"353\",\n        \"expected_working_hours\": \"15\",\n        \"skills\": \"python, react, node js, vs code\",\n        \"experiences\": \"web dev intern roles\",\n        \"online_offline\": \"offline\",\n        \"price_budget\": \"$500/hr\",\n        \"req_prof_criteria\": \"good communication skills\",\n        \"status\": \"new\",\n        \"potential_applicants\": [\n            \"653f1151239c0f06470810a4\"\n        ],\n        \"approved_applicants\": [\n            \"653a3160f3cdbcc444e4f814\",\n            \"6538b89785ca2f4d60448a54\"\n        ],\n        \"createdAt\": \"2023-10-26T09:18:21.939Z\",\n        \"updatedAt\": \"2023-11-12T07:49:07.544Z\",\n        \"__v\": 5,\n        \"invited_applicants\": []\n    },\n    \"message\": \"Succesfully Joined Project\",\n    \"errors\": []\n}"
+				},
+				{
+					"name": "Request Join Project API (Normal Applicant)",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"url": {
+							"raw": "{{localhost}}/project/:projectId/join",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"project",
+								":projectId",
+								"join"
+							],
+							"variable": [
+								{
+									"key": "projectId",
+									"value": "653a2eddea6abf5902db5287",
+									"description": "id of the project"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"34b-IN5mpLO82JJ03J7+cLJ/pt7otPU\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Sun, 12 Nov 2023 07:49:54 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"_id\": \"653a2eddea6abf5902db5287\",\n        \"owner\": \"6535e61b2684b34926774d98\",\n        \"project_title\": \"car2\",\n        \"tags\": [\n            \"bizz\",\n            \"software3\"\n        ],\n        \"description\": \"create a website for moodle33\",\n        \"start_date\": \"2020-08-22T00:00:00.000Z\",\n        \"end_date\": \"2021-09-27T00:00:00.000Z\",\n        \"No_professional\": \"353\",\n        \"expected_working_hours\": \"15\",\n        \"skills\": \"python, react, node js, vs code\",\n        \"experiences\": \"web dev intern roles\",\n        \"online_offline\": \"offline\",\n        \"price_budget\": \"$500/hr\",\n        \"req_prof_criteria\": \"good communication skills\",\n        \"status\": \"new\",\n        \"potential_applicants\": [\n            \"653f1151239c0f06470810a4\",\n            \"6535e5e72684b34926774d92\"\n        ],\n        \"approved_applicants\": [\n            \"653a3160f3cdbcc444e4f814\",\n            \"6538b89785ca2f4d60448a54\"\n        ],\n        \"createdAt\": \"2023-10-26T09:18:21.939Z\",\n        \"updatedAt\": \"2023-11-12T07:49:54.362Z\",\n        \"__v\": 6,\n        \"invited_applicants\": []\n    },\n    \"message\": \"Request to join project submitted successfully\",\n    \"errors\": []\n}"
+				}
+			]
+		},
+		{
+			"name": "Approve/Reject/Remove Professionals API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByb2Zlc3Npb25hbDRAZ21haWwuY29tIiwicm9sZSI6ImNvbXBhbnkiLCJfaWQiOiI2NTM1ZTYxYjI2ODRiMzQ5MjY3NzRkOTgiLCJpYXQiOjE2OTg2MzUzMjgsImV4cCI6MTY5ODcyMTYyOH0.ykJVKSEE8ZJ6ms6M-0gArLQ9Ris6wmFI6eDm9qsMUXA"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/project/:id/:action/:userId",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"project",
+						":id",
+						":action",
+						":userId"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "6536946a4fb7f71c832f6896",
+							"description": "project id"
+						},
+						{
+							"key": "action",
+							"value": "reject",
+							"description": "approve or reject or remove"
+						},
+						{
+							"key": "userId",
+							"value": "65368ad0838fa5476b3fe150",
+							"description": "user to be approved/rejected"
+						}
+					]
+				},
+				"description": "API for company user to approve ,reject, or remove a professional that has requested to join or has been approved to be in the project.\n\nNOTE:\n\n- Only the creator of the project can approve, reject, or remove professional users\n    \n- This will essentially move the user to a field called approved applicants field in the project details if a user is approved. If the user is rejected, this will just remove the user from the potential applicant field.\n- This API also automatically sends approval/rejection letter to the professional user."
+			},
+			"response": []
+		},
+		{
+			"name": "View Approved Professionals API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im9rYXlidWRkeTY0MTZAZ21haWwuY29tIiwicm9sZSI6ImNvbXBhbnkiLCJfaWQiOiI2NTM2OGFiODgzOGZhNTQ3NmIzZmUxNGEiLCJpYXQiOjE2OTgwNzQyNDMsImV4cCI6MTY5ODE2MDU0M30.h_7QZ_rSoG1boOl3fAeMXjGqullg-CL27k05YB_ldHo"
+					}
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/project/:id/approvedProfessionals",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"project",
+						":id",
+						"approvedProfessionals"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "6536946a4fb7f71c832f6896",
+							"description": "project id"
+						}
+					]
+				},
+				"description": "API to view the approved professional users for a specific project\n\nNOTE:\n\n- Only a company user (e.g. must be the creator of the project) can call this api"
+			},
+			"response": []
+		},
+		{
+			"name": "Invite Professionals API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImNvbXBhbnkxMTExMUBnbWFpbC5jb20iLCJyb2xlIjoiY29tcGFueSIsIl9pZCI6IjY1MjhkODE4MmI3ZmFhYzMxNTQ1ZjY1NSIsImlhdCI6MTY5NzE3NTU3NywiZXhwIjoxNjk3MjYxODc3fQ.GiiHkAQs-GGalqV4SvDnzCPOuRjKS7rcB_j7nlwRMJs"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"professionalEmail\": \"okaybuddy646@gmail.com\",\r\n    \"projectId\": \"6528d8312b7faac31545f65e\",\r\n    \"link\": \"youtube.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{localhost}}/project/inviteProfessional",
+				"description": "API for company user to invite a professional to join their project. This is done by sending an email to the professional user while also providing a link for them to join the project.\n\nThe body for this request takes in:\n\n- professionalEmail: the email of who you want to invite\n- projectId: project id that professional user will be invited to\n- link: the link of the project that you want to invite the professional user to\n    \n\nNOTEL:\n\n- Only the creator of the project can invite professional users to join their project"
+			},
+			"response": []
+		},
+		{
+			"name": "Edit Project Details API",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InByb2Zlc3Npb25hbEBnbWFpbC5jb20iLCJyb2xlIjoiY29tcGFueSIsIl9pZCI6IjY1MmNmMTU5ZjI1Mjk1NDk0YWYwNGM1MyIsImlhdCI6MTY5NzQ0NDIzOCwiZXhwIjoxNjk3NTMwNTM4fQ.rRO7f3L44oszVATPA-XFVxPXMvsXK9ojID6zJA-qqSM"
+					}
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"project_title\": \"PROJECT_edit\",\n    \"tags\": [\"Software3\", \"website3\"],\n    \"description\": \"create a website for moodle33\",\n    \"start_date\": \"2022-08-22\",\n    \"end_date\": \"2024-09-27\",\n    \"No_professional\": \"353\",\n    \"expected_working_hours\": \"15\",\n    \"skills\": \"python, react, node js, vs code\",\n    \"experiences\": \"web dev intern roles\",\n    \"online_offline\": \"offline\",\n    \"price_budget\": \"$1000/hr\",\n    \"req_prof_criteria\": \"good communication skills\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "127.0.0.1:3000/project/652cf219f25295494af04c68/edit",
+				"description": "This route allows company users to edit their project details\n\nparam: projectId\n\neg: 652cf219f25295494af04c68"
+			},
+			"response": [
+				{
+					"name": "Edit Project Details API",
+					"originalRequest": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"project_title\": \"PROJECT_edit\",\n    \"tags\": [\"Software3\", \"website3\"],\n    \"description\": \"create a website for moodle33\",\n    \"start_date\": \"2022-08-22\",\n    \"end_date\": \"2024-09-27\",\n    \"No_professional\": \"353\",\n    \"expected_working_hours\": \"15\",\n    \"skills\": \"python, react, node js, vs code\",\n    \"experiences\": \"web dev intern roles\",\n    \"online_offline\": \"offline\",\n    \"price_budget\": \"$1000/hr\",\n    \"req_prof_criteria\": \"good communication skills\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/652cf219f25295494af04c68/edit"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"5a0-gv2xwwHyyCv5gU+uilSsxQ7CyxE\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 16 Oct 2023 08:27:32 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"_id\": \"652cf219f25295494af04c68\",\n        \"owner\": \"652cf159f25295494af04c53\",\n        \"project_title\": \"PROJECT_edit\",\n        \"tags\": [\n            \"Software3\",\n            \"website3\"\n        ],\n        \"description\": \"create a website for moodle33\",\n        \"start_date\": \"2022-08-22T00:00:00.000Z\",\n        \"end_date\": \"2024-09-27T00:00:00.000Z\",\n        \"No_professional\": \"353\",\n        \"expected_working_hours\": \"15\",\n        \"skills\": \"python, react, node js, vs code\",\n        \"experiences\": \"web dev intern roles\",\n        \"online_offline\": \"offline\",\n        \"price_budget\": \"$1000/hr\",\n        \"req_prof_criteria\": \"good communication skills\",\n        \"status\": \"new\",\n        \"potential_applicants\": [],\n        \"approved_applicants\": [],\n        \"createdAt\": \"2023-10-16T08:19:37.078Z\",\n        \"updatedAt\": \"2023-10-16T08:27:32.567Z\",\n        \"__v\": 0\n    },\n    \"message\": \"Project details updated for {\\n  _id: new ObjectId(\\\"652cf219f25295494af04c68\\\"),\\n  owner: new ObjectId(\\\"652cf159f25295494af04c53\\\"),\\n  project_title: 'PROJECT_edit',\\n  tags: [ 'Software3', 'website3' ],\\n  description: 'create a website for moodle33',\\n  start_date: 2022-08-22T00:00:00.000Z,\\n  end_date: 2024-09-27T00:00:00.000Z,\\n  No_professional: '353',\\n  expected_working_hours: '15',\\n  skills: 'python, react, node js, vs code',\\n  experiences: 'web dev intern roles',\\n  online_offline: 'offline',\\n  price_budget: '$1000/hr',\\n  req_prof_criteria: 'good communication skills',\\n  status: 'new',\\n  potential_applicants: [],\\n  approved_applicants: [],\\n  createdAt: 2023-10-16T08:19:37.078Z,\\n  updatedAt: 2023-10-16T08:27:32.567Z,\\n  __v: 0\\n}\",\n    \"errors\": []\n}"
+				}
+			]
+		},
+		{
+			"name": "Delete a Project",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsIl9pZCI6IjY1M2NjMDVlMzFmN2ExZTI0NjIwZGI1MSIsImlhdCI6MTY5OTQyNjE2NSwiZXhwIjoxNjk5NTEyNDY1fQ.yYFHvyXHAV2dBJiTdrSsDXGIA1up21BfwDjIPTsIuXM"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:3000/project/:id/delete",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "3000",
+					"path": [
+						"project",
+						":id",
+						"delete"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null,
+							"disabled": true
+						}
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "653a2eccea6abf5902db5284"
+						}
+					]
+				},
+				"description": "# **API For Deleting a Project**\n\n## **IMPORTANT: THIS API REQUIRES THE JWT TOKEN IN THE AUTHORIZATION HEADER**\n\nApi to Delete a project.\n\nA project can only be deleted by the owner of the project and the admin.\n\nAdditionaly, This API will also recursively delete all reviews related to the project.\n\n## Request Type: json\n\n## Response Type: json\n\nSuccesfull Deletewill return a 200 OK Request"
+			},
+			"response": [
+				{
+					"name": "New Request",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "127.0.0.1:3000/project/652cf1b6f25295494af04c61/delete"
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"4b-MFVrDK0RxGrY33xXECdV81xfKgw\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Mon, 16 Oct 2023 08:19:08 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": \"Project deleted successfully!\",\n    \"message\": \"Success\",\n    \"errors\": []\n}"
+				}
+			]
+		},
+		{
+			"name": "Get Reviews",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"page\": 1,\r\n    \"size\": 10\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{localhost}}/project/:id/reviews",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"project",
+						":id",
+						"reviews"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "6538b2e54ae5d9810a635158"
+						}
+					]
+				},
+				"description": "# **API For Paginating Reviews for a Project**\n\nAPI to to paginate Reviews that is correlated to a completed project (Project with status of completed)\n\n## Request Type: json\n\nRequest Params:\n\nid: the project id in which you want to retrieve the reviews from\n\nRequest Format\n\n|  | required | type | description | example |\n| --- | --- | --- | --- | --- |\n| size | true | number | The size of the pagination you want to get | 4 |\n| page | true | number | The page of the pagination you want to fetch (Starts from 1) | 1 |\n\n## Response Type: json\n\nResponse for both Professional user and company user\n\n| Field Name | type | description | example |\n| --- | --- | --- | --- |\n| reviewsList | Array | An Array of Documents representing the reviews. | Can see from the examples |\n| amountOfReviews | number | Number of Reviews available for the project specified |  |\n| size | number | the size of each pagination page |  |\n| totalPages | number | The total number of pages available based on the pagination filters that is provided |  |\n| currentPage | number | The current page number in the pagination |  |\n| hasPrevPage | boolean | Just ignore this one |  |\n| hasNextPage | boolean | Just ignore this one |  |\n| prevPage | number | null | The number of the previous page of this pagination result. Will be null if there is no prevPage |\n| nextPage | number | null | The number of the next page of this pagination result, will be null if there is no nextPage |"
+			},
+			"response": [
+				{
+					"name": "Get Reviews",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"page\": 1,\r\n    \"size\": 10\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{localhost}}/project/:id/reviews",
+							"host": [
+								"{{localhost}}"
+							],
+							"path": [
+								"project",
+								":id",
+								"reviews"
+							],
+							"variable": [
+								{
+									"key": "id",
+									"value": "6538b2e54ae5d9810a635158"
+								}
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "X-Powered-By",
+							"value": "Express"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json; charset=utf-8"
+						},
+						{
+							"key": "ETag",
+							"value": "W/\"2a6-wk7yTaroiu/Kk9bR62FLYu0AI6s\""
+						},
+						{
+							"key": "Vary",
+							"value": "Accept-Encoding"
+						},
+						{
+							"key": "Content-Encoding",
+							"value": "gzip"
+						},
+						{
+							"key": "Date",
+							"value": "Tue, 07 Nov 2023 07:23:57 GMT"
+						},
+						{
+							"key": "Connection",
+							"value": "keep-alive"
+						},
+						{
+							"key": "Keep-Alive",
+							"value": "timeout=5"
+						},
+						{
+							"key": "Transfer-Encoding",
+							"value": "chunked"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"content\": {\n        \"reviewsList\": [\n            {\n                \"userId\": {\n                    \"_id\": \"6535e5e72684b34926774d92\",\n                    \"firstName\": \"New Name\",\n                    \"userName\": \"FreddyUser\",\n                    \"lastName\": \"''\"\n                },\n                \"projectId\": \"6538b2e54ae5d9810a635158\",\n                \"ratings\": 4,\n                \"ratingType\": \"Company\",\n                \"review\": \"not bad\",\n                \"id\": \"6549dc32c1890ea1a57e90eb\"\n            },\n            {\n                \"userId\": {\n                    \"_id\": \"6538b89785ca2f4d60448a54\",\n                    \"firstName\": \"Professional\",\n                    \"userName\": \"professional\"\n                },\n                \"projectId\": \"6538b2e54ae5d9810a635158\",\n                \"ratings\": 5,\n                \"ratingType\": \"Company\",\n                \"review\": \"not bad\",\n                \"id\": \"6549de5875a41c816807c57d\"\n            }\n        ],\n        \"amountOfReviews\": 2,\n        \"size\": 10,\n        \"totalPages\": 1,\n        \"currentPage\": 1,\n        \"pagingCounter\": 1,\n        \"hasPrevPage\": false,\n        \"hasNextPage\": false,\n        \"prevPage\": null,\n        \"nextPage\": null\n    },\n    \"message\": \"Request Success\",\n    \"errors\": []\n}"
+				}
+			]
+		}
+	]
+}
