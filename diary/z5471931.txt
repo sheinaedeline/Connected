@@ -42,4 +42,7 @@ Week 8
 Did the second demo, Finished the admin API statistics api, created the get reviews API, Fixed a bug in the get projects api
 
 Week 9,
-Worked on the delete user api, delete projects api
+Worked on the delete user api, delete projects api, added a sort by rating filter for the user api, fixed the company user rating feature
+
+Week 10.
+Did the final presentation demo, created the installation and running guide for the application
