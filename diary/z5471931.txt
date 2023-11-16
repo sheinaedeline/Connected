@@ -45,4 +45,4 @@ Week 9,
 Worked on the delete user api, delete projects api, added a sort by rating filter for the user api, fixed the company user rating feature
 
 Week 10.
-Did the final presentation demo, created the installation and running guide for the application
+Did the final presentation demo, Did the final report where I primarily finished the Installation and Running Guide for the Aplication.
