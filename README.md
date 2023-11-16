@@ -10,6 +10,9 @@ How to Install for Windows (Window Version that is used during development is Wi
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/230c01b3-af3b-41a2-963d-d7f1e7b8a730"> <br>
 6. Aftewards, Copy the .sample-env file and make a copy of it inside the backend folder and rename it to .env, Then delete the comment in the first line and replace the value for the MONGODB URLto your connection string. Make sure to change the localhost string in the mongodb URL String into the actual local host ip which should be 127.0.0.1. Overall the env file should look like this
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/9b51611e-cff0-4059-ba6d-c7fb5729546b"> <br>
+7. Then Go to the frontend folder inside the project folder and run npm install
+
+
 
 (Optional: Populating The Database using the existing database)
 1. To Populate the Database, First download the MongoDB Command Line Database Tools Download from https://fastdl.mongodb.org/tools/db/mongodb-database-tools-windows-x86_64-100.9.1.zip or https://www.mongodb.com/try/download/database-tools.
@@ -31,6 +34,5 @@ To use any accounts inside the user collection their default password is 1234123
 3. Then Click Import where afterwards you should see the the documentation and examples of the backend api
 4. In each api documentation you can click the document button to see more details about the api
  <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/89735ce1-b7a8-410a-8782-e0b896827bf0"> <br>
-
 
 
