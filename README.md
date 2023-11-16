@@ -22,6 +22,7 @@ How to Install for Windows (Window Version that is used during development is Wi
 
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/aa25bb48-02f4-4d78-9447-2d41bf6494a8"> <br>
 
+Note: To use any accounts inside the user collection their default password is 12341234
 (Optional: Viewing the Postman Documentation)
 1. Install Postman on your machine and open it
 2. Click Import on postman and drag/select all the files inside the Potman folder of the project directory
