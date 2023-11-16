@@ -73,6 +73,7 @@ Compatibility: Ensure your macOS is version 11 or later for MongoDB 7.0 Communit
 ### Running MongoDB:
 1. Run as macOS Service:
    To start: brew services start mongodb-community@7.0.
+   
    To stop: brew services stop mongodb-community@7.0​​.
 
 
