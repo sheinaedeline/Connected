@@ -40,7 +40,8 @@ To use any accounts inside the user collection their default password is 1234123
 2. Go to the backend directory and run npm run dev (Make sure the backend run first before the frontend). If its succesfull you should see this in the terminal
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/4f43ae96-6958-4728-bb4b-f846673ff4ab"> <br>
 4. Afterward go to the 'connected' directory inside the frontend folder and run npm run dev which should show this terminal
-   <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/07262820-ef3c-49ed-bdee-54ef2a03aed8"> <br>
+5. 
+<img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/07262820-ef3c-49ed-bdee-54ef2a03aed8"> <br>
 6. Open the website using the url provided by the terminal of the frontend terminal which be default should be http://localhost:3001
 
 
