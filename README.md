@@ -1,4 +1,4 @@
-Connected Website How To Install and Run
+<h1> Connected Website How To Install and Run </h1>
 
 How to Install for Windows (Window Version that is used during development is Windows 10):
 1. Ensure you have Node and NPM Installed (Node Version That is used during Development: v18.16.0. NPM Version Used During Development: 9.5.1 )
@@ -34,5 +34,6 @@ To use any accounts inside the user collection their default password is 1234123
 3. Then Click Import where afterwards you should see the the documentation and examples of the backend api
 4. In each api documentation you can click the document button to see more details about the api
  <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/89735ce1-b7a8-410a-8782-e0b896827bf0"> <br>
+
 
 
