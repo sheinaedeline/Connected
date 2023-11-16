@@ -11,13 +11,25 @@ How to Install for Windows (Window Version that is used during development is Wi
 6. Aftewards, Copy the .sample-env file and make a copy of it inside the backend folder and rename it to .env, Then delete the comment in the first line and replace the value for the MONGODB URLto your connection string. Make sure to change the localhost string in the mongodb URL String into the actual local host ip which should be 127.0.0.1. Overall the env file should look like this
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/9b51611e-cff0-4059-ba6d-c7fb5729546b"> <br>
 
-(Optional: Populating The Database)
+(Optional: Populating The Database using the existing database)
 1. To Populate the Database, First download the MongoDB Command Line Database Tools Download from https://fastdl.mongodb.org/tools/db/mongodb-database-tools-windows-x86_64-100.9.1.zip or https://www.mongodb.com/try/download/database-tools.
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/993e8da8-44dd-4f0b-a0e9-3a867571150b"> <br>
 2. Extract the files inside the bin folder of the downloaded file into any folder. Inside that folder create another folder called dump
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/e58c3119-5408-45ac-9722-35849d517b75"> <br>
 3. From the project folder, Copy the webApp folder into the dump folder you just created
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/c1bfd6ff-f275-4c5b-8d4b-2bc17dc84b52"> <br>
+4. Afterwards run the mongorestore application and it should automatically import the database. To check you can click the refresh databases button in the mongodb compass and it should show the webapp database
+<img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/aa25bb48-02f4-4d78-9447-2d41bf6494a8"> <br>
+Note: To use any accounts inside the user collection their default password is 12341234
+
+(Optional: Viewing the Postman Documentation)
+1. Install Postman on your machine and open it
+2. Click Import on postman and drag/select all the files inside the Potman folder of the project directory
+<img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/2d4015a8-a5ab-4afe-b0ad-5309f3f805af"> <br>
+<img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/3f6a80fe-a317-4cdb-84cf-c572dd264dbc"> <br>
+3. Then Click Import where afterwards you should see the the documentation and examples of the backend api
+4. In each api documentation you can click the document button to see more details about the api
+ <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/89735ce1-b7a8-410a-8782-e0b896827bf0"> <br>
 
 
 
