@@ -45,4 +45,35 @@ To use any accounts inside the user collection their default password is 1234123
 
 4. Open the website using the url provided by the terminal of the frontend terminal which be default should be http://localhost:3001
 
+## How to Install and Run MongoDB on macOS
+Compatibility: Ensure your macOS is version 11 or later for MongoDB 7.0 Community Edition​​.
+
+Prerequisites:
+Install Xcode Command-Line Tools:
+Open Terminal.
+Run: xcode-select --install.	
+This step is needed as Homebrew, which you'll use to install MongoDB.
+
+Install Homebrew:
+Follow the official Homebrew installation instructions since macOS doesn't include it by default​​.
+
+Installation Steps:
+Tap MongoDB Homebrew Tap:
+In Terminal, run: brew tap mongodb/brew.
+
+Update Homebrew:
+Run: brew update to update Homebrew and its formulae​​.
+Install MongoDB:
+
+Run: brew install mongodb-community@7.0.
+This command installs MongoDB along with binaries like mongod (server), mongos (sharded cluster query router), and mongosh (MongoDB Shell)​​.
+Installation paths differ based on your processor (Intel or Apple Silicon):
+Intel: /usr/local/etc/mongod.conf
+Apple Silicon: /opt/homebrew/etc/mongod.conf​​.
+
+Running MongoDB:
+Run as macOS Service:
+To start: brew services start mongodb-community@7.0.
+To stop: brew services stop mongodb-community@7.0​​.
+
 
