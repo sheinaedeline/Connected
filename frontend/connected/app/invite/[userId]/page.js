@@ -50,6 +50,7 @@ export default function InviteProfessional({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
+                alert('View Profile failed');
             }
         };
 
@@ -70,6 +71,7 @@ export default function InviteProfessional({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Get Projects failed', error);
+                alert('Get Projects failed');
             }
         };
 
@@ -103,6 +105,7 @@ export default function InviteProfessional({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Invite Professional failed', error);
+                alert('Invite Professional failed');
             }
         };
 

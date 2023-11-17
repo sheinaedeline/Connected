@@ -59,6 +59,7 @@ export default function ProjectTabs({accountId, userType}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Get Projects failed', error);
+                alert('Get Projects failed');
             }
         };
 

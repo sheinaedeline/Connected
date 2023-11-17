@@ -65,6 +65,7 @@ export default function CompanyHome() {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
+                alert('View Profile failed');
             }
         };
 
@@ -109,6 +110,7 @@ export default function CompanyHome() {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
+                alert('View Profile failed');
             }
 
             

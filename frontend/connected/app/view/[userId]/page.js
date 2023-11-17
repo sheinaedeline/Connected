@@ -104,6 +104,7 @@ export default function ViewProfile({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
+                alert('View Profile failed');
             }
         };
 
@@ -130,6 +131,7 @@ export default function ViewProfile({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Get Projects failed', error);
+                alert('Get Projects failed');
             }
         };
 
@@ -164,6 +166,7 @@ export default function ViewProfile({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Get Projects failed', error);
+                alert('Get Projects failed');
             }
         };
 
@@ -195,6 +198,7 @@ export default function ViewProfile({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Request To Join Project failed', error);
+                alert('Request to join failed');
             }
         };
 
@@ -224,6 +228,7 @@ export default function ViewProfile({params}) {
                     }
                 } catch (error) {
                     console.error('Delete project failed', error);
+                    alert('Delete project failed');
                 }
             };
 

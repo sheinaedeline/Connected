@@ -8,21 +8,12 @@ import { useRouter } from "next/navigation.js";
 
 export default function Header() {
   const router = useRouter();
-//   const userCtx = useContext(UserContext);
-//   const loggedInState = userCtx.loggedIn[0];
-//   const userTypeState = userCtx.userType[0];
-//   const hideRight = userCtx.hideRight;
-//   console.log("test", hide);
-
-  // Routes to show logo only
-  // const routesToHideElements = ['/login', '/register'];
-  // const [hide, setHide] = useState(false);
   const [loginState, setLoginState] = useState(false);
   const [userType, setUserType] = useState("");
   const [hide, setHide] = useState(false);
   
   
-//   Get Login Details
+  //  Get Login Details
   useEffect(() => {
     const getLogin = localStorage.getItem("loggedUser");
     if (getLogin) {
@@ -30,8 +21,6 @@ export default function Header() {
       setLoginState(true);
       setUserType(getState.userType);
     }
-    // setLoginState(userCtx.loggedIn[0]);
-    // setUserType(userCtx.userType[0]);
   },[]);
 
   return (

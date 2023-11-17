@@ -65,6 +65,7 @@ export default function Login() {
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Login Failed', error);
+            alert('Login failed');
         }
     };
 
@@ -86,6 +87,7 @@ export default function Login() {
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Forget Password Failed', error);
+            alert('Forget Password failed');
         }
     };
 
@@ -141,6 +143,7 @@ export default function Login() {
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Reset Password Failed', error);
+            alert('Reset Password failed');
         }
     };
 

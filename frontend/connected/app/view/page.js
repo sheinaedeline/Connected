@@ -15,7 +15,8 @@ import Link from 'next/link';
 
 export default function ViewProfile() {
     // const { state } = useUserData();
-    const state = JSON.parse(localStorage.getItem("loggedUser"));
+    const getState = localStorage.getItem("loggedUser");
+    const state = JSON.parse(getState);
     const { accountId, userType } = state;
     const router = useRouter();
     
@@ -100,6 +101,7 @@ export default function ViewProfile() {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
+                alert('View Profile failed');
             }
         };
         const getReviews = async () => {
@@ -133,6 +135,7 @@ export default function ViewProfile() {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Get Projects failed', error);
+                alert('Get Projects failed');
             }
         };
 

@@ -91,6 +91,7 @@ export default function RegistrationProfessional() {
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Registration failed', error);
+            alert('Registration failed');
         }
     };
 

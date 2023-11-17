@@ -70,6 +70,7 @@ export default function CompanyProfile() {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Edit Profile failed', error);
+                alert('Edit Profile failed');
             }
         };
 
@@ -106,6 +107,7 @@ export default function CompanyProfile() {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
+                alert('View Profile failed');
             }
         };
 

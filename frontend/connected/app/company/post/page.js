@@ -69,6 +69,7 @@ export default function CreateNewJob() {
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Create new job failed', error);
+            alert('Create new job failed');
         }
     };        
 

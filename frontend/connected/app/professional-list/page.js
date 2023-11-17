@@ -11,7 +11,8 @@ import Link from 'next/link';
 
 export default function ProfessionalList() {
 
-  const state = JSON.parse(localStorage.getItem("loggedUser"));
+  const getState = localStorage.getItem("loggedUser");
+  const state = JSON.parse(getState);
   const { accountId, userType } = state;
   const [professionalList, setProfessionalList] = useState([]);
 
@@ -35,6 +36,7 @@ export default function ProfessionalList() {
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('View pro failed', error);
+            alert('Get Profile failed');
         }
     };
 
