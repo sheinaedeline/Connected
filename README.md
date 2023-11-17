@@ -1,4 +1,9 @@
+
+
 <h1>Connected Website How To Install and Run</h1>
+
+## README for Frontend and Backend
+In both Frontend and Backend folders of this project, there are respective README files. Please do read both README files to smoothly run this application.
 
 ## How to Install for Windows (Window Version that is used during development is Windows 10):
 
@@ -11,7 +16,7 @@
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/230c01b3-af3b-41a2-963d-d7f1e7b8a730"> <br>
 6. Aftewards, Copy the .sample-env file and make a copy of it inside the backend folder and rename it to .env, Then delete the comment in the first line and replace the value for the MONGODB URLto your connection string. Make sure to change the localhost string in the mongodb URL String into the actual local host ip which should be 127.0.0.1. Overall the env file should look like this
 <img src="https://github.com/unsw-cse-comp3900-9900-23T3/capstone-project-9900m13aokbuddy/assets/43334334/9b51611e-cff0-4059-ba6d-c7fb5729546b"> <br>
-7. Then Go to the 'connected' (located in /frontend/connected folder located inside the frontendfolder and run npm install
+7. Then Go to the 'connected' (located in /frontend/connected folder located inside the frontend folder and run npm install according to the Frontend README file.
 
 
 ## Populating The Database using the provided existing database)
