@@ -83,7 +83,14 @@ Week 8:
 Week 9:
 •   Did backend pair programming during tutorial to save testing time.
 •   Checked with team members on progress
+•   Worked on rate professional user and project backend API functions
+•   Checked on other API funcitons from sprint 1, 2 and 3 to make sure there's no errors
 
+Week 10:
+•   Prepared and presented final project demonstration
+•   Received feedback from client and reflected on the entire development process
+•   Finished project report
+•   Submited peer assessment and source code
 
 
 

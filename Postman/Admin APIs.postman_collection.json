@@ -1,0 +1,68 @@
+{
+	"info": {
+		"_postman_id": "4ec5af1a-02be-49c7-b74c-f9e1434f991f",
+		"name": "Admin APIs",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "11299890",
+		"_collection_link": "https://gold-meteor-599339.postman.co/workspace/OK-BUDDY-COMP9900~c49f2943-398c-432d-a78a-3fc4ba4e8506/collection/11299890-4ec5af1a-02be-49c7-b74c-f9e1434f991f?action=share&source=collection_link&creator=11299890"
+	},
+	"item": [
+		{
+			"name": "Get Statistics",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsIl9pZCI6IjY1M2NjMDVlMzFmN2ExZTI0NjIwZGI1MSIsImlhdCI6MTY5ODU1OTA5NiwiZXhwIjoxNjk4NjQ1Mzk2fQ.fA4mzi8L8_uotERYcKp5l6ogN_Oarn4lh3aOXAjbnxM"
+					}
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"year\": \"2020\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{localhost}}/admin/statistics",
+				"description": "API to create a project.\n\nRequire Authentica\n\nNOTE: only a company user can create a project"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete User",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": {
+						"token": "JWT eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQGdtYWlsLmNvbSIsInJvbGUiOiJhZG1pbiIsIl9pZCI6IjY1M2NjMDVlMzFmN2ExZTI0NjIwZGI1MSIsImlhdCI6MTY5OTQxNzUyOSwiZXhwIjoxNjk5NTAzODI5fQ.BIxDac0ViDK00q1rJebIXUspogM4dEqfKg-CBQUUhmE"
+					}
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{localhost}}/admin/deleteuser/:id",
+					"host": [
+						"{{localhost}}"
+					],
+					"path": [
+						"admin",
+						"deleteuser",
+						":id"
+					],
+					"variable": [
+						{
+							"key": "id",
+							"value": "6538b89785ca2f4d60448a54"
+						}
+					]
+				},
+				"description": "# **API For Deleting a User**\n\n## **IMPORTANT: THIS API REQUIRES THE JWT TOKEN IN THE AUTHORIZATION HEADER.**\n\nApi to Delete a user, Can only be used by admins.\n\nAdditionaly, Deleting a user whose type of professional will:\n\n- Remove all the reviews made by that professional or reviews tied to that professional\n    \n- Remove the professionals from any project they were involved in\n    \n\nOn the other hand deleting a user with type company will:\n\n- Remove all projects and review tied to that compy\n    \n\n## Request Type: json\n\n## Response Type: json\n\nSuccesfull Deletewill return a 200 OK Request"
+			},
+			"response": []
+		}
+	]
+}
