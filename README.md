@@ -3,7 +3,7 @@
 <h1>Connected Website How To Install and Run</h1>
 
 ## README for Frontend and Backend
-In both Frontend and Backend folders of this project, there are respective README files. Please do read both README files to smoothly run this application.
+In both Frontend and Backend folders of this project, there are respective README files. Please do read both README files to smoothly run this application, but do follow this Main README File first.
 
 ## How to Install for Windows (Window Version that is used during development is Windows 10):
 
