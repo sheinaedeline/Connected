@@ -43,6 +43,7 @@ export default function ChangePasswordModal({modalState, setModalState}) {
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Change Password failed', error);
+            alert('Change Password failed');
         }
         
     };

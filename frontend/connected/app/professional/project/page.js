@@ -43,7 +43,8 @@ export default function page() {
   const [fourthSelectedOptions, setFourthSelectedOptions] = useState([]);
 
   
-  const state = JSON.parse(localStorage.getItem("loggedUser"));
+  const getState = localStorage.getItem("loggedUser");
+  const state = JSON.parse(getState);
   const { accountId, userType } = state;
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -170,6 +171,7 @@ export default function page() {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
+                alert('View Profile failed');
             }
     
         };

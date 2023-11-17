@@ -48,6 +48,7 @@ export default function HeaderRight(params) {
         } catch (error) {
             // Handle any errors (e.g., display an error message)
             console.error('Logout Failed', error);
+            alert('Logout failed');
         }
     };
 

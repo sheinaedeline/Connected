@@ -11,7 +11,8 @@ import Link from 'next/link';
 
 export default function CompanyList() {
 
-  const state = JSON.parse(localStorage.getItem("loggedUser"));
+  const getState = localStorage.getItem("loggedUser");
+  const state = JSON.parse(getState);
   const { accountId, userType } = state;
   const [professionalList, setProfessionalList] = useState([]);
 
@@ -33,7 +34,8 @@ export default function CompanyList() {
             
         } catch (error) {
             // Handle any errors (e.g., display an error message)
-            console.error('View company failed', error);
+            console.error('Get company failed', error);
+            alert('Get company failed');
         }
     };
 

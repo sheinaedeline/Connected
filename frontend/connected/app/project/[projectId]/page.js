@@ -92,6 +92,7 @@ export default function ViewProjectID({params}) {
             window.location.reload()
         } catch (error) {
             console.error(error);
+            alert('Update Project failed');
         }
     };
 
@@ -131,6 +132,7 @@ export default function ViewProjectID({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View Profile failed', error);
+                alert('View Profile failed');
             }
         };
 
@@ -152,6 +154,7 @@ export default function ViewProjectID({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Request To reject failed', error);
+                alert('Request to reject failed');
             }
         };
 
@@ -171,6 +174,7 @@ export default function ViewProjectID({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Request To approve failed', error);
+                alert('Request to approve failed');
             }
         };
 
@@ -187,6 +191,7 @@ export default function ViewProjectID({params}) {
                 window.location.reload();
             } catch (error) {
                 console.error('Request To remove failed', error);
+                alert('Request to remove failed');
             }
         };
     
@@ -208,6 +213,7 @@ export default function ViewProjectID({params}) {
                     }
                 } catch (error) {
                     console.error('Delete project failed', error);
+                    alert('Delete project failed');
                 }
             };
 
@@ -234,6 +240,7 @@ export default function ViewProjectID({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View detail failed', error);
+                alert('View detail failed');
             }
     
         };
@@ -258,6 +265,7 @@ export default function ViewProjectID({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View detail failed', error);
+                alert('View Potential failed');
             }
     
         };
@@ -282,6 +290,7 @@ export default function ViewProjectID({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('View detail failed', error);
+                alert('View invited failed');
             }
     
         };
@@ -319,6 +328,7 @@ export default function ViewProjectID({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Request To Join Project failed', error);
+                alert('Request to join failed');
             }
         };
 
@@ -351,6 +361,7 @@ export default function ViewProjectID({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('rate failed', error);
+                alert('Rating failed');
             }
         };
     
@@ -420,6 +431,7 @@ export default function ViewProjectID({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('rate failed', error);
+                alert('Rating failed');
             }
         };
     

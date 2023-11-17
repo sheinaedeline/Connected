@@ -22,6 +22,8 @@ export default function Logo(params) {
                 router.push('/company');
             } else if (userType === 'professional') {
                 router.push('/professional');
+            } else if (userType === 'admin') {
+                router.push('/admin');
             }
         }
     };

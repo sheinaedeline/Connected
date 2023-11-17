@@ -238,13 +238,75 @@ working more on sprint 3.
 
 Frontend:
 Satrio:
+Rating: 30, 39, 37
+Admin page: 43,44
+Certificate: 39
 
 Sheina:
+Inv pop: 36
 Change password: 18
 Prof completed proj: 40
-
 Forget password: 15
-Rating: 30, 39
-Inv pop: 36
-Prof notif: 37
-Admin page: 43,44
+
+
+#######################################
+TUT09 06/11/2023 1-3pm
+Sprint 3
+Before the demo, we did have a run down on what we will be demonstrating to the tutor and made sure that all the stories in sprint 2 is covered.
+Demo was more organised than the previous one but there was 2 minor errors with the double API requests and also professional applying to join a project.
+
+Throughout this week we had a lot of communication on Facebook Messenger on the project development. 
+I did meet with Satrio at a cafe to work on the project together and also on campus in the afternoon on Thursday 9/11/2023.
+We also had multiple meetings to work on the Frontend.
+
+Meeting 12/11/2023 3-4pm
+We had an online meeting just to finalise the final project demo.
+
+#######################################
+TUT10 13/11/2023 1-3pm
+Final Demo 
+Before the demo, we did have a final run down on what we will be demonstrating to the tutor and the project client (Dr. Basem Suleiman). 
+We made sure that all of the user stories are covered. The backend team will present the research and project information part, while the frontend team
+will be in charge of the demo.
+
+Final Demo run down:
+1. Register as a Professional but show register as company is possible
+2. Login as company
+3. Home Company
+4. Create new job post
+5. View Profile —> view rating
+6. Hire professionas
+7. Go to my projects
+8. Filter projects by tags, project name
+9. View project
+10. Accept prof
+11. Edit Project
+12. Complete ongoing pros
+13. Rate professionals
+14. Logout
+15. Login as professional
+16. Home Professional
+17. View all Projects
+18. Filter projects
+19. View All Company
+20. View one company
+21. Apply project
+22. View profile —> view rating && certification
+23. Edit Profile
+24. Upload cv at profile & change description —> click update
+25. Download CV
+26. View my projects
+27. Accept invite from my projects —> Project moved to joined projects section
+28. Logout
+29. Login as Admin —> nic@admin.com, 12341234
+30. Statistics
+
+After the demo, we decided to divide final report. I started by adding bits from our previous proposal report into the final report.
+We added a justification row to the user stories to explain how we deliver each of them. Everyone contributed to that according to 
+the features that we worked on. I added a section that explained more about the user interface for each 9 functionalities and linked
+them with the Appendix filled with screenshots of our website. We added a section containing all our implementation challenges.
+Backend team covers the backend challenges, frontend team covers the frontend challenges. Nicholas wrote the user manual for Windows Users,
+while Eric wrote the user manual for Mac OS users.
+
+Meeting 16/11/2023 3-5.30pm
+We work on the report together while I compiled and read through the report before submitting.

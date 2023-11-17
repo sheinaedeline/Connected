@@ -65,6 +65,7 @@ export default function projectProfile({params}) {
             } catch (error) {
                 // Handle any errors (e.g., display an error message)
                 console.error('Edit Project failed', error);
+                alert('Edit Project failed');
             }
         };
 
@@ -103,6 +104,7 @@ export default function projectProfile({params}) {
             } catch (error) {
 
                 console.error('View Project failed', error);
+                alert('View Project failed');
             }
         };
 
